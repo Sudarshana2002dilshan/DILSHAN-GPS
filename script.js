@@ -1,26 +1,20 @@
-let maxS = 0, sumS = 0, count = 0;
+const status = document.getElementById('status');
 
-function openTab(tabName) {
-    document.querySelectorAll('.tabcontent').forEach(t => t.style.display = 'none');
-    document.getElementById(tabName).style.display = 'block';
-}
+const options = {
+    enableHighAccuracy: true, // මෙය අනිවාර්යයි
+    timeout: 5000,
+    maximumAge: 0
+};
 
-function saveWaypoint() {
-    alert("Saved: " + document.getElementById('lat').innerText);
-}
-
-// GPS Logic
-navigator.geolocation.watchPosition((pos) => {
+function success(pos) {
+    status.innerText = "GPS ACTIVE";
+    status.style.color = "#22c55e";
+    
+    // Speed conversion
     let s = (pos.coords.speed * 3.6 || 0);
     document.getElementById('speed').innerText = s.toFixed(1);
     
-    if(s > maxS) maxS = s;
-    sumS += s; count++;
-    
-    document.getElementById('maxSpeed').innerText = maxS.toFixed(1);
-    document.getElementById('avgSpeed').innerText = (sumS/count).toFixed(1);
-    document.getElementById('course').innerText = (pos.coords.heading || 0).toFixed(0) + "°";
-
+    // Format: DD°MM.MMM
     const f = (c, isLat) => {
         let abs = Math.abs(c);
         return Math.floor(abs) + "°" + ((abs - Math.floor(abs)) * 60).toFixed(3) + "'" + (isLat ? (c>=0?"N":"S") : (c>=0?"E":"W"));
@@ -28,4 +22,11 @@ navigator.geolocation.watchPosition((pos) => {
     
     document.getElementById('lat').innerText = f(pos.coords.latitude, true);
     document.getElementById('lon').innerText = f(pos.coords.longitude, false);
-}, { enableHighAccuracy: true });
+}
+
+function error(err) {
+    status.innerText = "GPS Error: " + err.message;
+    status.style.color = "#ef4444";
+}
+
+navigator.geolocation.watchPosition(success, error, options);

@@ -3,48 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DILSHAN_GPS PRO</title>
+    <title>DILSHAN_GPS PRO V2</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="main-app">
-        <header>DILSHAN_GPS PRO</header>
-        
-        <div class="tabs">
-            <button onclick="openTab('live')">LIVE</button>
-            <button onclick="openTab('stats')">STATS</button>
-        </div>
+    <header class="app-title">DILSHAN_GPS PRO</header>
+    
+    <div id="status" class="status-bar">Connecting to GPS...</div>
 
-        <div id="live" class="tabcontent">
-            <div class="card wind-box">
-                WIND: <span id="windSpeed">--</span> km/h | DIR: <span id="windDir">--</span>°
-            </div>
-            <div class="card">
-                <div class="label">SPEED (km/h)</div>
-                <div class="value" id="speed">0.0</div>
-            </div>
-            <div class="card">
-                <div class="label">COURSE</div>
-                <div class="value" id="course">---°</div>
-            </div>
-            <div class="card location-card">
-                <div class="value-loc" id="lat">---</div>
-                <div class="value-loc" id="lon">---</div>
-            </div>
-            <button class="save-btn" onclick="saveWaypoint()">SAVE WAYPOINT</button>
-        </div>
-
-        <div id="stats" class="tabcontent" style="display:none">
-            <div class="card">
-                <div class="label">MAX SPEED</div>
-                <div class="value" id="maxSpeed">0.0</div>
-            </div>
-            <div class="card">
-                <div class="label">AVG SPEED</div>
-                <div class="value" id="avgSpeed">0.0</div>
-            </div>
-        </div>
+    <div class="card">
+        <div class="label">SPEED (km/h)</div>
+        <div class="value" id="speed">0.0</div>
     </div>
+
+    <div class="card location-card">
+        <div class="label">LOCATION (DD°MM.MMM)</div>
+        <div class="value-loc" id="lat">---</div>
+        <div class="value-loc" id="lon">---</div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
