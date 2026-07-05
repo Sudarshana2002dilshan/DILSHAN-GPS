@@ -1,34 +1,23 @@
-<div class="dashboard">
-<div class="header-container">
-    <div id="compass">
-        <!-- මෙහි මාලිමා රූපය හෝ Canvas එකක් තිබිය යුතුය -->
-        <p>Wind Direction: <span id="wind-dir">NE</span></p>
-    </div>
-</div>
-</div>
-
 <!DOCTYPE html>
-<html lang="si">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>𝘿𝙄𝙇𝙎𝙃𝘼𝙉_𝙂𝙋𝙎_𝙒𝙀𝘽</title>
+    <title>Prime Forex Club - GPS</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="dashboard">
-        <div class="speed-section">
-            <h1>Speed (SOG) km/h</h1>
-            <div id="speed" class="display">0.0</div>
+    <div class="card">
+        <div class="header">Prime Forex GPS</div>
+        <div class="data-box">
+            <p>Speed (SOG): <span id="speed">0.0</span> kt</p>
         </div>
-        <div class="course-section">
-            <h1>Course (COG) °</h1>
-            <div id="course" class="display">---</div>
+        <div class="data-box">
+            <p>Course (COG): <span id="course">---</span>°</p>
         </div>
-        <div class="location-section">
-            <h1>Location/Time</h1>
-            <div id="coords">Loading...</div>
-            <div id="time"></div>
+        <div class="data-box">
+            <p>Location:</p>
+            <p id="coords">Loading...</p>
         </div>
     </div>
     <script src="script.js"></script>
