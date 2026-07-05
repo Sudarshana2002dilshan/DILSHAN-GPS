@@ -1,32 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DILSHAN_GPS</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+<html>
 <body>
-    <div class="app-container">
-        <header class="app-title">DILSHAN_GPS</header>
-        
-        <div class="card">
-            <div class="label">SPEED (km/h)</div>
-            <div class="value" id="speed">0.0</div>
-        </div>
-
-        <div class="card">
-            <div class="label">COURSE (COG)</div>
-            <div class="value" id="course">--- °</div>
-        </div>
-
-        <div class="card location-card">
-            <div class="label">LOCATION</div>
-            <div class="value-loc" id="lat">---</div>
-            <div class="value-loc" id="lon">---</div>
-            <div class="time" id="time">Time: --:--:--</div>
-        </div>
-    </div>
-    <script src="script.js"></script>
+    <h1 id="test">GPS පරීක්ෂාව...</h1>
+    <script>
+        navigator.geolocation.getCurrentPosition(p => {
+            document.getElementById('test').innerText = "Lat: " + p.coords.latitude;
+        });
+    </script>
 </body>
 </html>
