@@ -1,10 +1,4 @@
 <div class="dashboard">
-<div class="header-container">
-    <div id="compass">
-        <!-- මෙහි මාලිමා රූපය හෝ Canvas එකක් තිබිය යුතුය -->
-        <p>Wind Direction: <span id="wind-dir">NE</span></p>
-    </div>
-</div>
   <div class="speed-section">
     <h1>Speed (SOG)</h1>
     <div class="display">0.0</div>

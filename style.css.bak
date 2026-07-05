@@ -5,19 +5,6 @@ body {
   margin: 0;
   padding: 10px;
 }
-.header-container {
-    background-color: #e0f7fa; /* "149985.jpg" හි ඇති වර්ණයට සමානයි */
-    text-align: center;
-    padding: 10px;
-    border-bottom: 2px solid #003366;
-}
-
-#compass {
-    font-weight: bold;
-    color: #003366;
-    margin-bottom: 10px;
-}
-
 
 .dashboard {
   max-width: 400px;

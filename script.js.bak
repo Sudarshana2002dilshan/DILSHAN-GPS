@@ -1,4 +1,5 @@
 function updateGPS() {
+<<<<<<< HEAD
   if (navigator.geolocation) {
     navigator.geolocation.watchPosition((position) => {
       const lat = position.coords.latitude;
@@ -9,14 +10,7 @@ function updateGPS() {
       // වේගය යාවත්කාලීන කිරීම මෙහිදී සිදු කරන්න
     });
   }
-  // මාලිමාව සහ සුළගේ දිශාව යාවත්කාලීන කිරීම
-function updateCompass(windDirection) {
-    document.getElementById('wind-dir').innerText = windDirection + '°';
-}
-
-// දත්ත ලැබුණු පසු ඉහත function එක අමතන්න
-// updateCompass(දත්ත);
-
+=======
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition((position) => {
             const speed = position.coords.speed ? (position.coords.speed * 3.6).toFixed(1) : "0.0";
@@ -31,5 +25,6 @@ function updateCompass(windDirection) {
             alert("GPS දෝෂයක්: " + err.message);
         }, { enableHighAccuracy: true });
     }
+>>>>>>> 15c3ce5deb953331889d5d30621f9e3fd84bd95f
 }
 updateGPS();
