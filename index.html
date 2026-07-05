@@ -1,10 +1,18 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DILSHAN_GPS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-    <h1 id="test">GPS පරීක්ෂාව...</h1>
-    <script>
-        navigator.geolocation.getCurrentPosition(p => {
-            document.getElementById('test').innerText = "Lat: " + p.coords.latitude;
-        });
-    </script>
+    <header class="app-title">DILSHAN_GPS</header>
+    <div class="card">
+        <div class="label">LOCATION</div>
+        <div class="value-loc" id="lat">---</div>
+        <div class="value-loc" id="lon">---</div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

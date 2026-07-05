@@ -1,32 +1,22 @@
-const status = document.getElementById('status');
-
-const options = {
-    enableHighAccuracy: true, // මෙය අනිවාර්යයි
-    timeout: 5000,
-    maximumAge: 0
-};
-
-function success(pos) {
-    status.innerText = "GPS ACTIVE";
-    status.style.color = "#22c55e";
-    
-    // Speed conversion
-    let s = (pos.coords.speed * 3.6 || 0);
-    document.getElementById('speed').innerText = s.toFixed(1);
-    
-    // Format: DD°MM.MMM
-    const f = (c, isLat) => {
-        let abs = Math.abs(c);
-        return Math.floor(abs) + "°" + ((abs - Math.floor(abs)) * 60).toFixed(3) + "'" + (isLat ? (c>=0?"N":"S") : (c>=0?"E":"W"));
-    };
-    
-    document.getElementById('lat').innerText = f(pos.coords.latitude, true);
-    document.getElementById('lon').innerText = f(pos.coords.longitude, false);
+function formatCoord(coord, isLat) {
+    const abs = Math.abs(coord);
+    const deg = Math.floor(abs);
+    const min = ((abs - deg) * 60).toFixed(3);
+    const dir = isLat ? (coord >= 0 ? "N" : "S") : (coord >= 0 ? "E" : "W");
+    return `${deg}°${min}'${dir}`;
 }
 
-function error(err) {
-    status.innerText = "GPS Error: " + err.message;
-    status.style.color = "#ef4444";
-}
-
-navigator.geolocation.watchPosition(success, error, options);
+navigator.geolocation.watchPosition((pos) => {
+    // Speed: m/s to km/h (multiply by 3.6)
+    document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1);
+    
+    // Course
+    document.getElementById('course').innerText = pos.coords.heading ? pos.coords.heading.toFixed(0) : '---';
+    
+    // Location
+    document.getElementById('lat').innerText = formatCoord(pos.coords.latitude, true);
+    document.getElementById('lon').innerText = formatCoord(pos.coords.longitude, false);
+    
+    // Time
+    document.getElementById('time').innerText = "Time: " + new Date().toLocaleTimeString();
+}, { enableHighAccuracy: true });
