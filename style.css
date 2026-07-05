@@ -1,9 +1,9 @@
-body { background: #0f172a; color: white; font-family: sans-serif; padding: 10px; }
-.app-title { text-align: center; font-size: 26px; font-weight: bold; color: #38bdf8; margin: 10px 0; }
-.wind-bar { text-align: center; background: #1e293b; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
+body { background: #0b0e14; color: #e2e8f0; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; }
+header { text-align: center; font-size: 24px; font-weight: 800; color: #06b6d4; padding: 15px; }
 .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-.tabs button { flex: 1; padding: 15px; background: #334155; border: none; color: white; border-radius: 10px; }
-.card { background: #1e293b; padding: 20px; border-radius: 20px; margin-bottom: 15px; text-align: center; border: 1px solid #334155; }
-.value { font-size: 60px; font-weight: 900; color: #facc15; }
-.value-loc { font-size: 45px; font-weight: 800; color: #ffffff; margin: 5px 0; }
-.save-btn { width: 100%; padding: 20px; background: #22c55e; border: none; border-radius: 10px; font-weight: bold; color: white; }
+.tabs button { flex: 1; padding: 12px; background: #1e293b; border: none; color: white; border-radius: 8px; font-weight: bold; }
+.card { background: #111827; padding: 20px; border-radius: 15px; margin-bottom: 15px; text-align: center; border: 1px solid #374151; }
+.value { font-size: 55px; font-weight: 900; color: #fbbf24; }
+.value-loc { font-size: 40px; font-weight: 700; color: #ffffff; margin: 5px 0; }
+.save-btn { width: 100%; padding: 18px; background: #0891b2; border: none; border-radius: 10px; color: white; font-weight: bold; font-size: 16px; }
+.wind-box { color: #94a3b8; font-size: 14px; }

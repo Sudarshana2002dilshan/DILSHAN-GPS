@@ -1,22 +1,29 @@
-function formatCoord(coord, isLat) {
-    const abs = Math.abs(coord);
-    const deg = Math.floor(abs);
-    const min = ((abs - deg) * 60).toFixed(3);
-    const dir = isLat ? (coord >= 0 ? "N" : "S") : (coord >= 0 ? "E" : "W");
-    return `${deg}°${min}'${dir}`;
+let maxS = 0, totalS = 0, count = 0;
+
+function showTab(id) {
+    document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
 }
 
+function saveWaypoint() {
+    alert("Waypoint Saved: " + document.getElementById('lat').innerText);
+}
+
+// GPS සහ සුළං දත්ත
 navigator.geolocation.watchPosition((pos) => {
-    // Speed: m/s to km/h (multiply by 3.6)
-    document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1);
+    let s = pos.coords.speed * 3.6 || 0;
+    document.getElementById('speed').innerText = s.toFixed(1);
+    if(s > maxS) maxS = s;
+    totalS += s; count++;
+    document.getElementById('maxSpeed').innerText = maxS.toFixed(1);
+    document.getElementById('avgSpeed').innerText = (totalS/count).toFixed(1);
+    document.getElementById('course').innerText = (pos.coords.heading || 0).toFixed(0) + '°';
     
-    // Course
-    document.getElementById('course').innerText = pos.coords.heading ? pos.coords.heading.toFixed(0) : '---';
-    
-    // Location
-    document.getElementById('lat').innerText = formatCoord(pos.coords.latitude, true);
-    document.getElementById('lon').innerText = formatCoord(pos.coords.longitude, false);
-    
-    // Time
-    document.getElementById('time').innerText = "Time: " + new Date().toLocaleTimeString();
+    // DD°MM.MMM ආකෘතිය
+    const f = (c, isLat) => {
+        let abs = Math.abs(c);
+        return Math.floor(abs) + "°" + ((abs - Math.floor(abs)) * 60).toFixed(3) + "'" + (isLat ? (c>=0?"N":"S") : (c>=0?"E":"W"));
+    };
+    document.getElementById('lat').innerText = f(pos.coords.latitude, true);
+    document.getElementById('lon').innerText = f(pos.coords.longitude, false);
 }, { enableHighAccuracy: true });
