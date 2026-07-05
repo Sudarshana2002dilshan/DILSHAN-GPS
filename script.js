@@ -1,32 +1,24 @@
-const status = document.getElementById('status');
-
-const options = {
-    enableHighAccuracy: true, // මෙය අනිවාර්යයි
-    timeout: 5000,
-    maximumAge: 0
-};
+console.log("GPS Script Loaded");
 
 function success(pos) {
-    status.innerText = "GPS ACTIVE";
-    status.style.color = "#22c55e";
+    const lat = pos.coords.latitude.toFixed(5);
+    const lon = pos.coords.longitude.toFixed(5);
+    console.log("Location found:", lat, lon);
     
-    // Speed conversion
-    let s = (pos.coords.speed * 3.6 || 0);
-    document.getElementById('speed').innerText = s.toFixed(1);
+    // HTML වලට දත්ත යැවීම
+    const latEl = document.getElementById('lat');
+    const lonEl = document.getElementById('lon');
     
-    // Format: DD°MM.MMM
-    const f = (c, isLat) => {
-        let abs = Math.abs(c);
-        return Math.floor(abs) + "°" + ((abs - Math.floor(abs)) * 60).toFixed(3) + "'" + (isLat ? (c>=0?"N":"S") : (c>=0?"E":"W"));
-    };
-    
-    document.getElementById('lat').innerText = f(pos.coords.latitude, true);
-    document.getElementById('lon').innerText = f(pos.coords.longitude, false);
+    if(latEl && lonEl) {
+        latEl.innerText = lat;
+        lonEl.innerText = lon;
+    } else {
+        alert("Location: " + lat + ", " + lon);
+    }
 }
 
 function error(err) {
-    status.innerText = "GPS Error: " + err.message;
-    status.style.color = "#ef4444";
+    alert("GPS Error: " + err.message);
 }
 
-navigator.geolocation.watchPosition(success, error, options);
+navigator.geolocation.watchPosition(success, error, { enableHighAccuracy: true });
