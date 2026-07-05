@@ -1,24 +1,22 @@
-console.log("GPS Script Loaded");
-
-function success(pos) {
-    const lat = pos.coords.latitude.toFixed(5);
-    const lon = pos.coords.longitude.toFixed(5);
-    console.log("Location found:", lat, lon);
-    
-    // HTML වලට දත්ත යැවීම
-    const latEl = document.getElementById('lat');
-    const lonEl = document.getElementById('lon');
-    
-    if(latEl && lonEl) {
-        latEl.innerText = lat;
-        lonEl.innerText = lon;
-    } else {
-        alert("Location: " + lat + ", " + lon);
-    }
+function formatCoord(coord, isLat) {
+    const abs = Math.abs(coord);
+    const deg = Math.floor(abs);
+    const min = ((abs - deg) * 60).toFixed(3);
+    const dir = isLat ? (coord >= 0 ? "N" : "S") : (coord >= 0 ? "E" : "W");
+    return `${deg}°${min}'${dir}`;
 }
 
-function error(err) {
-    alert("GPS Error: " + err.message);
-}
-
-navigator.geolocation.watchPosition(success, error, { enableHighAccuracy: true });
+navigator.geolocation.watchPosition((pos) => {
+    // Speed: m/s to km/h (multiply by 3.6)
+    document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1);
+    
+    // Course
+    document.getElementById('course').innerText = pos.coords.heading ? pos.coords.heading.toFixed(0) : '---';
+    
+    // Location
+    document.getElementById('lat').innerText = formatCoord(pos.coords.latitude, true);
+    document.getElementById('lon').innerText = formatCoord(pos.coords.longitude, false);
+    
+    // Time
+    document.getElementById('time').innerText = "Time: " + new Date().toLocaleTimeString();
+}, { enableHighAccuracy: true });
