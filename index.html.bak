@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="dashboard">
   <div class="speed-section">
     <h1>Speed (SOG)</h1>
@@ -41,3 +42,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+>>>>>>> 15c3ce5deb953331889d5d30621f9e3fd84bd95f
