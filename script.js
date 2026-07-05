@@ -1,18 +1,22 @@
-function toDegreesMinutesAndSeconds(coordinate, isLat) {
-    const absolute = Math.abs(coordinate);
-    const degrees = Math.floor(absolute);
-    const minutes = ((absolute - degrees) * 60).toFixed(3);
-    const direction = isLat ? (coordinate >= 0 ? "N" : "S") : (coordinate >= 0 ? "E" : "W");
-    return `${degrees}°${minutes}' ${direction}`;
+function formatCoord(coord, isLat) {
+    const abs = Math.abs(coord);
+    const deg = Math.floor(abs);
+    const min = ((abs - deg) * 60).toFixed(3);
+    const dir = isLat ? (coord >= 0 ? "N" : "S") : (coord >= 0 ? "E" : "W");
+    return `${deg}°${min}'${dir}`;
 }
 
-navigator.geolocation.watchPosition((position) => {
-    document.getElementById('speed').innerText = (position.coords.speed * 1.94384 || 0).toFixed(2);
-    document.getElementById('course').innerText = position.coords.heading ? position.coords.heading.toFixed(0) : '---';
+navigator.geolocation.watchPosition((pos) => {
+    // Speed: m/s to km/h (multiply by 3.6)
+    document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1);
     
-    const lat = toDegreesMinutesAndSeconds(position.coords.latitude, true);
-    const lon = toDegreesMinutesAndSeconds(position.coords.longitude, false);
-    const time = new Date().toLocaleTimeString();
+    // Course
+    document.getElementById('course').innerText = pos.coords.heading ? pos.coords.heading.toFixed(0) : '---';
     
-    document.getElementById('coords').innerHTML = `${lat}<br>${lon}<br>${time}`;
-});
+    // Location
+    document.getElementById('lat').innerText = formatCoord(pos.coords.latitude, true);
+    document.getElementById('lon').innerText = formatCoord(pos.coords.longitude, false);
+    
+    // Time
+    document.getElementById('time').innerText = "Time: " + new Date().toLocaleTimeString();
+}, { enableHighAccuracy: true });
