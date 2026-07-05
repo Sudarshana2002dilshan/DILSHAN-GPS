@@ -3,37 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DILSHAN-𝙂𝙋𝙎</title>
+    <title>DILSHAN_GPS</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="main-container">
-        <header>
-            <h1>𝘿𝙄𝙇𝙎𝙃𝘼𝙉 𝙂𝙋𝙎: 𝙁𝙄𝙎𝙃𝙄𝙉𝙂 𝙋𝙊𝙄𝙉𝙏</h1>
-        </header>
-
-        <!-- Speed Card -->
-        <div class="data-card">
+    <div class="app-container">
+        <header class="app-title">DILSHAN_GPS</header>
+        
+        <div class="card">
             <div class="label">Speed (SOG)</div>
             <div class="value" id="speed">0.0</div>
             <div class="unit">kt</div>
         </div>
 
-        <!-- Course Card -->
-        <div class="data-card">
+        <div class="card">
             <div class="label">Course (COG)</div>
             <div class="value" id="course">---</div>
             <div class="unit">°</div>
         </div>
 
-        <!-- Location Card -->
-        <div class="data-card location-card">
+        <div class="card location-card">
             <div class="label">Location / Time</div>
-            <div class="value location-text" id="coords">Loading...</div>
+            <div class="value-loc" id="coords">Loading...</div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
