@@ -2,31 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DILSHAN_GPS</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <header class="app-title">DILSHAN_GPS</header>
-        
-        <div class="card">
-            <div class="label">Speed (SOG)</div>
-            <div class="value" id="speed">0.0</div>
-            <div class="unit">kt</div>
-        </div>
+    <header class="app-title">DILSHAN_GPS</header>
+    <div class="wind-bar">Wind: <span id="windSpeed">--</span> km/h | Dir: <span id="windDir">--</span>°</div>
 
-        <div class="card">
-            <div class="label">Course (COG)</div>
-            <div class="value" id="course">---</div>
-            <div class="unit">°</div>
-        </div>
-
-        <div class="card location-card">
-            <div class="label">Location / Time</div>
-            <div class="value-loc" id="coords">Loading...</div>
-        </div>
+    <div class="tabs">
+        <button onclick="showTab('main')">Live</button>
+        <button onclick="showTab('map')">Map</button>
+        <button onclick="showTab('stats')">Stats</button>
     </div>
+
+    <div id="main" class="tab-content">
+        <div class="card"><div class="label">SPEED (km/h)</div><div class="value" id="speed">0.0</div></div>
+        <div class="card location-card"><div class="value-loc" id="lat">---</div><div class="value-loc" id="lon">---</div></div>
+        <button class="save-btn" onclick="saveWaypoint()">SAVE WAYPOINT</button>
+    </div>
+
+    <div id="map" class="tab-content" style="display:none">
+        <div id="mapView" class="card" style="height:300px">Map View Active</div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
