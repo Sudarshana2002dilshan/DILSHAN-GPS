@@ -1,0 +1,9 @@
+body { font-family: sans-serif; background-color: #e0f7fa; padding: 10px; }
+.dashboard { max-width: 400px; margin: 0 auto; }
+.speed-section, .course-section, .location-section {
+    background-color: #ffffff; border: 2px solid #003366;
+    border-radius: 12px; padding: 15px; margin-bottom: 15px;
+}
+h1 { color: #003366; font-size: 1rem; text-align: center; margin: 0 0 10px 0; }
+.display { font-size: 2.5rem; font-weight: bold; color: #003366; text-align: center; }
+#coords { font-size: 1rem; color: #333; text-align: center; }
