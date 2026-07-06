@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DILSHAN MARINE GPS</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
@@ -18,30 +19,28 @@
         <button onclick="toggleTheme()">Dark / Light Mode</button>
         <button onclick="toggleBatteryMode()">Battery Optimizer: <span id="bat-status">OFF</span></button>
         <div class="about">
-            <p>Developed by: Dilshan</p>
+            <p>Developer: Dilshan</p>
             <a href="tel:+94765529447">+94 76 552 9447</a>
         </div>
     </div>
 
-    <div id="home" class="tab-pane active">
-        <div class="compass-box"><div id="compass-needle" class="needle">▲</div></div>
-        <div class="val-xl" id="speed">0.0 km/h</div>
+    <div class="dashboard">
+        <div class="compass-box">
+            <div id="compass-needle" class="needle">▲</div>
+        </div>
+        <div class="main-data">
+            <div class="val-xl" id="speed">0.0 km/h</div>
+            <div class="label">Heading: <span id="heading">0°</span></div>
+        </div>
         <div class="grid">
             <div class="card">Lat: <span id="lat">0.00000</span></div>
             <div class="card">Lon: <span id="lon">0.00000</span></div>
-            <div class="card">Heading: <span id="heading">0°</span></div>
+            <div class="card">Wind: <span id="wind">--</span></div>
             <div class="card">Time: <span id="time">00:00</span></div>
         </div>
     </div>
 
-    <div id="windy-tab" class="tab-pane">
-        <h3 style="text-align:center; color:#38bdf8;">ඉදිරි කාලගුණ අනාවැකිය</h3>
-        <div id="forecast-data">දත්ත ලබාගනිමින්...</div>
-    </div>
-
     <nav class="bottom-nav">
-        <button onclick="showTab('home')">HOME</button>
-        <button onclick="showTab('windy-tab'); fetchForecast();">WINDY</button>
         <button onclick="saveWaypoint()">+ POINT</button>
         <button class="sos-btn" onclick="sendSOS()">SOS</button>
     </nav>

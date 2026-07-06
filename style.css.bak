@@ -1,0 +1,13 @@
+body { background: #000; color: #fff; font-family: sans-serif; margin: 0; transition: 0.3s; }
+.light-mode { background: #f0f0f0; color: #000; }
+header { padding: 15px; background: #111; display: flex; justify-content: space-between; }
+.settings-panel { display: none; position: fixed; top: 0; right: 0; width: 260px; height: 100%; background: #1a1a1a; padding: 20px; z-index: 1000; }
+.settings-panel.show { display: block; }
+.compass-box { width: 140px; height: 140px; border: 4px solid #38bdf8; border-radius: 50%; margin: 20px auto; position: relative; }
+.needle { position: absolute; top: 10px; left: 65px; color: #fbbf24; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 20px; }
+.card { background: #111; padding: 15px; border-radius: 10px; text-align: center; }
+.val-xl { font-size: 40px; font-weight: bold; text-align: center; color: #38bdf8; }
+.bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; }
+.bottom-nav button { flex: 1; padding: 15px; border: none; background: #222; color: #fff; }
+.sos-btn { background: #dc2626 !important; }
