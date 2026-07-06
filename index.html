@@ -3,16 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DILSHAN_GPS</title>
+    <title>DILSHAN_GPS PRO</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="app-title">DILSHAN_GPS</header>
+    
+    <div class="card wind-card">
+        <div>WIND: <span id="wSpeed">--</span> km/h</div>
+        <div>DIR: <span id="wDir">--</span>°</div>
+    </div>
+
+    <div class="card">
+        <div class="label">SPEED (km/h)</div>
+        <div class="value" id="speed">0.0</div>
+    </div>
+
     <div class="card">
         <div class="label">LOCATION</div>
         <div class="value-loc" id="lat">---</div>
         <div class="value-loc" id="lon">---</div>
     </div>
+    
     <script src="script.js"></script>
 </body>
 </html>

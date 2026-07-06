@@ -1,12 +1,27 @@
+// OpenWeather API එක භාවිතා කර සුළං දත්ත ගැනීමට (ඔබේ API key එක දමන්න)
+const apiKey = 'ef037298a7b9778d89749e09067c3862'; 
+
 navigator.geolocation.watchPosition(
     (pos) => {
+        // 1. වේගය (km/h)
+        document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1);
+
+        // 2. ස්ථානය
         const f = (c, isLat) => {
             let abs = Math.abs(c);
             return Math.floor(abs) + "°" + ((abs - Math.floor(abs)) * 60).toFixed(3) + "'" + (isLat ? (c>=0?"N":"S") : (c>=0?"E":"W"));
         };
         document.getElementById('lat').innerText = f(pos.coords.latitude, true);
         document.getElementById('lon').innerText = f(pos.coords.longitude, false);
+
+        // 3. සුළං දත්ත (API ඇමතුම)
+        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${apiKey}`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('wSpeed').innerText = (data.wind.speed * 3.6).toFixed(1);
+                document.getElementById('wDir').innerText = data.wind.deg;
+            });
     },
-    (err) => { console.error(err); },
+    (err) => console.error(err),
     { enableHighAccuracy: true }
 );
