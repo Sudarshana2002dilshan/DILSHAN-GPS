@@ -1,44 +1,17 @@
-// 1. පරණ Cache සහ Service Workers ඉවත් කිරීම (අලුත් දේවල් පෙන්වීමට)
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(registrations => {
-        for (let registration of registrations) {
-            registration.unregister();
-        }
-    });
-}
-
-// 2. Battery Optimization - GPS සැකසුම් අලුත් කිරීම (Battery Saver ක්‍රියාත්මක වන විට නැවත watchPosition ලබා ගැනීම)
-let isBatSaver = false;
-let watchId = null;
-
-function startGPS() {
-    if (watchId !== null) navigator.geolocation.clearWatch(watchId);
-    watchId = navigator.geolocation.watchPosition((pos) => {
-        document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1) + " km/h";
-        document.getElementById('lat').innerText = pos.coords.latitude.toFixed(5);
-        document.getElementById('lon').innerText = pos.coords.longitude.toFixed(5);
-        document.getElementById('heading').innerText = (pos.coords.heading || 0).toFixed(0) + "°";
-        document.getElementById('time').innerText = new Date().toLocaleTimeString();
-        document.getElementById('compass-needle').style.transform = `rotate(${pos.coords.heading || 0}deg)`;
-    }, null, { enableHighAccuracy: !isBatSaver });
-}
-
-function toggleBatteryMode() {
-    isBatSaver = !isBatSaver;
-    document.getElementById('bat-status').innerText = isBatSaver ? "ON" : "OFF";
-    startGPS(); // Setting වෙනස් වූ විට GPS එක Restart වේ
-}
-
-// පද්ධතිය ආරම්භයේදී GPS දියත් කිරීම
-startGPS();
-
-// ඉතිරි කොටස් ඒ ආකාරයටම පවතී
-function toggleTheme() { document.body.classList.toggle('light-mode'); }
-
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
 function showTab(id) {
     document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
     document.getElementById(id).classList.add('active');
+    toggleSidebar();
 }
+
+navigator.geolocation.watchPosition((pos) => {
+    document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1);
+    document.getElementById('heading').innerText = (pos.coords.heading || 0).toFixed(0);
+    document.getElementById('lat').innerText = pos.coords.latitude.toFixed(4) + " N";
+    document.getElementById('lon').innerText = pos.coords.longitude.toFixed(4) + " E";
+    document.getElementById('time').innerText = new Date().toLocaleTimeString();
+}, null, { enableHighAccuracy: true });
 
 function fetchForecast() {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -49,7 +22,7 @@ function fetchForecast() {
             for(let i=0; i<3; i++) {
                 let item = d.list[i];
                 let desc = { "Clear": "පැහැදිලි", "Clouds": "වලාකුළු", "Rain": "වැසි" }[item.weather[0].main] || item.weather[0].main;
-                container.innerHTML += `<div class="card" style="margin-bottom:10px;">${item.dt_txt.split(' ')[1]} - ${desc} - ${item.main.temp}°C</div>`;
+                container.innerHTML += `<div class="box">${item.dt_txt.split(' ')[1]} | ${desc} | ${item.main.temp}°C</div>`;
             }
         });
     });
@@ -57,3 +30,4 @@ function fetchForecast() {
 
 function sendSOS() { window.location.href = `sms:?body=SOS! Loc: ${document.getElementById('lat').innerText}, ${document.getElementById('lon').innerText}`; }
 function saveWaypoint() { localStorage.setItem('wp_'+Date.now(), 'saved'); alert("ස්ථානය සුරකින ලදී!"); }
+function toggleTheme() { document.body.style.filter = document.body.style.filter === 'invert(1)' ? 'none' : 'invert(1)'; }
