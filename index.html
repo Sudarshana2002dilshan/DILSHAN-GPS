@@ -8,24 +8,30 @@
 </head>
 <body>
     <div id="home" class="tab-pane active">
-        <header class="app-header"><h1>DILSHAN MARINE GPS</h1></header>
-        <div class="card">
-            <div class="label">සුළඟ (WIND)</div>
-            <div class="huge-data" id="wind-speed">-- km/h</div>
-            <div class="bold-text" id="wind-dir">--</div>
+        <div class="logo-container">
+            <img src="DILGPS.png" alt="Logo" class="main-logo">
         </div>
-        <div class="card">
-            <div class="label">SPEED (SOG)</div>
-            <div class="huge-data" id="speed">0.0 km/h</div>
-        </div>
-        <div class="card">
-            <div class="label">LOCATION</div>
-            <div class="huge-bold" id="lat">0°00.000' N</div>
-            <div class="huge-bold" id="lon">0°00.000' E</div>
-            <div class="huge-bold" id="time">--:--:--</div>
+        
+        <div class="main-container">
+            <div class="card">
+                <div class="label">LOCATION</div>
+                <div class="huge-bold" id="lat">0°00.000' N</div>
+                <div class="huge-bold" id="lon">0°00.000' E</div>
+                <div class="time-data" id="time">--:--:--</div>
+            </div>
+            <div class="card">
+                <div class="label">SPEED (SOG)</div>
+                <div class="huge-data" id="speed">0.0 km/h</div>
+            </div>
+            <div class="card">
+                <div class="label">WIND SPEED</div>
+                <div class="huge-data" id="wind-speed">-- km/h</div>
+            </div>
         </div>
     </div>
+
     <div id="windy" class="tab-pane"><iframe src="https://embed.windy.com/embed2.html?lat=7.0&lon=80.0&zoom=7"></iframe></div>
+
     <div id="settings" class="tab-pane">
         <div class="card">
             <h3>SETTINGS</h3>
@@ -33,10 +39,11 @@
             <a href="https://wa.me/94765529447" class="btn-wa">CONTACT WHATSAPP</a>
         </div>
     </div>
+
     <nav class="bottom-nav">
         <button onclick="showTab('home')">HOME</button>
         <button onclick="showTab('windy')">WINDY</button>
-        <button onclick="showTab('settings')">SETTINGS</button>
+        <button onclick="showTab('settings')">SET</button>
     </nav>
     <script src="script.js"></script>
 </body>
