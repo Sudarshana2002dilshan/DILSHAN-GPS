@@ -2,21 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DILSHAN MARINE GPS</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="home" class="tab-pane active">
         <div class="logo-container">
-            <img src="DILGPS.png" alt="Logo" class="main-logo">
+            <img src="DILGPS.png" class="main-logo">
         </div>
-        
         <div class="main-container">
             <div class="card">
                 <div class="label">LOCATION</div>
-                <div class="huge-bold" id="lat">0°00.000' N</div>
-                <div class="huge-bold" id="lon">0°00.000' E</div>
+                <div class="huge-bold" id="lat">--</div>
+                <div class="huge-bold" id="lon">--</div>
                 <div class="time-data" id="time">--:--:--</div>
             </div>
             <div class="card">
@@ -40,10 +39,10 @@
         </div>
     </div>
 
-        <nav class="bottom-nav">
-        <button onclick="showTab('home')">🏠 HOME</button>
-        <button onclick="showTab('windy')">🌪️ WINDY</button>
-        <button onclick="showTab('settings')">⚙️ SETTINGS</button>
+    <nav class="bottom-nav">
+        <button onclick="showTab('home')">HOME</button>
+        <button onclick="showTab('windy')">WINDY</button>
+        <button onclick="showTab('settings')">SET</button>
     </nav>
     <script src="script.js"></script>
 </body>
