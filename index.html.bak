@@ -9,22 +9,26 @@
 <body>
     <div class="app-container">
         <header class="app-title">DILSHAN_GPS</header>
+
+        <div class="wind-info">
+            සුළඟ: <span id="wind-dir">--</span> | <span id="wind-speed">0</span> km/h
+        </div>
         
         <div class="card">
-            <div class="label">SPEED (km/h)</div>
+            <div class="label">SPEED (SOG) km/h</div>
             <div class="value" id="speed">0.0</div>
         </div>
 
         <div class="card">
-            <div class="label">COURSE (COG)</div>
-            <div class="value" id="course">--- °</div>
+            <div class="label">COURSE (COG) °</div>
+            <div class="value" id="course">---</div>
         </div>
 
         <div class="card location-card">
-            <div class="label">LOCATION</div>
+            <div class="label">LOCATION / TIME</div>
             <div class="value-loc" id="lat">---</div>
             <div class="value-loc" id="lon">---</div>
-            <div class="time" id="time">Time: --:--:--</div>
+            <div class="time" id="time">--:--:--</div>
         </div>
     </div>
     <script src="script.js"></script>
