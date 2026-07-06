@@ -6,6 +6,12 @@
     <title>DILSHAN_GPS</title>
     <link rel="stylesheet" href="style.css?v=7.0">
 </head>
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js');
+    }
+</script>
+
 <body>
     <div class="app-container">
         <header class="app-title">DILSHAN MARINE GPS</header>
