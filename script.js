@@ -1,42 +1,37 @@
-const apiKey = 'b55f6eb21b285249ea39c2d19af58d88'; // ඔබේ API Key
+// 1. Wake Lock (තිරය අගුළු වැටීම වළක්වයි)
+if ('wakeLock' in navigator) navigator.wakeLock.request('screen');
+
+// 2. Offline support
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 
 function showTab(id) {
     document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
     document.getElementById(id).style.display = 'block';
 }
 
-function getWindDirection(deg) {
-    if (deg > 337.5 || deg <= 22.5) return "උතුර (N)";
-    if (deg > 22.5 && deg <= 67.5) return "ඊසාන (NE)";
-    if (deg > 67.5 && deg <= 112.5) return "නැගෙනහිර (E)";
-    if (deg > 112.5 && deg <= 157.5) return "අග්නිදිග (SE)";
-    if (deg > 157.5 && deg <= 202.5) return "දකුණ (S)";
-    if (deg > 202.5 && deg <= 247.5) return "නිරිත (SW)";
-    if (deg > 247.5 && deg <= 292.5) return "බටහිර (W)";
-    return "වයඹ (NW)";
-}
-
 navigator.geolocation.watchPosition((pos) => {
+    // වේගය සහ ලොකේෂන්
     document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1) + " km/h";
-    document.getElementById('heading').innerText = (pos.coords.heading || 0).toFixed(0) + "°";
-    document.getElementById('lat').innerText = "Lat: " + pos.coords.latitude.toFixed(5);
-    document.getElementById('lon').innerText = "Lon: " + pos.coords.longitude.toFixed(5);
-    document.getElementById('time').innerText = new Date().toLocaleTimeString();
+    document.getElementById('lat').innerText = pos.coords.latitude.toFixed(5);
+    document.getElementById('lon').innerText = pos.coords.longitude.toFixed(5);
+    document.getElementById('heading').innerText = "දිශාව: " + (pos.coords.heading || 0).toFixed(0) + "°";
+    document.getElementById('time').innerText = "වෙලාව: " + new Date().toLocaleTimeString();
 
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=${apiKey}&units=metric`)
+    // සුළං දත්ත (API)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
         .then(res => res.json())
         .then(data => {
-            let dir = getWindDirection(data.wind.deg);
-            document.getElementById('wind').innerText = `වේගය: ${(data.wind.speed * 3.6).toFixed(1)} km/h | දිශාව: ${dir}`;
+            document.getElementById('wind').innerText = `සුළඟ: ${(data.wind.speed * 3.6).toFixed(1)} km/h (${data.wind.deg}°)`;
         });
 }, null, { enableHighAccuracy: true });
 
 function addWaypoint() {
-    let p = document.getElementById('lat').innerText + " " + document.getElementById('lon').innerText;
-    let li = document.createElement('li'); li.innerText = p;
+    let li = document.createElement('li');
+    li.innerText = `Pos: ${document.getElementById('lat').innerText}, ${document.getElementById('lon').innerText} | ${new Date().toLocaleTimeString()}`;
     document.getElementById('wp-list').appendChild(li);
+    localStorage.setItem('wp_' + Date.now(), li.innerText); // Offline සුරැකීම
 }
 
 function sendSOS() {
-    window.location.href = `sms:?body=SOS! I am at ${document.getElementById('lat').innerText}, ${document.getElementById('lon').innerText}`;
+    window.location.href = `sms:?body=SOS! මගේ පිහිටීම: ${document.getElementById('lat').innerText}, ${document.getElementById('lon').innerText}`;
 }
