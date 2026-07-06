@@ -2,6 +2,10 @@ body { background: #000; color: #fff; font-family: sans-serif; margin: 0; transi
 .light-mode { background: #fff; color: #000; }
 header { padding: 15px; background: #111; display: flex; justify-content: space-between; }
 .settings-panel { display: none; position: fixed; top: 0; right: 0; width: 250px; height: 100%; background: #1a1a1a; padding: 20px; z-index: 1000; }
+.menu-btn { width: 100%; padding: 12px; margin: 5px 0; background: #222; border: 1px solid #444; color: white; border-radius: 5px; cursor: pointer; }
+.data-val { font-size: 1.2em; font-weight: bold; color: #fff; }
+.contact-link { color: #38bdf8; font-size: 1.2em; font-weight: bold; text-decoration: none; }
+.card { background: #111; padding: 15px; border-radius: 12px; border: 1px solid #222; text-align: center; }
 .settings-panel.show { display: block; }
 .tab-pane { display: none; padding: 20px; }
 .active { display: block; }

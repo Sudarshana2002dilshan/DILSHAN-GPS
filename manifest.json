@@ -1,6 +1,6 @@
 {
   "name": "DILSHAN MARINE GPS",
-  "short_name": "MarineGPS",
+  "short_name": "DILSHAN_GPS",
   "display": "standalone",
   "start_url": "index.html",
   "background_color": "#000000",
