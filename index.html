@@ -3,28 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DILSHAN_GPS PRO</title>
+    <title>DILSHAN MARINE GPS</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
-    <header class="app-title">DILSHAN_GPS</header>
+    <header>MARINE GPS NAVIGATOR</header>
     
-    <div class="card wind-card">
-        <div>WIND: <span id="wSpeed">--</span> km/h</div>
-        <div>DIR: <span id="wDir">--</span>°</div>
+    <!-- Tab Navigation -->
+    <div class="tabs">
+        <button onclick="showTab('home')">LIVE</button>
+        <button onclick="showTab('waypoints')">POINTS</button>
+        <button onclick="showTab('settings')">SET</button>
     </div>
 
-    <div class="card">
-        <div class="label">SPEED (km/h)</div>
-        <div class="value" id="speed">0.0</div>
-    </div>
-
-    <div class="card">
-        <div class="label">LOCATION</div>
-        <div class="value-loc" id="lat">---</div>
-        <div class="value-loc" id="lon">---</div>
+    <!-- Live Tracking -->
+    <div id="home" class="tab-content">
+        <div class="card">
+            <div class="label">CURRENT SPEED</div>
+            <div class="value" id="speed">0.0 <small>km/h</small></div>
+        </div>
+        <div class="card">
+            <div class="label">COORDINATES</div>
+            <div class="value-loc" id="lat">---</div>
+            <div class="value-loc" id="lon">---</div>
+        </div>
+        <div id="home" class="tab-content">
+    <div class="card compass-card">
+        <div class="label">HEADING</div>
+        <div class="value" id="heading">0°</div>
     </div>
     
+    <div class="card">
+        <div class="label">SPEED</div>
+        <div class="value" id="speed">0.0 <small>km/h</small></div>
+    </div>
+
+    <button class="sos-btn" onclick="sendSOS()">SOS - EMERGENCY</button>
+</div>
+        <button class="save-btn" onclick="addWaypoint()">+ MARK LOCATION</button>
+    </div>
+
+    <!-- Waypoints List -->
+    <div id="waypoints" class="tab-content" style="display:none">
+        <div class="card" id="wp-list">
+            <div class="label">SAVED WAYPOINTS</div>
+            <ul id="list"></ul>
+        </div>
+    </div>
+
+    <!-- Settings -->
+    <div id="settings" class="tab-content" style="display:none">
+        <div class="card">
+            <label>Units: </label>
+            <select id="unitSelect">
+                <option value="km">Kilometers</option>
+                <option value="nm">Nautical Miles</option>
+            </select>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

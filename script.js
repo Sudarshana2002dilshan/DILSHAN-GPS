@@ -1,27 +1,47 @@
-const apiKey = 'ef037298a7b9778d89749e09067c3862'; // ඔබේ Key එක මෙතැනට දමන්න
+function showTab(id) {
+    document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+}
 
-navigator.geolocation.watchPosition(
-    (pos) => {
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
-        
-        // ස්ථානය පෙන්වීම
-        const f = (c, isLat) => Math.floor(Math.abs(c)) + "°" + ((Math.abs(c) - Math.floor(Math.abs(c))) * 60).toFixed(3) + "'" + (isLat ? (c>=0?"N":"S") : (c>=0?"E":"W"));
-        document.getElementById('lat').innerText = f(lat, true);
-        document.getElementById('lon').innerText = f(lon, false);
-        document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1);
+function addWaypoint() {
+    let lat = document.getElementById('lat').innerText;
+    let lon = document.getElementById('lon').innerText;
+    let li = document.createElement('li');
+    li.innerText = `Pos: ${lat} / ${lon}`;
+    document.getElementById('list').appendChild(li);
+}
+// දිශාව සහ වේගය යාවත්කාලීන කිරීම
+navigator.geolocation.watchPosition((pos) => {
+    // වේගය
+    document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1);
+    
+    // දිශාව (Compass Heading)
+    // දුරකථනයේ හෙඩිං එක නැත්නම් චලනය වන දිශාව පෙන්වයි
+    document.getElementById('heading').innerText = (pos.coords.heading || 0).toFixed(0) + "°";
+    
+    // ලොකේෂන්
+    document.getElementById('lat').innerText = pos.coords.latitude.toFixed(5);
+    document.getElementById('lon').innerText = pos.coords.longitude.toFixed(5);
+}, null, { enableHighAccuracy: true });
 
-        // සුළං දත්ත පරීක්ෂාව
-        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`)
-            .then(res => res.json())
-            .then(data => {
-                if(data.wind) {
-                    document.getElementById('wSpeed').innerText = (data.wind.speed * 3.6).toFixed(1);
-                    document.getElementById('wDir').innerText = data.wind.deg;
-                }
-            })
-            .catch(err => console.log("Wind API Error:", err));
-    },
-    (err) => console.error(err),
-    { enableHighAccuracy: true }
-);
+// SOS ශ්‍රිතය
+function sendSOS() {
+    let lat = document.getElementById('lat').innerText;
+    let lon = document.getElementById('lon').innerText;
+    let msg = `SOS! I am at Latitude: ${lat}, Longitude: ${lon}. Need Help!`;
+    
+    // දුරකථනයේ කෙටි පණිවිඩ යැවීමේ සේවාව විවෘත කරයි
+    window.location.href = `sms:?body=${encodeURIComponent(msg)}`;
+}
+
+
+navigator.geolocation.watchPosition((pos) => {
+    document.getElementById('speed').innerText = (pos.coords.speed * 3.6).toFixed(1);
+    document.getElementById('lat').innerText = pos.coords.latitude.toFixed(5);
+    document.getElementById('lon').innerText = pos.coords.longitude.toFixed(5);
+}, null, { enableHighAccuracy: true });
+
+// Register Service Worker for Offline usage
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+}

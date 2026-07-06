@@ -1,14 +1,8 @@
 {
-  "name": "My GPS Tracker",
+  "name": "DILSHAN_GPS",
   "short_name": "GPS",
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#e0f7fa",
-  "icons": [
-    {
-      "src": "/icon.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    }
-  ]
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a"
 }
