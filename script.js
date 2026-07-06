@@ -39,3 +39,6 @@ navigator.geolocation.watchPosition((pos) => {
         document.getElementById('wind-dir').innerText = dirs[Math.round(d.wind.deg / 45) % 8];
     });
 });
+window.addEventListener('offline', () => {
+    alert("ඔබ දැන් Offline! GPS දත්ත පමණක් පෙන්වනු ඇත.");
+});
