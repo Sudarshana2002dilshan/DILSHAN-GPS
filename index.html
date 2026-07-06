@@ -4,51 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DILSHAN MARINE GPS</title>
-    <link rel="stylesheet" href="style.css?v=5.0">
+    <link rel="stylesheet" href="style.css?v=6.0">
 </head>
 <body>
     <div id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <img src="https://raw.githubusercontent.com/Sudarshana2002dilshan/Whatsapp-/refs/heads/main/cc327b9e-fab7-4fd9-8f22-3423d0fccef6.png?token=GHSAT0AAAAAAEA3CEBAPJKREQ7ZRIFYPQ6C2SLLMWQ" width="60" style="border-radius:50%">
-            <h3>DILSHAN MARINE</h3>
-        </div>
+        <div class="sidebar-header"><h3>DILSHAN MARINE</h3></div>
         <button onclick="showTab('home')">GPS Info</button>
         <button onclick="showTab('windy-tab'); fetchForecast();">Windy Forecast</button>
         <button onclick="toggleTheme()">Dark / Light Mode</button>
-        <button onclick="alert('Support: Sudarshana Dilshan\nWhatsApp: +94765529447')">Support</button>
-        <button onclick="alert('DILSHAN MARINE GPS v5.0\nProfessional Navigation Tool')">About</button>
     </div>
 
     <header>
         <button onclick="toggleSidebar()">☰</button>
-        <span>DILSHAN MARINE GPS</span>
+        <span>SailFreeGPS: GPS Info</span>
     </header>
 
-    <div id="home" class="tab-pane active">
-        <div class="wind-box">
-            සුළඟ: <span id="wind-dir">--</span> | <span id="wind-speed">0</span> km/h
+    <div id="home" class="tab-pane active dashboard">
+        <!-- Speed (SOG) Section -->
+        <div class="main-box">
+            <div class="label-text">Speed (SOG) km/h</div>
+            <div class="sub-grid">
+                <div class="sub-box">Trip: <span id="trip">0.00</span> NM</div>
+                <div class="sub-box">Avg: -- | Max: --</div>
+            </div>
+            <div id="speed" class="huge-num">0.0</div>
         </div>
-        <div class="compass-wrapper">
-            <div id="compass-needle" class="compass-needle">▲</div>
-        </div>
-        <div class="box"><div class="label-text">SPEED (km/h)</div><div id="speed" class="big-num">0.0</div></div>
-        <div class="box">
-            <div class="label-text">LOCATION / TIME</div>
-            <div id="lat" class="data-val">0.0000 N</div>
-            <div id="lon" class="data-val">0.0000 E</div>
-            <div id="time" class="data-val" style="color:#004d40;">00:00:00</div>
-        </div>
-    </div>
 
-    <div id="windy-tab" class="tab-pane">
-        <h3 style="text-align:center;">Weather Forecast</h3>
-        <div id="forecast-data"></div>
+        <!-- Course (COG) Section -->
+        <div class="main-box">
+            <div class="label-text">Course (COG) °</div>
+            <div id="heading" class="huge-num">000</div>
+        </div>
+
+        <!-- Location/Time Section -->
+        <div class="main-box">
+            <div class="label-text">Location/Time</div>
+            <div id="lat" class="data-val">0°00.000' N</div>
+            <div id="lon" class="data-val">0°00.000' E</div>
+            <div id="time" class="data-val">00:00:00</div>
+        </div>
     </div>
 
     <nav class="bottom-nav">
         <button class="sos-btn" onclick="sendSOS()">SOS</button>
         <button onclick="saveWaypoint()">+ WAYPOINT</button>
     </nav>
-    <script src="script.js?v=5.0"></script>
+    <script src="script.js?v=6.0"></script>
 </body>
 </html>

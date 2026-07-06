@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DILSHAN MARINE GPS</title>
     <link rel="stylesheet" href="style.css?v=5.0">
 </head>
@@ -12,8 +13,10 @@
             <h3>DILSHAN MARINE</h3>
         </div>
         <button onclick="showTab('home')">GPS Info</button>
-        <button onclick="showTab('windy-tab')">Windy Forecast</button>
+        <button onclick="showTab('windy-tab'); fetchForecast();">Windy Forecast</button>
         <button onclick="toggleTheme()">Dark / Light Mode</button>
+        <button onclick="alert('Support: Sudarshana Dilshan\nWhatsApp: +94765529447')">Support</button>
+        <button onclick="alert('DILSHAN MARINE GPS v5.0\nProfessional Navigation Tool')">About</button>
     </div>
 
     <header>

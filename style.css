@@ -1,17 +1,12 @@
-body { background: #e0f7fa; color: #000; font-family: sans-serif; margin: 0; transition: 0.3s; }
-.dark-mode { background: #121212; color: #fff; }
-.sidebar { position: fixed; left: -250px; top: 0; width: 250px; height: 100%; background: #004d40; color: white; transition: 0.3s; padding-top: 20px; z-index: 2000; }
+body { background: #e0f7fa; color: #000; font-family: sans-serif; margin: 0; }
+.dashboard { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+.main-box { border: 2px solid #004d40; padding: 10px; border-radius: 5px; background: #d1f2f8; }
+.huge-num { font-size: 80px; font-weight: bold; text-align: center; color: #000; }
+.sub-grid { display: flex; gap: 10px; font-size: 14px; }
+.sub-box { border: 1px solid #004d40; padding: 5px; flex: 1; }
+.label-text { font-size: 20px; font-weight: bold; }
+.data-val { font-size: 24px; font-weight: bold; }
+.sidebar { position: fixed; left: -250px; width: 250px; height: 100%; background: #004d40; color: white; transition: 0.3s; z-index: 2000; }
 .sidebar.active { left: 0; }
-.sidebar button { display: block; width: 100%; padding: 15px; background: none; border: none; color: white; text-align: left; font-size: 18px; }
-header { background: #004d40; color: white; padding: 15px; display: flex; align-items: center; }
-.tab-pane { display: none; padding: 10px; }
-.active { display: block; }
-.compass-wrapper { width: 120px; height: 120px; border: 6px solid #004d40; border-radius: 50%; margin: 20px auto; position: relative; transition: 0.5s; }
-.compass-needle { position: absolute; top: 10px; left: 55px; font-size: 30px; color: #d32f2f; transition: transform 0.5s ease-out; }
-.wind-box { background: #004d40; color: white; padding: 10px; text-align: center; font-weight: bold; }
-.box { border: 2px solid #004d40; border-radius: 10px; padding: 15px; background: #b2ebf2; margin: 10px; text-align: center; }
-.big-num { font-size: 85px; font-weight: 800; color: #38bdf8; }
-.data-val { font-size: 26px; font-weight: bold; margin: 5px 0; }
-.bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; background: #004d40; }
-.bottom-nav button { flex: 1; padding: 15px; border: none; background: #004d40; color: white; font-weight: bold; }
-.sos-btn { background: #d32f2f !important; }
+.bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; }
+.bottom-nav button { flex: 1; padding: 15px; background: #004d40; color: white; border: none; }
