@@ -12,7 +12,7 @@ function toDMS(dec, isLat) {
     return `${deg}°${min}' ${dir}`;
 }
 
-// සජීවී GPS Tracking
+// සජීවී GPS දත්ත
 navigator.geolocation.watchPosition((pos) => {
     document.getElementById('lat').innerText = toDMS(pos.coords.latitude, true);
     document.getElementById('lon').innerText = toDMS(pos.coords.longitude, false);
@@ -20,12 +20,14 @@ navigator.geolocation.watchPosition((pos) => {
     document.getElementById('time').innerText = new Date().toLocaleTimeString();
 }, null, { enableHighAccuracy: true });
 
-// කාලගුණ දත්ත
+// සුළඟේ වේගය සහ දිශාව
 function getWind() {
     navigator.geolocation.getCurrentPosition(pos => {
         fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
         .then(r => r.json()).then(d => {
             document.getElementById('wind-speed').innerText = (d.wind.speed * 3.6).toFixed(1) + " km/h";
+            const dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+            document.getElementById('wind-dir').innerText = "DIR: " + dirs[Math.round(d.wind.deg / 45) % 8];
         });
     });
 }
