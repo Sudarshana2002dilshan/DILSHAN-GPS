@@ -1,5 +1,5 @@
 // OpenWeather API එක භාවිතා කර සුළං දත්ත ගැනීමට (ඔබේ API key එක දමන්න)
-const apiKey = 'YOUR_OPENWEATHER_API_KEY'; 
+const apiKey = 'ef037298a7b9778d89749e09067c3862'; 
 
 navigator.geolocation.watchPosition(
     (pos) => {
