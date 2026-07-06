@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DILSHAN MARINE PRO</title>
+    <title>DILSHAN MARINE GPS</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div id="home" class="tab-pane active">
         <header class="logo-header">
-            <img src="DILGPS.png" width="70">
-            <h2>DILSHAN MARINE</h2>
+            <img src="DILGPS.png" alt="Logo" width="70">
+            <h1>DILSHAN MARINE GPS</h1>
         </header>
+        
         <div class="card">
             <div class="label">WIND DATA</div>
             <div class="wind-grid">
@@ -20,11 +21,13 @@
                 <div class="w-item"><span>දිශාව</span><br><b id="wind-dir">--</b></div>
             </div>
         </div>
+
         <div class="card highlight">
             <div class="label">SPEED (SOG)</div>
             <div class="huge-val" id="speed">0.0</div>
             <span class="unit">km/h</span>
         </div>
+
         <div class="card">
             <div class="label">LOCATION (LAT / LON)</div>
             <div class="loc-huge" id="lat">0.0000 N</div>
@@ -34,17 +37,19 @@
     </div>
 
     <div id="windy" class="tab-pane">
-        <iframe src="https://embed.windy.com/embed2.html?lat=7.0&lon=80.0&zoom=7" width="100%" height="90vh"></iframe>
+        <div class="windy-wrapper">
+            <iframe src="https://embed.windy.com/embed2.html?lat=7.0&lon=80.0&zoom=7" width="100%" height="100%"></iframe>
+        </div>
     </div>
 
     <div id="settings" class="tab-pane">
         <div class="card settings-card">
-            <img src="DILGPS.png" width="100">
-            <h3>DILSHAN MARINE PRO</h3>
+            <img src="DILGPS.png" width="120">
+            <h2>DILSHAN MARINE GPS</h2>
             <button class="theme-btn" onclick="toggleTheme()">DARK / LIGHT MODE</button>
             <div class="contact">
                 <p>Developer: Sudarshana Dilshan</p>
-                <a href="https://wa.me/94765529447" class="wa-btn">WHATSAPP CONTACT</a>
+                <a href="https://wa.me/+94765529447" class="wa-btn">WHATSAPP CONTACT</a>
             </div>
         </div>
     </div>

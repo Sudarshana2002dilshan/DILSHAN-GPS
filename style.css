@@ -1,10 +1,9 @@
-body { background: #f0f4f8; font-family: 'Segoe UI', sans-serif; margin: 0; padding-bottom: 80px; transition: 0.3s; }
+body { background: #f0f4f8; font-family: sans-serif; margin: 0; padding-bottom: 80px; }
 .dark-mode { background: #121212; color: #fff; }
-.card { background: white; margin: 15px; padding: 20px; border-radius: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-left: 10px solid #004d40; }
-.huge-val { font-size: 90px; font-weight: 900; color: #d32f2f; text-align: center; }
-.loc-huge { font-size: 45px; font-weight: 800; color: #000; text-align: center; }
+.card { background: white; margin: 15px; padding: 20px; border-radius: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-left: 8px solid #004d40; }
+.huge-val { font-size: 80px; font-weight: 900; color: #d32f2f; text-align: center; }
+.loc-huge { font-size: 40px; font-weight: 800; color: #000; text-align: center; }
 .tab-pane { display: none; }
 .active { display: block; }
-.bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; background: #004d40; padding: 10px 0; z-index: 1000; }
-.bottom-nav button { flex: 1; border: none; background: none; color: white; font-weight: bold; font-size: 16px; }
-.windy-wrapper { height: 90vh; width: 100%; }
+.bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; background: #004d40; padding: 15px 0; }
+.bottom-nav button { flex: 1; border: none; background: none; color: white; font-weight: bold; }
