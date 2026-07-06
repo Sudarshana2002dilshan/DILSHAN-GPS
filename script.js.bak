@@ -1,37 +1,42 @@
-// 1. Wake Lock (තිරය අගුළු වැටීම වළක්වයි)
-if ('wakeLock' in navigator) navigator.wakeLock.request('screen');
+// Map Initialization
+const map = L.map('map').setView([7.32, 79.83], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+let marker = L.marker([7.32, 79.83]).addTo(map);
 
-// 2. Offline support
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+let dist = 0;
+let lastPos = null;
+
+navigator.geolocation.watchPosition((pos) => {
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+
+    // Update Map
+    marker.setLatLng([lat, lon]);
+    map.setView([lat, lon], 15);
+
+    // Update UI
+    document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1) + " km/h";
+    document.getElementById('lat').innerText = lat.toFixed(5);
+    document.getElementById('lon').innerText = lon.toFixed(5);
+
+    // Distance Tracker
+    if(lastPos) {
+        dist += calculateDistance(lastPos.lat, lastPos.lon, lat, lon);
+        document.getElementById('distance').innerText = "දූරය: " + dist.toFixed(2) + " km";
+    }
+    lastPos = {lat, lon};
+}, null, { enableHighAccuracy: true });
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    let R = 6371;
+    let dLat = (lat2-lat1)*Math.PI/180;
+    let dLon = (lon2-lon1)*Math.PI/180;
+    let a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
 
 function showTab(id) {
     document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
     document.getElementById(id).style.display = 'block';
-}
-
-navigator.geolocation.watchPosition((pos) => {
-    // වේගය සහ ලොකේෂන්
-    document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1) + " km/h";
-    document.getElementById('lat').innerText = pos.coords.latitude.toFixed(5);
-    document.getElementById('lon').innerText = pos.coords.longitude.toFixed(5);
-    document.getElementById('heading').innerText = "දිශාව: " + (pos.coords.heading || 0).toFixed(0) + "°";
-    document.getElementById('time').innerText = "වෙලාව: " + new Date().toLocaleTimeString();
-
-    // සුළං දත්ත (API)
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById('wind').innerText = `සුළඟ: ${(data.wind.speed * 3.6).toFixed(1)} km/h (${data.wind.deg}°)`;
-        });
-}, null, { enableHighAccuracy: true });
-
-function addWaypoint() {
-    let li = document.createElement('li');
-    li.innerText = `Pos: ${document.getElementById('lat').innerText}, ${document.getElementById('lon').innerText} | ${new Date().toLocaleTimeString()}`;
-    document.getElementById('wp-list').appendChild(li);
-    localStorage.setItem('wp_' + Date.now(), li.innerText); // Offline සුරැකීම
-}
-
-function sendSOS() {
-    window.location.href = `sms:?body=SOS! මගේ පිහිටීම: ${document.getElementById('lat').innerText}, ${document.getElementById('lon').innerText}`;
+    if(id === 'map') map.invalidateSize();
 }

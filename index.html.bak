@@ -1,40 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>DILSHAN MARINE GPS</title>
+    <title>MARINE GPS PRO</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
 </head>
-<body>
+<body class="night-mode">
     <div class="tabs">
-        <button onclick="showTab('home')">LIVE</button>
-        <button onclick="showTab('points')">POINTS</button>
+        <button onclick="showTab('map')">MAP</button>
+        <button onclick="showTab('live')">LIVE</button>
         <button onclick="showTab('sos')">SOS</button>
     </div>
 
-    <div id="home" class="tab-content">
+    <div id="map" class="tab-content" style="height: 300px;"></div>
+
+    <div id="live" class="tab-content" style="display:none">
         <div class="main-val" id="speed">0.0 km/h</div>
-        <div class="loc-box">
-            <div class="val-big" id="lat">0.00000</div>
-            <div class="val-big" id="lon">0.00000</div>
-        </div>
+        <div class="val-big" id="lat">0.00000</div>
+        <div class="val-big" id="lon">0.00000</div>
         <div class="sub-box">
-            <div id="heading">දිශාව: --</div>
-            <div id="time">වෙලාව: --:--:--</div>
+            <div id="distance">දූරය: 0 km</div>
             <div id="wind">සුළඟ: --</div>
         </div>
     </div>
 
-    <div id="points" class="tab-content" style="display:none">
-        <button class="action-btn" onclick="addWaypoint()">+ ස්ථානය සුරකින්න</button>
-        <ul id="wp-list"></ul>
-    </div>
-
     <div id="sos" class="tab-content" style="display:none">
-        <button class="sos-btn" onclick="sendSOS()">SOS - හදිසි උදව්</button>
+        <button class="sos-btn" onclick="sendSOS()">SOS EMERGENCY</button>
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

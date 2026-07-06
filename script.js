@@ -1,3 +1,8 @@
+// script.js හි ඉහළින්ම මෙය තිබේදැයි බලන්න
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+    .then(() => console.log('Service Worker Registered!'));
+}
 // Map Initialization
 const map = L.map('map').setView([7.32, 79.83], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
