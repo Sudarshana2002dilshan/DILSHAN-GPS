@@ -14,7 +14,7 @@ function toDMS(dec, isLat) {
     return `${deg}°${min}' ${dir}`;
 }
 
-// GPS සජීවීව
+// GPS Tracking
 navigator.geolocation.watchPosition((pos) => {
     document.getElementById('lat').innerText = toDMS(pos.coords.latitude, true);
     document.getElementById('lon').innerText = toDMS(pos.coords.longitude, false);
@@ -22,7 +22,7 @@ navigator.geolocation.watchPosition((pos) => {
     document.getElementById('time').innerText = new Date().toLocaleTimeString();
 }, null, { enableHighAccuracy: true });
 
-// කාලගුණය (සිංහලෙන්)
+// කාලගුණය (සිංහල දිශා)
 function getWind() {
     navigator.geolocation.getCurrentPosition(pos => {
         fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)

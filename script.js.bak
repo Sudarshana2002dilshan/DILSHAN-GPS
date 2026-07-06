@@ -2,12 +2,10 @@ function showTab(id) {
     document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
-
 function toggleTheme() {
     document.body.classList.toggle('dark-mode');
     document.body.classList.toggle('light-mode');
 }
-
 function toDMS(dec, isLat) {
     const abs = Math.abs(dec);
     const deg = Math.floor(abs);
@@ -16,7 +14,7 @@ function toDMS(dec, isLat) {
     return `${deg}°${min}' ${dir}`;
 }
 
-// සජීවී GPS දත්ත
+// GPS සජීවීව
 navigator.geolocation.watchPosition((pos) => {
     document.getElementById('lat').innerText = toDMS(pos.coords.latitude, true);
     document.getElementById('lon').innerText = toDMS(pos.coords.longitude, false);
@@ -24,7 +22,7 @@ navigator.geolocation.watchPosition((pos) => {
     document.getElementById('time').innerText = new Date().toLocaleTimeString();
 }, null, { enableHighAccuracy: true });
 
-// සුළඟේ දත්ත (සිංහලෙන්)
+// කාලගුණය (සිංහලෙන්)
 function getWind() {
     navigator.geolocation.getCurrentPosition(pos => {
         fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
