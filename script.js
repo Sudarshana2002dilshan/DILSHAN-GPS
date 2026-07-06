@@ -20,3 +20,6 @@ function formatDMS(val, isLat) {
     let dir = isLat ? (val >= 0 ? 'N' : 'S') : (val >= 0 ? 'E' : 'W');
     return `${deg}°${min}' ${dir}`;
 }
+
+function sendSOS() { window.location.href = `sms:?body=SOS! Loc: ${document.getElementById('lat').innerText}, ${document.getElementById('lon').innerText}`; }
+function saveWaypoint() { alert("ස්ථානය සුරකින ලදී!"); }
