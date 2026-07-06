@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DILSHAN MARINE GPS</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
 </head>
 <body>
+
     <div id="home" class="tab-pane active">
         <header class="app-header">
             <img src="DILGPS.png" class="logo">
@@ -16,7 +16,7 @@
 
         <div class="card">
             <div class="label">සුළඟ (WIND)</div>
-            <div class="large-data" id="wind-speed">-- km/h</div>
+            <div class="huge-data" id="wind-speed">-- km/h</div>
             <div class="med-data" id="wind-dir">--</div>
         </div>
 
@@ -39,7 +39,7 @@
 
     <div id="settings" class="tab-pane">
         <div class="card settings-card">
-            <img src="DILGPS.png" width="100">
+            <img src="DILGPS.png" width="80">
             <h3>DILSHAN MARINE PRO</h3>
             <button class="theme-btn" onclick="toggleTheme()">DARK / LIGHT MODE</button>
             <div class="contact-box">

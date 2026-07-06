@@ -4,20 +4,30 @@ function showTab(id) {
 }
 function toggleTheme() { document.body.classList.toggle('dark-mode'); }
 
-// GPS සහ කාලය නිරන්තරයෙන් අලුත් කිරීම
+function toDMS(dec, isLat) {
+    const abs = Math.abs(dec);
+    const deg = Math.floor(abs);
+    const min = ((abs - deg) * 60).toFixed(3);
+    const dir = isLat ? (dec >= 0 ? 'N' : 'S') : (dec >= 0 ? 'E' : 'W');
+    return `${deg}°${min}' ${dir}`;
+}
+
+// GPS සහ කාලය Live යාවත්කාලීන කිරීම
+navigator.geolocation.watchPosition((pos) => {
+    document.getElementById('lat').innerText = toDMS(pos.coords.latitude, true);
+    document.getElementById('lon').innerText = toDMS(pos.coords.longitude, false);
+    document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1) + " km/h";
+    document.getElementById('time').innerText = new Date().toLocaleTimeString();
+}, null, { enableHighAccuracy: true });
+
+// කාලගුණ දත්ත තත්පර 30කට වරක්
 setInterval(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
-        const toDMS = (dec, isLat) => {
-            const abs = Math.abs(dec);
-            const deg = Math.floor(abs);
-            const min = ((abs - deg) * 60).toFixed(3);
-            const dir = isLat ? (dec >= 0 ? 'N' : 'S') : (dec >= 0 ? 'E' : 'W');
-            return `${deg}°${min}' ${dir}`;
-        };
-
-        document.getElementById('lat').innerText = toDMS(pos.coords.latitude, true);
-        document.getElementById('lon').innerText = toDMS(pos.coords.longitude, false);
-        document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1) + " km/h";
-        document.getElementById('time').innerText = new Date().toLocaleTimeString();
-    }, null, { enableHighAccuracy: true });
-}, 3000); // සෑම තත්පර 3කට වරක් රිෆ්‍රෙෂ් වේ
+        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
+        .then(r => r.json()).then(d => {
+            document.getElementById('wind-speed').innerText = (d.wind.speed * 3.6).toFixed(1) + " km/h";
+            const dirs = ["උතුරු", "ඊසාන", "නැගෙනහිර", "අග්නිදිග", "දකුණ", "නිරිත", "බටහිර", "වයඹ"];
+            document.getElementById('wind-dir').innerText = dirs[Math.round(d.wind.deg / 45) % 8];
+        });
+    });
+}, 30000);
