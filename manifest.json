@@ -1,15 +1,8 @@
 {
   "name": "DILSHAN MARINE GPS",
   "short_name": "MarineGPS",
-  "start_url": "/index.html",
   "display": "standalone",
+  "start_url": "index.html",
   "background_color": "#000000",
-  "theme_color": "#000000",
-  "icons": [
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/854/854894.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+  "icons": [{ "src": "https://raw.githubusercontent.com/Sudarshana2002dilshan/Whatsapp-/refs/heads/main/cc327b9e-fab7-4fd9-8f22-3423d0fccef6.png?token=GHSAT0AAAAAAEA3CEBAPJKREQ7ZRIFYPQ6C2SLLMWQ", "sizes": "512x512", "type": "image/png" }]
 }

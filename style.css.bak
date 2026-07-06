@@ -7,3 +7,8 @@ body { background: #020617; color: white; font-family: sans-serif; margin: 0; pa
 .sub-box { margin-top: 20px; padding: 15px; text-align: center; color: #38bdf8; font-size: 18px; font-weight: bold; }
 .action-btn { width: 100%; padding: 20px; background: #059669; border: none; color: white; border-radius: 10px; font-size: 18px; }
 .sos-btn { width: 100%; padding: 30px; background: #dc2626; border: none; color: white; font-size: 24px; font-weight: 900; border-radius: 10px; }
+.night-mode { background: #000; color: #ff0000; } /* රතු-කළු නයිට් මෝඩ් */
+.main-val { font-size: 50px; font-weight: 900; color: #ff4444; text-align: center; }
+.sos-btn { width: 100%; padding: 40px; background: #800000; color: #fff; border: 2px solid red; font-size: 25px; }
+.tabs button { background: #222; color: #fff; padding: 15px; border: 1px solid #444; }
+

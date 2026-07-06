@@ -1,35 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MARINE GPS PRO</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DILSHAN MARINE GPS</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
-<body class="night-mode">
-    <div class="tabs">
-        <button onclick="showTab('map')">MAP</button>
-        <button onclick="showTab('live')">LIVE</button>
-        <button onclick="showTab('sos')">SOS</button>
-    </div>
+<body>
+    <header>
+        <span>DILSHAN MARINE GPS</span>
+        <button id="settingsBtn" onclick="toggleSettings()">⋮</button>
+    </header>
 
-    <div id="map" class="tab-content" style="height: 300px;"></div>
-
-    <div id="live" class="tab-content" style="display:none">
-        <div class="main-val" id="speed">0.0 km/h</div>
-        <div class="val-big" id="lat">0.00000</div>
-        <div class="val-big" id="lon">0.00000</div>
-        <div class="sub-box">
-            <div id="distance">දූරය: 0 km</div>
-            <div id="wind">සුළඟ: --</div>
+    <div id="settingsMenu" class="settings-panel" style="display:none;">
+        <button onclick="toggleTheme()">Dark/Light Mode</button>
+        <div class="about-section">
+            <p><strong>Developed by:</strong> Dilshan</p>
+            <p>WhatsApp/Call: <a href="tel:+94765529447">+94 76 552 9447</a></p>
         </div>
     </div>
 
-    <div id="sos" class="tab-content" style="display:none">
-        <button class="sos-btn" onclick="sendSOS()">SOS EMERGENCY</button>
+    <div id="dashboard" class="tab-pane active">
+        <div id="compass" class="compass">N</div>
+        <div class="card">
+            <div class="label">WIND</div>
+            <div class="val" id="wind">--</div>
+        </div>
+        <div class="card">
+            <div class="label">SPEED</div>
+            <div class="val" id="speed">0.0 km/h</div>
+        </div>
+        <div class="card">
+            <div class="val-xl" id="lat">0.00000</div>
+            <div class="val-xl" id="lon">0.00000</div>
+            <div class="label" id="time">--:--:--</div>
+        </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <nav class="bottom-tabs">
+        <button onclick="alert('Wind Map Feature Active')">WINDY</button>
+        <button onclick="alert('Waypoints Saved')">POINTS</button>
+        <button class="sos-btn" onclick="sendSOS()">SOS</button>
+    </nav>
     <script src="script.js"></script>
 </body>
 </html>
