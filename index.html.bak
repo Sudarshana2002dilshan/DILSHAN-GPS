@@ -7,42 +7,27 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="home" class="tab-pane active">
         <header class="app-header">
             <img src="DILGPS.png" class="logo">
             <h1 class="app-title">DILSHAN MARINE GPS</h1>
         </header>
-
-        <div class="card">
-            <div class="label">සුළඟ (WIND)</div>
-            <div class="huge-data" id="wind-speed">-- km/h</div>
-            <div class="med-data" id="wind-dir">--</div>
-        </div>
-
-        <div class="card">
-            <div class="label">SPEED (SOG)</div>
-            <div class="huge-data" id="speed">0.0 km/h</div>
-        </div>
-
-        <div class="card">
-            <div class="label">LOCATION / TIME</div>
-            <div class="huge-loc" id="lat">0°00.000' N</div>
-            <div class="huge-loc" id="lon">0°00.000' E</div>
-            <div class="time-data" id="time">--:--:--</div>
+        <div class="content-area">
+            <div class="card"><div class="label">සුළඟ (WIND)</div><div class="huge-data" id="wind-speed">-- km/h</div><div class="med-data" id="wind-dir">--</div></div>
+            <div class="card"><div class="label">SPEED (SOG)</div><div class="huge-data" id="speed">0.0 km/h</div></div>
+            <div class="card"><div class="label">LOCATION / TIME</div><div class="huge-loc" id="lat">0°00.000' N</div><div class="huge-loc" id="lon">0°00.000' E</div><div class="time-data" id="time">--:--:--</div></div>
         </div>
     </div>
 
-    <div id="windy" class="tab-pane">
-        <iframe src="https://embed.windy.com/embed2.html?lat=7.0&lon=80.0&zoom=7" class="full-screen-map"></iframe>
-    </div>
+    <div id="windy" class="tab-pane"><iframe src="https://embed.windy.com/embed2.html?lat=7.0&lon=80.0&zoom=7" class="full-screen-map"></iframe></div>
 
     <div id="settings" class="tab-pane">
         <div class="card settings-card">
-            <img src="DILGPS.png" width="80">
+            <img src="DILGPS.png" width="80" style="border-radius:50%">
             <h3>DILSHAN MARINE PRO</h3>
             <button class="theme-btn" onclick="toggleTheme()">DARK / LIGHT MODE</button>
-            <div class="contact-box">
+            <div class="contact-box" style="margin-top:20px;">
+                <p>Version: 48.1.0</p>
                 <p>Developer: Sudarshana Dilshan</p>
                 <a href="https://wa.me/94765529447" class="wa-btn">CONTACT WHATSAPP</a>
             </div>

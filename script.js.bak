@@ -2,7 +2,6 @@ function showTab(id) {
     document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
-function toggleTheme() { document.body.classList.toggle('dark-mode'); }
 
 function toDMS(dec, isLat) {
     const abs = Math.abs(dec);
@@ -12,22 +11,16 @@ function toDMS(dec, isLat) {
     return `${deg}°${min}' ${dir}`;
 }
 
-// GPS සහ කාලය Live යාවත්කාලීන කිරීම
-navigator.geolocation.watchPosition((pos) => {
-    document.getElementById('lat').innerText = toDMS(pos.coords.latitude, true);
-    document.getElementById('lon').innerText = toDMS(pos.coords.longitude, false);
-    document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1) + " km/h";
-    document.getElementById('time').innerText = new Date().toLocaleTimeString();
-}, null, { enableHighAccuracy: true });
-
-// කාලගුණ දත්ත තත්පර 30කට වරක්
-setInterval(() => {
-    navigator.geolocation.getCurrentPosition((pos) => {
-        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
-        .then(r => r.json()).then(d => {
-            document.getElementById('wind-speed').innerText = (d.wind.speed * 3.6).toFixed(1) + " km/h";
-            const dirs = ["උතුරු", "ඊසාන", "නැගෙනහිර", "අග්නිදිග", "දකුණ", "නිරිත", "බටහිර", "වයඹ"];
-            document.getElementById('wind-dir').innerText = dirs[Math.round(d.wind.deg / 45) % 8];
-        });
-    });
-}, 30000);
+// GPS සජීවීව ක්‍රියාත්මක කිරීම
+if (navigator.geolocation) {
+    navigator.geolocation.watchPosition((pos) => {
+        document.getElementById('lat').innerText = toDMS(pos.coords.latitude, true);
+        document.getElementById('lon').innerText = toDMS(pos.coords.longitude, false);
+        document.getElementById('speed').innerText = (pos.coords.speed * 3.6 || 0).toFixed(1) + " km/h";
+        document.getElementById('time').innerText = new Date().toLocaleTimeString();
+    }, (err) => {
+        console.error("GPS Error: " + err.message);
+    }, { enableHighAccuracy: true });
+} else {
+    alert("ඔබේ බ්‍රවුසරය GPS සඳහා සහය නොදක්වයි.");
+}
