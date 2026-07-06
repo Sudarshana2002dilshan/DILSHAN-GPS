@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DILSHAN MARINE GPS</title>
-    <link rel="stylesheet" href="style.css">
-</head>
 <body class="dark-mode">
     <div id="home" class="tab-pane active">
         <div class="logo-container"><img src="DILGPS.png" class="main-logo"></div>
@@ -32,7 +24,7 @@
 
     <div id="settings" class="tab-pane">
         <div class="card">
-            <img src="DILGPS.png" class="about-logo">
+            <img src="DILGPS.png" class="about-logo" style="width:100px; border-radius:50%">
             <h2>DILSHAN MARINE GPS</h2>
             <p>Version: 2.0.0 Pro</p>
             <p>Developer: Sudarshana Dilshan</p>
@@ -49,4 +41,3 @@
     </nav>
     <script src="script.js"></script>
 </body>
-</html>
