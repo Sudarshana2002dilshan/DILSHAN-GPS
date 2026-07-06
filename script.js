@@ -17,6 +17,13 @@ window.onload = () => {
     document.getElementById('lat').innerText = localStorage.getItem('lastLat') || "0°00.000' N";
     document.getElementById('lon').innerText = localStorage.getItem('lastLon') || "0°00.000' E";
 };
+// පර්මිෂන් එක ඉල්ලීම
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        (pos) => { console.log("Location allowed"); },
+        (err) => { alert("කරුණාකර ඇප් එකේ Settings වෙත ගොස් Location Permission ලබා දෙන්න."); }
+    );
+}
 
 navigator.geolocation.watchPosition((pos) => {
     const latDMS = toDMS(pos.coords.latitude, true);

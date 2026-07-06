@@ -1,8 +1,0 @@
-{
-  "name": "DILSHAN MARINE PRO",
-  "short_name": "MarineGPS",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#e0f7fa",
-  "icons": [{"src": "https://raw.githubusercontent.com/Sudarshana2002dilshan/Whatsapp-/refs/heads/main/cc327b9e-fab7-4fd9-8f22-3423d0fccef6.png", "sizes": "192x192", "type": "image/png"}]
-}
