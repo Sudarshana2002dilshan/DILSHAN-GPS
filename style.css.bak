@@ -1,0 +1,26 @@
+:root {
+    --bg-dark: #0a192f; --card-dark: #112240; --text-dark: #ffffff; --accent-dark: #64ffda;
+    --bg-light: #e0e0e0; --card-light: #ffffff; --text-light: #000000; --accent-light: #004d40;
+}
+body { margin: 0; font-family: sans-serif; transition: 0.3s; }
+body.dark-mode { background: var(--bg-dark); color: var(--text-dark); }
+body.light-mode { background: var(--bg-light); color: var(--text-light); }
+
+.tab-pane { display: none; padding-bottom: 80px; }
+.active { display: block; }
+.logo-container { text-align: center; padding: 20px; }
+.main-logo { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--accent-dark); }
+body.light-mode .main-logo { border: 4px solid var(--accent-light); }
+
+.card { background: var(--card-dark); border: 2px solid var(--accent-dark); margin: 15px; padding: 25px; border-radius: 25px; text-align: center; }
+body.light-mode .card { background: var(--card-light); border: 2px solid var(--accent-light); }
+
+.huge-text { font-size: 38px; font-weight: 900; color: var(--accent-dark); margin: 5px 0; }
+body.light-mode .huge-text { color: var(--accent-light); }
+
+.bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; background: #004d40; }
+.bottom-nav button { flex: 1; padding: 18px; border: none; background: none; color: white; font-weight: bold; }
+iframe { width: 100%; height: 100vh; border: none; }
+.btn { width: 100%; padding: 15px; background: #004d40; color: white; border-radius: 12px; border: none; font-weight: bold; }
+.btn-wa { display: block; padding: 15px; background: #25D366; color: white; border-radius: 12px; margin-top: 10px; font-weight: bold; text-decoration: none; text-align: center; }
+.about-logo { width: 80px; border-radius: 50%; }
