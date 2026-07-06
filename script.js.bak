@@ -2,10 +2,8 @@ function showTab(id) {
     document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
-function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    document.body.classList.toggle('light-mode');
-}
+function toggleTheme() { document.body.classList.toggle('dark'); }
+
 function toDMS(dec, isLat) {
     const abs = Math.abs(dec);
     const deg = Math.floor(abs);
@@ -14,7 +12,7 @@ function toDMS(dec, isLat) {
     return `${deg}°${min}' ${dir}`;
 }
 
-// GPS Tracking
+// සජීවී GPS Tracking
 navigator.geolocation.watchPosition((pos) => {
     document.getElementById('lat').innerText = toDMS(pos.coords.latitude, true);
     document.getElementById('lon').innerText = toDMS(pos.coords.longitude, false);
@@ -22,14 +20,14 @@ navigator.geolocation.watchPosition((pos) => {
     document.getElementById('time').innerText = new Date().toLocaleTimeString();
 }, null, { enableHighAccuracy: true });
 
-// කාලගුණය (සිංහල දිශා)
+// කාලගුණ දත්ත
 function getWind() {
     navigator.geolocation.getCurrentPosition(pos => {
         fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
         .then(r => r.json()).then(d => {
             document.getElementById('wind-speed').innerText = (d.wind.speed * 3.6).toFixed(1) + " km/h";
-            const dirs = ["උතුරු", "ඊසාන", "නැගෙනහිර", "අග්නිදිග", "දකුණ", "නිරිත", "බටහිර", "වයඹ"];
-            document.getElementById('wind-dir').innerText = dirs[Math.round(d.wind.deg / 45) % 8];
+            const dirs = ["උතුරු (North)", "ඊසාන (North-East)", "නැගෙනහිර (East)", "අග්නිදිග (South-East)", "දකුණ (South)", "නිරිත (South-West)", "බටහිර (West)", "වයඹ (North-West)"];
+            document.getElementById('wind-dir').innerText = "දිශාව: " + dirs[Math.round(d.wind.deg / 45) % 8];
         });
     });
 }
