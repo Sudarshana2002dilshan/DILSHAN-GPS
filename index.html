@@ -15,43 +15,34 @@
 
     <div id="settingsMenu" class="settings-panel" style="display:none;">
         <button onclick="toggleTheme()">Dark/Light Mode</button>
-        
-        <div class="about-section" style="text-align: center; margin-top: 15px;">
-            <img src="https://raw.githubusercontent.com/Sudarshana2002dilshan/Whatsapp-/refs/heads/main/cc327b9e-fab7-4fd9-8f22-3423d0fccef6.png?token=GHSAT0AAAAAAEA3CEBAPJKREQ7ZRIFYPQ6C2SLLMWQ" 
-                 alt="Profile" style="width: 80px; border-radius: 50%; border: 2px solid #38bdf8; margin-bottom: 10px;">
-            <p style="margin: 5px 0;"><strong>Developed by:</strong> Dilshan</p>
-            <p style="margin: 5px 0;">WhatsApp/Call: <br><a href="tel:+94765529447" style="color: #38bdf8; text-decoration: none; font-weight: bold;">+94 76 552 9447</a></p>
+        <div class="about-section">
+            <p><strong>Developed by:</strong> Dilshan</p>
+            <p>WhatsApp/Call: <a href="tel:+94765529447">+94 76 552 9447</a></p>
         </div>
     </div>
 
     <div id="dashboard" class="tab-pane active">
-        <div id="compass" class="compass-circle">N</div>
-        
+        <div id="compass" class="compass">N</div>
         <div class="card">
             <div class="label">WIND</div>
             <div class="val" id="wind">--</div>
         </div>
-        
         <div class="card">
             <div class="label">SPEED</div>
             <div class="val" id="speed">0.0 km/h</div>
         </div>
-        
         <div class="card">
-            <div class="label">LOCATION</div>
             <div class="val-xl" id="lat">0.00000</div>
             <div class="val-xl" id="lon">0.00000</div>
-            <div class="label" id="time" style="margin-top: 10px;">--:--:--</div>
+            <div class="label" id="time">--:--:--</div>
         </div>
     </div>
 
     <nav class="bottom-tabs">
-        <button onclick="showTab('dashboard')">HOME</button>
-        <button onclick="alert('Windy Map Feature')">WINDY</button>
+        <button onclick="alert('Wind Map Feature Active')">WINDY</button>
         <button onclick="alert('Waypoints Saved')">POINTS</button>
         <button class="sos-btn" onclick="sendSOS()">SOS</button>
     </nav>
-
     <script src="script.js"></script>
 </body>
 </html>
