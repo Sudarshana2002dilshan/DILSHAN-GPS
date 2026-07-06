@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DILSHAN MARINE GPS</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div id="home" class="tab-pane active">
@@ -27,8 +26,8 @@
 
         <div class="card">
             <div class="label">LOCATION / TIME</div>
-            <div class="huge-loc" id="lat">0°00.000' N</div>
-            <div class="huge-loc" id="lon">0°00.000' E</div>
+            <div class="huge-loc" id="lat">0.0000 N</div>
+            <div class="huge-loc" id="lon">0.0000 E</div>
             <div class="time-data" id="time">--:--:--</div>
         </div>
     </div>
