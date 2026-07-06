@@ -3,41 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DILSHAN_GPS</title>
-    <link rel="stylesheet" href="style.css?v=7.0">
+    <title>DILSHAN MARINE GPS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js');
-    }
-</script>
-
 <body>
-    <div class="app-container">
-        <header class="app-title">DILSHAN MARINE GPS</header>
-        
+    <div id="home" class="tab-pane active">
+        <header class="logo-header">
+            <img src="https://raw.githubusercontent.com/Sudarshana2002dilshan/Whatsapp-/refs/heads/main/cc327b9e-fab7-4fd9-8f22-3423d0fccef6.png" width="50">
+            <h3>DILSHAN MARINE GPS</h3>
+        </header>
         <div class="card wind-card">
-            <div class="label">සුළඟ (Wind)</div>
-            <div class="value"><span id="wind-dir">--</span> | <span id="wind-speed">0</span> km/h</div>
+            <div class="label">WIND DATA (සුළඟ)</div>
+            <div class="wind-grid"><div id="wind-speed">-- km/h</div><div id="wind-dir">--</div></div>
         </div>
-
-        <div class="card speed-card">
-            <div class="label">SPEED (SOG) km/h</div>
-            <div class="value huge" id="speed">0.0</div>
-        </div>
-
-        <div class="card cog-card">
-            <div class="label">COURSE (COG) °</div>
-            <div class="value huge" id="course">---</div>
-        </div>
-
+        <div class="card"><div class="label">SPEED (SOG) km/h</div><div class="huge" id="speed">0.0</div></div>
+        <div class="card"><div class="label">COURSE (COG) °</div><div class="huge" id="course">000</div></div>
         <div class="card location-card">
             <div class="label">LOCATION / TIME</div>
             <div class="value-loc" id="lat">0°00.000' N</div>
             <div class="value-loc" id="lon">0°00.000' E</div>
-            <div class="time" id="time">--:--:--</div>
+            <div class="time" id="time">00:00:00</div>
         </div>
     </div>
-    <script src="script.js?v=7.0"></script>
+    <div id="windy" class="tab-pane"><iframe src="https://www.windy.com" width="100%" height="600px"></iframe></div>
+    <div id="settings" class="tab-pane">
+        <div class="card text-center">
+            <img src="https://raw.githubusercontent.com/Sudarshana2002dilshan/Whatsapp-/refs/heads/main/cc327b9e-fab7-4fd9-8f22-3423d0fccef6.png" width="100">
+            <h3>DILSHAN MARINE GPS</h3>
+            <button onclick="toggleTheme()">Dark / Light Mode</button>
+            <p>Developer: Sudarshana Dilshan</p>
+            <a href="https://wa.me/94765529447" class="whatsapp-btn">WhatsApp: +94765529447</a>
+        </div>
+    </div>
+    <nav class="bottom-nav"><button onclick="showTab('home')">HOME</button><button onclick="showTab('windy')">WINDY</button><button onclick="showTab('settings')">SETTINGS</button></nav>
+    <script src="script.js"></script>
+    <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');</script>
 </body>
 </html>

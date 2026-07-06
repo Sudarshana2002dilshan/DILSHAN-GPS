@@ -1,19 +1,5 @@
-body { background: #e0f7fa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; }
-.app-container { display: flex; flex-direction: column; gap: 12px; }
-.app-title { font-size: 24px; font-weight: bold; color: #004d40; text-align: center; margin-bottom: 10px; }
-
-/* කාඩ්පත් ඩිසයින් */
-.card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); animation: fadeIn 0.8s ease-in-out; }
-
-/* Speed සහ Course සඳහා රතු වර්ණය සහ 60px ප්‍රමාණය */
-.speed-card, .cog-card { border-left: 6px solid #b71c1c; }
-.huge { font-size: 90px; font-weight: 800; color: #b71c1c; text-align: center; }
-
-/* Location සහ Time සඳහා සැකසුම් */
-.location-card { border-left: 6px solid #004d40; text-align: center; }
-.label { font-size: 14px; color: #666; font-weight: bold; text-transform: uppercase; text-align: center; }
-.value-loc { font-size: 60px; font-weight: bold; color: #000; }
-.time { font-size: 28px; font-weight: bold; color: #000; margin-top: 5px; }
-
-/* ඇනිමේෂන් */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.card { background: #fff; padding: 15px; border-radius: 15px; margin: 10px; border-left: 6px solid #004d40; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+.huge { font-size: 60px; font-weight: 800; color: #b71c1c; text-align: center; }
+.value-loc { font-size: 24px; font-weight: bold; text-align: center; }
+.time { font-size: 22px; font-weight: bold; text-align: center; color: #333; margin-top: 5px; }
+.wind-grid { display: flex; justify-content: space-between; font-weight: bold; font-size: 18px; margin-top: 5px; color: #004d40; }
