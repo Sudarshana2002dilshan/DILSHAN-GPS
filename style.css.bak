@@ -1,8 +1,0 @@
-body { background: #020617; color: white; font-family: 'Roboto', sans-serif; margin: 0; padding: 10px; }
-header { text-align: center; font-size: 20px; font-weight: bold; color: #38bdf8; padding: 10px; }
-.tabs { display: flex; gap: 5px; margin-bottom: 20px; }
-.tabs button { flex: 1; padding: 12px; background: #1e293b; border: none; color: white; border-radius: 5px; }
-.card { background: #0f172a; padding: 20px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #334155; }
-.value { font-size: 50px; font-weight: 900; color: #fbbf24; text-align: center; }
-.value-loc { font-size: 28px; font-weight: 600; color: #ffffff; text-align: center; }
-.save-btn { width: 100%; padding: 20px; background: #059669; border: none; color: white; font-weight: bold; border-radius: 10px; }

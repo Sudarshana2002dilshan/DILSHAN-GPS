@@ -5,62 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DILSHAN MARINE GPS</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
 </head>
 <body>
-    <header>MARINE GPS NAVIGATOR</header>
+    <header>DILSHAN MARINE GPS NAVIGATOR</header>
     
-    <!-- Tab Navigation -->
     <div class="tabs">
         <button onclick="showTab('home')">LIVE</button>
-        <button onclick="showTab('waypoints')">POINTS</button>
-        <button onclick="showTab('settings')">SET</button>
+        <button onclick="showTab('points')">POINTS</button>
+        <button onclick="showTab('settings')">SOS</button>
     </div>
 
-    <!-- Live Tracking -->
     <div id="home" class="tab-content">
+        <div class="card"><div class="label">SPEED</div><div class="value" id="speed">0.0 km/h</div></div>
+        <div class="card"><div class="label">HEADING</div><div class="value" id="heading">0°</div></div>
         <div class="card">
-            <div class="label">CURRENT SPEED</div>
-            <div class="value" id="speed">0.0 <small>km/h</small></div>
+            <div class="label">LOCATION</div>
+            <div class="val-sm" id="lat">---</div>
+            <div class="val-sm" id="lon">---</div>
+            <div class="label" style="margin-top:10px">LOCAL TIME</div>
+            <div class="val-sm" id="time">--:--:--</div>
         </div>
         <div class="card">
-            <div class="label">COORDINATES</div>
-            <div class="value-loc" id="lat">---</div>
-            <div class="value-loc" id="lon">---</div>
-        </div>
-        <div id="home" class="tab-content">
-    <div class="card compass-card">
-        <div class="label">HEADING</div>
-        <div class="value" id="heading">0°</div>
-    </div>
-    
-    <div class="card">
-        <div class="label">SPEED</div>
-        <div class="value" id="speed">0.0 <small>km/h</small></div>
-    </div>
-
-    <button class="sos-btn" onclick="sendSOS()">SOS - EMERGENCY</button>
-</div>
-        <button class="save-btn" onclick="addWaypoint()">+ MARK LOCATION</button>
-    </div>
-
-    <!-- Waypoints List -->
-    <div id="waypoints" class="tab-content" style="display:none">
-        <div class="card" id="wp-list">
-            <div class="label">SAVED WAYPOINTS</div>
-            <ul id="list"></ul>
+            <div class="label">WIND DATA</div>
+            <div class="val-sm" id="wind">වේගය: -- km/h | දිශාව: --</div>
         </div>
     </div>
 
-    <!-- Settings -->
+    <div id="points" class="tab-content" style="display:none">
+        <button class="save-btn" onclick="addWaypoint()">+ SAVE CURRENT LOCATION</button>
+        <div class="card"><ul id="wp-list"></ul></div>
+    </div>
+
     <div id="settings" class="tab-content" style="display:none">
-        <div class="card">
-            <label>Units: </label>
-            <select id="unitSelect">
-                <option value="km">Kilometers</option>
-                <option value="nm">Nautical Miles</option>
-            </select>
-        </div>
+        <button class="sos-btn" onclick="sendSOS()">SOS EMERGENCY</button>
     </div>
 
     <script src="script.js"></script>
