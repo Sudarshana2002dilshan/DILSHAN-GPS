@@ -3,52 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DILSHAN MARINE GPS</title>
-    <link rel="stylesheet" href="style.css?v=6.0">
+    <title>DILSHAN_GPS</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="sidebar" class="sidebar">
-        <div class="sidebar-header"><h3>DILSHAN MARINE</h3></div>
-        <button onclick="showTab('home')">GPS Info</button>
-        <button onclick="showTab('windy-tab'); fetchForecast();">Windy Forecast</button>
-        <button onclick="toggleTheme()">Dark / Light Mode</button>
-    </div>
-
-    <header>
-        <button onclick="toggleSidebar()">☰</button>
-        <span>SailFreeGPS: GPS Info</span>
-    </header>
-
-    <div id="home" class="tab-pane active dashboard">
-        <!-- Speed (SOG) Section -->
-        <div class="main-box">
-            <div class="label-text">Speed (SOG) km/h</div>
-            <div class="sub-grid">
-                <div class="sub-box">Trip: <span id="trip">0.00</span> NM</div>
-                <div class="sub-box">Avg: -- | Max: --</div>
-            </div>
-            <div id="speed" class="huge-num">0.0</div>
+    <div class="app-container">
+        <header class="app-title">DILSHAN_GPS</header>
+        
+        <div class="card">
+            <div class="label">SPEED (km/h)</div>
+            <div class="value" id="speed">0.0</div>
         </div>
 
-        <!-- Course (COG) Section -->
-        <div class="main-box">
-            <div class="label-text">Course (COG) °</div>
-            <div id="heading" class="huge-num">000</div>
+        <div class="card">
+            <div class="label">COURSE (COG)</div>
+            <div class="value" id="course">--- °</div>
         </div>
 
-        <!-- Location/Time Section -->
-        <div class="main-box">
-            <div class="label-text">Location/Time</div>
-            <div id="lat" class="data-val">0°00.000' N</div>
-            <div id="lon" class="data-val">0°00.000' E</div>
-            <div id="time" class="data-val">00:00:00</div>
+        <div class="card location-card">
+            <div class="label">LOCATION</div>
+            <div class="value-loc" id="lat">---</div>
+            <div class="value-loc" id="lon">---</div>
+            <div class="time" id="time">Time: --:--:--</div>
         </div>
     </div>
-
-    <nav class="bottom-nav">
-        <button class="sos-btn" onclick="sendSOS()">SOS</button>
-        <button onclick="saveWaypoint()">+ WAYPOINT</button>
-    </nav>
-    <script src="script.js?v=6.0"></script>
+    <script src="script.js"></script>
 </body>
 </html>
