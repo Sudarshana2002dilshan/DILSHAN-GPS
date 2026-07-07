@@ -33,7 +33,7 @@ navigator.geolocation.watchPosition((pos) => {
     document.getElementById('lon').innerText = toDMS(longitude, false);
     document.getElementById('time').innerText = new Date().toLocaleTimeString();
 
-    // UI Updates - Speed
+    // UI Updates - Speed (Knots වලින් අවශ්‍ය නම් 3.6 වෙනුවට 1.94384 යොදන්න)
     document.getElementById('speed').innerText = ((speed || 0) * 3.6).toFixed(1) + " km/h";
 
     // Weather API Logic
@@ -54,7 +54,7 @@ navigator.geolocation.watchPosition((pos) => {
 
 // 4. Helper Functions
 function getDirection(deg) {
-    const dirs = ["උතුරු", "ඊසාන", "නැගෙනහිර", "අග්නිදිග", "දකුණ", "නිරිත", "බටහිර", "වයඹ"];
+    const dirs = ["උතුරු 🧭", "ඊසාන 🧭", "නැගෙනහිර 🧭", "අග්නිදිග 🧭", "දකුණ 🧭", "නිරිත 🧭", "බටහිර 🧭", "වයඹ 🧭"];
     return dirs[Math.round(deg / 45) % 8];
 }
 
@@ -69,9 +69,11 @@ function toDMS(dec, isLat) {
 function checkHazards(lat, lon) {
     const alertBox = document.getElementById('hazard-alert');
     let found = false;
+    
     globalHazards.forEach(h => {
+        // සරල දුර සෙවීමේ සූත්‍රය (ශ්‍රී ලංකාව අවට මුහුදට ඉතා නිවැරදියි)
         const d = Math.sqrt(Math.pow(lat - h.lat, 2) + Math.pow(lon - h.lon, 2)) * 111;
-        if (d < 0.8) {
+        if (d < 0.8) { // 800m වඩා අඩු නම් අනතුරු ඇඟවීම් කරයි
             alertBox.innerHTML = `⚠️ අනතුරුදායකයි: ${h.name} (${d.toFixed(2)} km) අසල ඇත!`;
             alertBox.style.display = "block";
             found = true;
@@ -93,7 +95,7 @@ window.openAdmin = () => {
     if (pass === "dilshan123") {
         document.getElementById('admin-modal').style.display = "block";
     } else {
-        alert("වැරදි මුරපදයකි!");
+        alert("වැරදි මුරපදයකි! නැවත උත්සාහ කරන්න.");
     }
 };
 
@@ -103,16 +105,27 @@ window.adminSaveHazard = async () => {
     const lon = parseFloat(document.getElementById('admin-lon').value);
     if (name && !isNaN(lat) && !isNaN(lon)) {
         await addDoc(collection(db, "hazards"), { name, lat, lon });
-        alert("සාර්ථකයි!");
+        alert("ගල සාර්ථකව මැප් එකට ඇතුළත් කළා! ✅");
+        document.getElementById('admin-name').value = "";
+        document.getElementById('admin-lat').value = "";
+        document.getElementById('admin-lon').value = "";
         document.getElementById('admin-modal').style.display = "none";
+    } else {
+        alert("කරුණාකර සියලුම විස්තර නිවැරදිව ඇතුළත් කරන්න!");
     }
 };
 
 window.saveHazard = async () => {
     const name = document.getElementById('h-name').value;
-    if(!name) return alert("නමක් ඇතුළත් කරන්න!");
+    if(!name) return alert("කරුණාකර ගලේ නමක් ඇතුළත් කරන්න!");
+    
     navigator.geolocation.getCurrentPosition(async (pos) => {
-        await addDoc(collection(db, "hazards"), { name, lat: pos.coords.latitude, lon: pos.coords.longitude });
-        alert("සාර්ථකයි!");
-    });
+        await addDoc(collection(db, "hazards"), { 
+            name, 
+            lat: pos.coords.latitude, 
+            lon: pos.coords.longitude 
+        });
+        alert("ඔබ සිටින ස්ථානයේ ගල සාර්ථකව සේව් කළා! ✅");
+        document.getElementById('h-name').value = "";
+    }, (err) => alert("GPS ලබා ගැනීමට නොහැක: " + err.message));
 };

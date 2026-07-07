@@ -15,13 +15,13 @@
                 <img src="DILGPS.png" class="main-logo" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
         </div>
-        <h2 class="app-title" style="text-align: center; color: #64ffda; margin-top: -10px; margin-bottom: 20px;">DILSHAN MARINE GPS</h2>
+        <h2 class="app-title">DILSHAN MARINE GPS</h2>
         
         <div class="card animate-card">
             <div class="label">📍 LOCATION & TIME</div>
-            <div class="huge-text" id="lat" style="font-size:35px;">--</div>
-            <div class="huge-text" id="lon" style="font-size:35px;">--</div>
-            <div class="time-text" id="time" style="font-size:28px; color:#fbc02d; margin-top:10px;">--:--:--</div>
+            <div class="huge-text" id="lat">--</div>
+            <div class="huge-text" id="lon">--</div>
+            <div class="time-text" id="time">--:--:--</div>
         </div>
 
         <div class="card animate-card">
@@ -31,8 +31,8 @@
 
         <div class="card animate-card">
             <div class="label">🌬️ WIND INFO</div>
-            <div class="wind-text" id="wind-speed"style="font-size:28px; color:#1CFF13; margin-top:10px;">--</div>
-            <div class="wind-dir" id="wind-dir"style="font-size:28px; color:#1CFF13; margin-top:10px;">--</div>
+            <div class="wind-text" id="wind-speed">--</div>
+            <div class="wind-dir" id="wind-dir">--</div>
         </div>
     </div>
 
@@ -62,6 +62,7 @@
 
             <div class="settings-actions">
                 <button class="btn" onclick="toggleTheme()">🌓 DARK / LIGHT MODE</button>
+                <button class="btn" onclick="showBatteryInfo()" style="background:#ff9800; color:black;">🔋 BATTERY OPTIMIZATION</button>
                 <button class="btn" onclick="openAdmin()" style="background:#d32f2f;">🛠️ ADMIN PANEL</button>
                 <a href="https://wa.me/94765529447" class="btn" style="background:#25D366; text-decoration:none; display:block;">💬 WHATSAPP SUPPORT</a>
                 <a href="https://drive.google.com/uc?export=download&id=1rCkE_Xmfg0xJFFbBvRW5ETSVuGBFw11l" class="btn" style="background:#1976d2; text-decoration:none; display:block;">⬇️ DOWNLOAD APP</a>
