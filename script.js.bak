@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-// 1. Firebase Configuration
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyAbCfnQtNWbSznv3OU0THPZSB9VWPv-hOs",
   authDomain: "dilshan-gps.firebaseapp.com",
@@ -16,48 +16,62 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let globalHazards = [];
-
-// 2. Real-time Hazard Database Sync
 onSnapshot(collection(db, "hazards"), (snapshot) => {
     globalHazards = snapshot.docs.map(doc => doc.data());
 });
 
-// 3. Location, Speed, Time & Weather Watcher
-const options = { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 };
-
+// Real-time Position & Data Updates
 navigator.geolocation.watchPosition((pos) => {
     const { latitude, longitude, speed } = pos.coords;
 
-    // UI Updates - Location & Time
+    // 1. Location & Time
     document.getElementById('lat').innerText = toDMS(latitude, true);
     document.getElementById('lon').innerText = toDMS(longitude, false);
     document.getElementById('time').innerText = new Date().toLocaleTimeString();
 
-    // UI Updates - Speed
+    // 2. Speed (Convert m/s to km/h)
     document.getElementById('speed').innerText = ((speed || 0) * 3.6).toFixed(1) + " km/h";
 
-    // Weather API Logic
+    // 3. Weather API (Wind Speed & Direction)
     fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
-    .then(r => r.json())
+    .then(response => response.json())
     .then(data => {
-        document.getElementById('wind-speed').innerText = (data.wind.speed * 3.6).toFixed(1) + " km/h";
-        document.getElementById('wind-dir').innerText = getDirection(data.wind.deg);
+        const speedKmh = (data.wind.speed * 3.6).toFixed(1);
+        const dir = getDirection(data.wind.deg);
+        document.getElementById('wind-speed').innerText = speedKmh + " km/h";
+        document.getElementById('wind-dir').innerText = dir;
     }).catch(() => {
         document.getElementById('wind-speed').innerText = "--";
         document.getElementById('wind-dir').innerText = "--";
     });
 
-    // Hazard Detection Logic
+    // 4. Hazard Alert System
     checkHazards(latitude, longitude);
 
-}, (err) => console.error("GPS Error: " + err.message), options);
+}, (err) => console.error(err), { enableHighAccuracy: true });
 
-// 4. Helper Functions
+// Helper: Direction Converter
 function getDirection(deg) {
     const dirs = ["උතුරු", "ඊසාන", "නැගෙනහිර", "අග්නිදිග", "දකුණ", "නිරිත", "බටහිර", "වයඹ"];
     return dirs[Math.round(deg / 45) % 8];
 }
 
+// Helper: Hazard Detection
+function checkHazards(lat, lon) {
+    const alertBox = document.getElementById('hazard-alert');
+    let found = false;
+    globalHazards.forEach(h => {
+        const d = Math.sqrt(Math.pow(lat - h.lat, 2) + Math.pow(lon - h.lon, 2)) * 111;
+        if (d < 0.8) {
+            alertBox.innerHTML = `⚠️ අනතුරුදායකයි: ${h.name} (${d.toFixed(2)} km) වෙත ලංවී ඇත!`;
+            alertBox.style.display = "block";
+            found = true;
+        }
+    });
+    if (!found) alertBox.style.display = "none";
+}
+
+// Helper: DMS Converter
 function toDMS(dec, isLat) {
     const abs = Math.abs(dec);
     const deg = Math.floor(abs);
@@ -66,21 +80,7 @@ function toDMS(dec, isLat) {
     return `${deg}°${min}' ${dir}`;
 }
 
-function checkHazards(lat, lon) {
-    const alertBox = document.getElementById('hazard-alert');
-    let found = false;
-    globalHazards.forEach(h => {
-        const d = Math.sqrt(Math.pow(lat - h.lat, 2) + Math.pow(lon - h.lon, 2)) * 111;
-        if (d < 0.8) {
-            alertBox.innerHTML = `⚠️ අනතුරුදායකයි: ${h.name} (${d.toFixed(2)} km) අසල ඇත!`;
-            alertBox.style.display = "block";
-            found = true;
-        }
-    });
-    if (!found) alertBox.style.display = "none";
-}
-
-// 5. Admin & Global UI Controls
+// Global UI Functions
 window.showTab = (id) => {
     document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
     document.getElementById(id).classList.add('active');
@@ -89,30 +89,24 @@ window.showTab = (id) => {
 window.toggleTheme = () => document.body.classList.toggle('light-mode');
 
 window.openAdmin = () => {
-    const pass = prompt("Enter Admin Password:");
-    if (pass === "dilshan123") {
-        document.getElementById('admin-modal').style.display = "block";
-    } else {
-        alert("වැරදි මුරපදයකි!");
-    }
+    const pass = prompt("Admin Password:");
+    if (pass === "dilshan123") document.getElementById('admin-modal').style.display = "block";
 };
 
 window.adminSaveHazard = async () => {
     const name = document.getElementById('admin-name').value;
     const lat = parseFloat(document.getElementById('admin-lat').value);
     const lon = parseFloat(document.getElementById('admin-lon').value);
-    if (name && !isNaN(lat) && !isNaN(lon)) {
+    if (name && lat && lon) {
         await addDoc(collection(db, "hazards"), { name, lat, lon });
-        alert("සාර්ථකයි!");
-        document.getElementById('admin-modal').style.display = "none";
+        alert("සාර්ථකව එකතු විය!");
     }
 };
 
 window.saveHazard = async () => {
     const name = document.getElementById('h-name').value;
-    if(!name) return alert("නමක් ඇතුළත් කරන්න!");
     navigator.geolocation.getCurrentPosition(async (pos) => {
         await addDoc(collection(db, "hazards"), { name, lat: pos.coords.latitude, lon: pos.coords.longitude });
-        alert("සාර්ථකයි!");
+        alert("මාක් කරන ලදී!");
     });
 };
