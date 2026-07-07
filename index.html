@@ -2,31 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DILSHAN MARINE GPS</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="dark-mode">
+<body>
+    <div id="hazard-alert" class="whitebar" style="display:none;"></div>
 
     <div id="home" class="tab-pane active">
-        <div id="hazard-alert" class="whitebar" style="display:none;"></div>
         <div class="logo-container"><img src="DILGPS.png" class="main-logo"></div>
-        <div class="main-container">
-            <div class="card">
-                <div class="label">📍 LOCATION (DMS)</div>
-                <div class="huge-text" id="lat">--</div>
-                <div class="huge-text" id="lon">--</div>
-                <div class="time-text" id="time">--:--:--</div>
-            </div>
-            <div class="card">
-                <div class="label">🚀 SPEED (SOG)</div>
-                <div class="huge-text" id="speed">0.0 km/h</div>
-            </div>
-            <div class="card">
-                <div class="label">🌬️ WIND SPEED & DIR</div>
-                <div class="huge-text" id="wind-speed">-- km/h</div>
-                <div id="wind-dir" style="color:#ffffff; font-size:25px; font-weight:bold;">--</div>
-            </div>
+        <div class="card">
+            <div class="label">LOCATION (DMS)</div>
+            <div class="huge-text" id="lat">--</div>
+            <div class="huge-text" id="lon">--</div>
+        </div>
+        <div class="card">
+            <div class="label">SPEED (SOG)</div>
+            <div class="speed-text" id="speed">0.0 knots</div>
+        </div>
+        <div class="card">
+            <div class="time-text" id="time">--:--:--</div>
         </div>
     </div>
 
@@ -34,8 +29,8 @@
 
     <div id="mark" class="tab-pane">
         <div class="card">
-            <h3>📍 මාක් කරන්න</h3>
-            <input type="text" id="h-name" placeholder="ගලේ නම" style="width:80%; padding:10px; border-radius:10px;">
+            <h3>📍 ගලක් මාක් කරන්න</h3>
+            <input type="text" id="h-name" placeholder="ගලේ නම" class="input-field">
             <button class="btn" onclick="saveHazard()">💾 සේව් කරන්න</button>
         </div>
     </div>
@@ -45,7 +40,7 @@
             <img src="DILGPS.png" class="about-logo">
             <h2>DILSHAN MARINE GPS</h2>
             <a href="https://wa.me/94765529447" class="btn-wa">💬 CONTACT WHATSAPP</a>
-            <a href="YOUR_DOWNLOAD_LINK_HERE" class="btn-dl">⬇️ DOWNLOAD APP</a>
+            <a href="#" class="btn-dl">⬇️ DOWNLOAD APP</a>
         </div>
     </div>
 
@@ -55,6 +50,6 @@
         <button onclick="showTab('mark')">📍+</button>
         <button onclick="showTab('settings')">⚙️</button>
     </nav>
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
