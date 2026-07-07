@@ -3,10 +3,6 @@
 body { background: var(--bg); color: var(--text); font-family: sans-serif; height: 100vh; margin:0; }
 .tab-pane { display: none; height: 85vh; overflow-y: auto; }
 .tab-pane.active { display: block; }
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
 /* Animation Card */
 .animate-card { animation: slideUp 0.5s ease-out; }
 @keyframes slideUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
