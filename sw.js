@@ -1,5 +1,28 @@
-const CACHE_NAME = 'marine-gps-v1';
-const ASSETS = ['/', '/index.html', '/style.css', '/script.js', '/DILGPS.png'];
+const CACHE_NAME = 'dilshan-gps-v1';
+const ASSETS = [
+  './',
+  './index.html',
+  './style.css',
+  './script.js',
+  './DILGPS.png',
+  './firebase-app.js',
+  './firebase-firestore.js'
+];
 
-self.addEventListener('install', (e) => e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS))));
-self.addEventListener('fetch', (e) => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));
+// ඇප් එක මුලින්ම ලෝඩ් වන විට ෆයිල් ටික මෙමරියට ගැනීම
+self.addEventListener('install', (e) => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS);
+    })
+  );
+});
+
+// ඉන්ටර්නෙට් නැතිව ඕපන් කරන විට මෙමරියෙන් ඇප් එක ලෝඩ් කර දීම
+self.addEventListener('fetch', (e) => {
+  e.respondWith(
+    caches.match(e.request).then((response) => {
+      return response || fetch(e.request);
+    })
+  );
+});

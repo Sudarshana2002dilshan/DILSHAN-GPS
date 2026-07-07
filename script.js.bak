@@ -12,15 +12,51 @@ const firebaseConfig = {
   measurementId: "G-SZ44FM7Z42"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
+// 📴 Offline Safety: ඉන්ටර්නෙට් නැතිව ඇප් එක ලෝඩ් වුවහොත් Firebase ක්‍රැෂ් වීම වැළැක්වීම
+let db = null;
 let globalHazards = [];
 
-// 2. Real-time Hazard Database Sync
-onSnapshot(collection(db, "hazards"), (snapshot) => {
-    globalHazards = snapshot.docs.map(doc => doc.data());
+try {
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    
+    // Real-time Hazard Database Sync
+    onSnapshot(collection(db, "hazards"), (snapshot) => {
+        globalHazards = snapshot.docs.map(doc => doc.data());
+        // ඔෆ්ලයින් භාවිතය සඳහා ලැබෙන ඩේටා LocalStorage එකේ සේව් කර තබා ගැනීම
+        localStorage.setItem('local_hazards', JSON.stringify(globalHazards));
+    });
+} catch (e) {
+    console.log("Firebase Offline Mode Active");
+}
+
+// ඉන්ටර්නෙට් නැතිනම් කලින් සේව් කරගත් ගල් (Hazards) ටික මෙතනින් ලෝඩ් වේ
+if (globalHazards.length === 0) {
+    const localData = localStorage.getItem('local_hazards');
+    if (localData) globalHazards = JSON.parse(localData);
+}
+
+// 2. Screen Wake Lock (ස්ක්‍රීන් එක ලොක් නොවී තබා ගැනීම)
+let wakeLock = null;
+async function keepScreenAwake() {
+    try {
+        if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+            console.log("🔒 Screen Wake Lock Active. Screen won't sleep.");
+        }
+    } catch (err) {
+        console.log("Wake Lock Failed: " + err.message);
+    }
+}
+// ඇප් එක ඔන් වූ සැනින් ස්ක්‍රීන් එක අවදිකර තබා ගැනීම
+keepScreenAwake();
+// පරිශීලකයා ඇප් එක මිනිමයිස් කර නැවත ආවොත් නැවත ක්‍රියාත්මක කිරීම
+document.addEventListener('visibilitychange', () => {
+    if (wakeLock !== null && document.visibilityState === 'visible') {
+        keepScreenAwake();
+    }
 });
+
 
 // 3. Location, Speed, Time & Weather Watcher
 const options = { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 };
@@ -33,28 +69,31 @@ navigator.geolocation.watchPosition((pos) => {
     document.getElementById('lon').innerText = toDMS(longitude, false);
     document.getElementById('time').innerText = new Date().toLocaleTimeString();
 
-    // UI Updates - Speed (Knots වලින් අවශ්‍ය නම් 3.6 වෙනුවට 1.94384 යොදන්න)
+    // UI Updates - Speed
     document.getElementById('speed').innerText = ((speed || 0) * 3.6).toFixed(1) + " km/h";
 
-    // Weather API Logic
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
-    .then(r => r.json())
-    .then(data => {
-        document.getElementById('wind-speed').innerText = (data.wind.speed * 3.6).toFixed(1) + " km/h";
-        document.getElementById('wind-dir').innerText = getDirection(data.wind.deg);
-    }).catch(() => {
-        document.getElementById('wind-speed').innerText = "--";
-        document.getElementById('wind-dir').innerText = "--";
-    });
+    // Weather API Logic (ඉන්ටර්නෙට් ඇත්නම් පමණක් ක්‍රියා කරයි)
+    if(navigator.onLine) {
+        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('wind-speed').innerText = (data.wind.speed * 3.6).toFixed(1) + " km/h";
+            document.getElementById('wind-dir').innerText = getDirection(data.wind.deg);
+        }).catch(() => {
+            document.getElementById('wind-speed').innerText = "--";
+            document.getElementById('wind-dir').innerText = "--";
+        });
+    }
 
     // Hazard Detection Logic
     checkHazards(latitude, longitude);
 
 }, (err) => console.error("GPS Error: " + err.message), options);
 
+
 // 4. Helper Functions
 function getDirection(deg) {
-    const dirs = ["උතුරු 🧭", "ඊසාන 🧭", "නැගෙනහිර 🧭", "අග්නිදිග 🧭", "දකුණ 🧭", "නිරිත 🧭", "බටහිර 🧭", "වයඹ 🧭"];
+    const dirs = ["උතුරු", "ඊසාන", "නැගෙනහිර", "අග්නිදිග", "දකුණ", "නිරිත", "බටහිර", "වයඹ"];
     return dirs[Math.round(deg / 45) % 8];
 }
 
@@ -66,21 +105,21 @@ function toDMS(dec, isLat) {
     return `${deg}°${min}' ${dir}`;
 }
 
+// ⚠️ අනතුරු හැඟවීම් සහ ගලේ නම පැහැදිලිව පෙන්වීම
 function checkHazards(lat, lon) {
     const alertBox = document.getElementById('hazard-alert');
     let found = false;
-    
     globalHazards.forEach(h => {
-        // සරල දුර සෙවීමේ සූත්‍රය (ශ්‍රී ලංකාව අවට මුහුදට ඉතා නිවැරදියි)
         const d = Math.sqrt(Math.pow(lat - h.lat, 2) + Math.pow(lon - h.lon, 2)) * 111;
-        if (d < 0.8) { // 800m වඩා අඩු නම් අනතුරු ඇඟවීම් කරයි
-            alertBox.innerHTML = `⚠️ අනතුරුදායකයි: ${h.name} (${d.toFixed(2)} km) අසල ඇත!`;
+        if (d < 0.8) { // මීටර් 800 ක් ඇතුලත නම්
+            alertBox.innerHTML = `⚠️ අනතුරක් ලඟයි: "${h.name}" ගල අසල ඇත! <br> දුර: ${d.toFixed(3)} KM`;
             alertBox.style.display = "block";
             found = true;
         }
     });
     if (!found) alertBox.style.display = "none";
 }
+
 
 // 5. Admin & Global UI Controls
 window.showTab = (id) => {
@@ -90,42 +129,38 @@ window.showTab = (id) => {
 
 window.toggleTheme = () => document.body.classList.toggle('light-mode');
 
+// බැටරි සේවිං නිසා ජීපීඑස් කැපී යාම වැළැක්වීමට උපදෙස් බටන් එක
+window.showBatteryInfo = () => {
+    alert("💡 මුහුදේදී GPS ඩේටා කැපී යාම වැලැක්වීමට:\n\n1. ෆෝන් එකේ Settings -> Apps වෙත යන්න.\n2. මෙම ඇප් එක (DILSHAN MARINE GPS) තෝරන්න.\n3. Battery / Battery Saver එක 'No Restrictions' (සීමා රහිත) කරන්න.");
+};
+
 window.openAdmin = () => {
     const pass = prompt("Enter Admin Password:");
     if (pass === "dilshan123") {
         document.getElementById('admin-modal').style.display = "block";
     } else {
-        alert("වැරදි මුරපදයකි! නැවත උත්සාහ කරන්න.");
+        alert("වැරදි මුරපදයකි!");
     }
 };
 
 window.adminSaveHazard = async () => {
+    if(!db) return alert("ඉන්ටර්නෙට් නොමැතිව අප්ලෝඩ් කල නොහැක!");
     const name = document.getElementById('admin-name').value;
     const lat = parseFloat(document.getElementById('admin-lat').value);
     const lon = parseFloat(document.getElementById('admin-lon').value);
     if (name && !isNaN(lat) && !isNaN(lon)) {
         await addDoc(collection(db, "hazards"), { name, lat, lon });
-        alert("ගල සාර්ථකව මැප් එකට ඇතුළත් කළා! ✅");
-        document.getElementById('admin-name').value = "";
-        document.getElementById('admin-lat').value = "";
-        document.getElementById('admin-lon').value = "";
+        alert("සාර්ථකයි!");
         document.getElementById('admin-modal').style.display = "none";
-    } else {
-        alert("කරුණාකර සියලුම විස්තර නිවැරදිව ඇතුළත් කරන්න!");
     }
 };
 
 window.saveHazard = async () => {
+    if(!db) return alert("Offline අවස්ථාවලදී සේව් කල නොහැක!");
     const name = document.getElementById('h-name').value;
-    if(!name) return alert("කරුණාකර ගලේ නමක් ඇතුළත් කරන්න!");
-    
+    if(!name) return alert("නමක් ඇතුළත් කරන්න!");
     navigator.geolocation.getCurrentPosition(async (pos) => {
-        await addDoc(collection(db, "hazards"), { 
-            name, 
-            lat: pos.coords.latitude, 
-            lon: pos.coords.longitude 
-        });
-        alert("ඔබ සිටින ස්ථානයේ ගල සාර්ථකව සේව් කළා! ✅");
-        document.getElementById('h-name').value = "";
-    }, (err) => alert("GPS ලබා ගැනීමට නොහැක: " + err.message));
+        await addDoc(collection(db, "hazards"), { name, lat: pos.coords.latitude, lon: pos.coords.longitude });
+        alert("සාර්ථකයි!");
+    });
 };

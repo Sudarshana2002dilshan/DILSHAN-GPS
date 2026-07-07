@@ -36,18 +36,18 @@ body {
     font-weight: 900;
 }
 
-/* --- අනතුරු ඇඟවීමේ බාර් එක (Hazard Alert) ලොකුවට සහ පැහැදිලිව --- */
+/* ⚠️ අනතුරු ඇඟවීමේ බාර් එක (Hazard Alert) ලොකුවට */
 .whitebar {
     background: #ff1744;
     color: #ffffff;
     font-weight: 900;
     text-align: center;
     padding: 20px;
-    font-size: 26px; /* ෆොන්ට් එක ගොඩක් ලොකු කළා */
+    font-size: 26px; 
     box-shadow: 0px 5px 15px rgba(0,0,0,0.5);
     border-bottom: 3px solid #fff;
     text-transform: uppercase;
-    animation: blink-bg 1s infinite alternate; /* ඇසිපිය ගහන ඇනිමේෂන් එකක් */
+    animation: blink-bg 1s infinite alternate; 
 }
 @keyframes blink-bg {
     from { background: #ff1744; }
@@ -72,23 +72,18 @@ body {
     margin-bottom: 5px;
 }
 
-/* --- ලොකේෂන් අංක ලොකු කිරීම සහ ලයිට් මෝඩ් එකේදී කළු කිරීම --- */
+/* 📍 ලොකේෂන් අංක ලොකු කිරීම සහ ලයිට් මෝඩ් එකේදී කළු කිරීම */
 .huge-text { 
-    font-size: 48px; /* අංක ගොඩක් ලොකු කළා */
+    font-size: 48px; 
     font-weight: 900; 
-    color: #ffffff; /* ඩාර්ක් මෝඩ් එකේදී සුදු */
+    color: #ffffff; 
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 .light-mode .huge-text {
-    color: #000000 !important; /* ලයිට් මෝඩ් එකේදී අනිවාර්යයෙන්ම කළු වේ */
+    color: #000000 !important; 
 }
 
-.time-text {
-    font-size:28px; 
-    color:#fbc02d; 
-    margin-top:10px;
-    font-weight: bold;
-}
+.time-text { font-size:28px; color:#fbc02d; margin-top:10px; font-weight: bold; }
 .speed-text { font-size: 52px; font-weight: 900; color: #ff5722; }
 .wind-text { font-weight: 800; font-size: 28px; color: #1CFF13; margin-top:10px; }
 .wind-dir { font-weight: 800; font-size: 28px; color: #1CFF13; margin-top:10px; }

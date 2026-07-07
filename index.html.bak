@@ -65,7 +65,7 @@
                 <button class="btn" onclick="showBatteryInfo()" style="background:#ff9800; color:black;">🔋 BATTERY OPTIMIZATION</button>
                 <button class="btn" onclick="openAdmin()" style="background:#d32f2f;">🛠️ ADMIN PANEL</button>
                 <a href="https://wa.me/94765529447" class="btn" style="background:#25D366; text-decoration:none; display:block;">💬 WHATSAPP SUPPORT</a>
-                <a href="https://drive.google.com/uc?export=download&id=1rCkE_Xmfg0xJFFbBvRW5ETSVuGBFw11l" class="btn" style="background:#1976d2; text-decoration:none; display:block;">⬇️ DOWNLOAD APP</a>
+                <a href="https://drive.google.com/file/d/109q3-g3QKdffN3J0W8JTiikIzziRVlBy/view?usp=drivesdk" class="btn" style="background:#1976d2; text-decoration:none; display:block;">⬇️ DOWNLOAD APP</a>
             </div>
 
             <div id="admin-modal" class="card" style="display:none; border:2px solid red; margin-top:20px;">
