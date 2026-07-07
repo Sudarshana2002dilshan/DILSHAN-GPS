@@ -109,3 +109,40 @@ body {
 .bottom-nav button { flex: 1; padding: 20px; border:none; background:none; color: white; font-size: 24px; cursor: pointer; }
 .input-field { width: 90%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 2px solid #ccc; font-weight: bold;}
 .btn { width: 95%; padding: 15px; margin-top:10px; border-radius: 10px; border: none; background: #00796b; color: white; font-weight: 900; font-size: 16px; cursor: pointer;}
+
+/* 🌙 Night Vision Mode එකට අදාළ CSS */
+.night-vision-mode {
+    --bg: #000000 !important;
+    --card: #120000 !important;
+    --text: #ff1744 !important;
+    --accent: #b71c1c !important;
+}
+
+.night-vision-mode body,
+.night-vision-mode .card,
+.night-vision-mode h2,
+.night-vision-mode h3,
+.night-vision-mode h4,
+.night-vision-mode .label,
+.night-vision-mode .huge-text,
+.night-vision-mode .speed-text,
+.night-vision-mode .wind-text,
+.night-vision-mode .wind-dir,
+.night-vision-mode .current-text,
+.night-vision-mode .current-dir,
+.night-vision-mode .time-text {
+    background-color: #000000 !important;
+    color: #ff1744 !important;
+    border-color: #ff1744 !important;
+    text-shadow: none !important;
+}
+
+.night-vision-mode .btn {
+    background: #b71c1c !important;
+    color: #ffffff !important;
+}
+
+.night-vision-mode .bottom-nav {
+    background: #1a0000 !important;
+}
+

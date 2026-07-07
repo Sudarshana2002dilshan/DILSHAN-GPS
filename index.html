@@ -67,10 +67,28 @@
 
             <div class="settings-actions">
                 <button class="btn" onclick="toggleTheme()">🌓 DARK / LIGHT MODE</button>
+                <button class="btn" onclick="toggleNightVision()" style="background:#ff1744; color:white;">🌙 NIGHT VISION MODE (🔴)</button>
+                
                 <button class="btn" onclick="showBatteryInfo()" style="background:#ff9800; color:black;">🔋 BATTERY OPTIMIZATION</button>
                 <button class="btn" onclick="openAdmin()" style="background:#d32f2f;">🛠️ ADMIN PANEL</button>
                 <a href="https://wa.me/94765529447" class="btn" style="background:#25D366; text-decoration:none; display:block;">💬 WHATSAPP SUPPORT</a>
                 <a href="https://drive.google.com/uc?export=download&id=1rCkE_Xmfg0xJFFbBvRW5ETSVuGBFw11l" class="btn" style="background:#1976d2; text-decoration:none; display:block;">⬇️ DOWNLOAD APP</a>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #64ffda; margin: 20px 0;">
+
+            <div style="background: rgba(100, 255, 218, 0.05); padding: 15px; border-radius: 15px; border: 1px solid #64ffda; text-align: left;">
+                <h4 style="color: #64ffda; margin-top: 0; text-align: center;">🔄 GPS COORDINATES CONVERTER</h4>
+                <p style="font-size: 13px; opacity: 0.8; text-align: center;">වෙනත් අය දෙන GPS අංක ඇප් එකේ ක්‍රමයට (DMS) හරවා ගන්න.</p>
+                
+                <label style="font-size: 12px; font-weight: bold;">Decimal Format (උදා: 7.12345):</label>
+                <input type="number" id="convert-input" placeholder="7.12345" class="input-field" style="width:92%; margin-bottom: 10px;">
+                
+                <button class="btn" onclick="convertGPS()" style="margin-bottom: 15px;">🔄 CONVERT (හරවන්න)</button>
+                
+                <div style="font-weight: bold; font-size: 16px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; border-left: 5px solid #ff9800;">
+                    ප්‍රතිඵලය (DMS): <span id="convert-result" style="color: #ff5722;">--</span>
+                </div>
             </div>
 
             <div id="admin-modal" class="card" style="display:none; border:2px solid red; margin-top:20px;">

@@ -1,170 +1,224 @@
-// Local ෆයිල් වෙනුවට කෙලින්ම Google CDN ලින්ක් එක පාවිච්චි කිරීම
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+// ============================================================================
+// DILSHAN MARINE GPS - MASTER SCRIPT
+// Developer: Sudarshana DILSHAN
+// Features: Live Tracking, Marine Hazards Alerts, Night Vision, GPS Converter
+// ============================================================================
 
+// --- GLOBAL VARIABLES & STATE ---
+let watchId = null;
+let savedHazards = [];
+let db = null; // Firebase Reference (If used)
 
-// 1. Firebase Configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAbCfnQtNWbSznv3OU0THPZSB9VWPv-hOs",
-  authDomain: "dilshan-gps.firebaseapp.com",
-  projectId: "dilshan-gps",
-  storageBucket: "dilshan-gps.firebasestorage.app",
-  messagingSenderId: "86804944242",
-  appId: "1:86804944242:web:c1c0351d2da5a0d83fb9eb",
-  measurementId: "G-SZ44FM7Z42"
-};
-
-let db = null;
-let globalHazards = [];
-
-// 🌐 Global UI Functions (HTML එකෙන් කෙලින්ම කෝල් කරන නිසා මේවා සෙට් කර ඇත)
-window.showTab = (id) => {
-    document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
-    const targetTab = document.getElementById(id);
-    if (targetTab) {
-        targetTab.classList.add('active');
-    }
-};
-
-window.toggleTheme = () => {
-    document.body.classList.toggle('light-mode');
-};
-
-window.showBatteryInfo = () => {
-    alert("💡 මුහුදේදී GPS ඩේටා කැපී යාම වැලැක්වීමට:\n\n1. ෆෝන් එකේ Settings -> Apps වෙත යන්න.\n2. මෙම ඇප් එක (DILSHAN MARINE GPS) තෝරන්න.\n3. Battery / Battery Saver එක 'No Restrictions' (සීමා රහිත) කරන්න.");
-};
-
-window.openAdmin = () => {
-    const pass = prompt("Enter Admin Password:");
-    if (pass === "dilshan123") {
-        document.getElementById('admin-modal').style.display = "block";
-    } else {
-        alert("වැරදි මුරපදයකි!");
-    }
-};
-
-// Firebase Initialization with Offline Handling
-try {
-    const app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
+// --- INITIALIZATION ---
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. මුලින්ම පෙන්වන්නේ Dashboard ටැබ් එක
+    showTab('dashboard');
     
-    onSnapshot(collection(db, "hazards"), (snapshot) => {
-        globalHazards = snapshot.docs.map(doc => doc.data());
-        localStorage.setItem('local_hazards', JSON.stringify(globalHazards));
-    });
-} catch (e) {
-    console.log("Running in Offline Mode");
-}
-
-// ඉන්ටර්නෙට් නැතිනම් කලින් සේව් කරගත් දත්ත ලෝඩ් කර ගැනීම
-if (globalHazards.length === 0) {
-    const localData = localStorage.getItem('local_hazards');
-    if (localData) globalHazards = JSON.parse(localData);
-}
-
-// 2. Screen Wake Lock (ස්ක්‍රීන් එක නිවී යාම වැළැක්වීම)
-let wakeLock = null;
-async function keepScreenAwake() {
-    try {
-        if ('wakeLock' in navigator) {
-            wakeLock = await navigator.wakeLock.request('screen');
-            console.log("Screen Wake Lock Active.");
-        }
-    } catch (err) {
-        console.log("Wake Lock Failed: " + err.message);
-    }
-}
-keepScreenAwake();
-document.addEventListener('visibilitychange', () => {
-    if (wakeLock !== null && document.visibilityState === 'visible') {
-        keepScreenAwake();
-    }
+    // 2. Local Storage එකෙන් සේව් කරපු ගල් (Hazards) ලෝඩ් කිරීම
+    loadSavedHazards();
+    
+    // 3. GPS ට්‍රැකින් පටන් ගැනීම
+    startTracking();
 });
 
-// 3. GPS Watcher
-const options = { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 };
+// --- 📱 TAB NAVIGATION SYSTEM ---
+window.showTab = (tabId) => {
+    // සියලුම ටැබ් පැනල් හංගන්න
+    document.querySelectorAll('.tab-pane').forEach(panel => {
+        panel.classList.remove('active');
+    });
+    // සියලුම බටන්ස් වල ඇක්ටිව් ගතිය අයින් කරන්න
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
 
-navigator.geolocation.watchPosition((pos) => {
-    const { latitude, longitude, speed } = pos.coords;
+    // තෝරාගත් ටැබ් එක පෙන්වන්න
+    const activePanel = document.getElementById(tabId);
+    if (activePanel) activePanel.classList.add('active');
 
-    document.getElementById('lat').innerText = toDMS(latitude, true);
-    document.getElementById('lon').innerText = toDMS(longitude, false);
-    document.getElementById('time').innerText = new Date().toLocaleTimeString();
+    // තෝරාගත් බටන් එක හයිලයිට් කරන්න
+    const activeBtn = document.querySelector(`[onclick="showTab('${tabId}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+};
 
-    document.getElementById('speed').innerText = ((speed || 0) * 3.6).toFixed(1) + " km/h";
-
-    // Weather & Ocean Currents API (ඉන්ටර්නෙට් ඇති විට පමණි)
-    if(navigator.onLine) {
-        // 🌊 Marine API එකෙන් දියකඩ දත්ත ලබා ගැනීම
-        fetch(`https://api.open-meteo.com/v1/marine?latitude=${latitude}&longitude=${longitude}&current_variable=ocean_current_velocity,ocean_current_direction`)
-        .then(r => r.json())
-        .then(data => {
-            const currentSpeed = data.current?.ocean_current_velocity || 0;
-            const currentDeg = data.current?.ocean_current_direction || 0;
-
-            document.getElementById('current-speed').innerText = currentSpeed.toFixed(2) + " m/s";
-            document.getElementById('current-dir').innerText = "දියකඩ දිශාව: " + getDirection(currentDeg);
-        }).catch((err) => console.log("Marine API Error: ", err));
-
-        // 🌬️ හුළඟේ දත්ත ලබා ගැනීම
-        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
-        .then(r => r.json())
-        .then(data => {
-            document.getElementById('wind-speed').innerText = (data.wind.speed * 3.6).toFixed(1) + " km/h";
-            document.getElementById('wind-dir').innerText = "හුළං දිශාව: " + getDirection(data.wind.deg);
-        }).catch(() => {});
+// --- 🧭 LIVE GPS TRACKING & CALCULATIONS ---
+function startTracking() {
+    if (!navigator.geolocation) {
+        alert("ඔයාගේ ෆෝන් එකේ GPS වැඩ කරන්නේ නැහැ!");
+        return;
     }
 
-    checkHazards(latitude, longitude);
-}, (err) => console.error("GPS Error: " + err.message), options);
+    const options = {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 10000
+    };
 
-// 4. Helpers
-function getDirection(deg) {
-    const dirs = ["උතුරු", "ඊසාන", "නැගෙනහිර", "අග්නිදිග", "දකුණ", "නිරිත", "බටහිර", "වයඹ"];
-    return dirs[Math.round(deg / 45) % 8];
+    watchId = navigator.geolocation.watchPosition(updateLocation, handleGPSError, options);
 }
 
-function toDMS(dec, isLat) {
-    const abs = Math.abs(dec);
-    const deg = Math.floor(abs);
-    const min = ((abs - deg) * 60).toFixed(3);
-    const dir = isLat ? (dec >= 0 ? 'N' : 'S') : (dec >= 0 ? 'E' : 'W');
-    return `${deg}°${min}' ${dir}`;
+function updateLocation(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const speedKnots = position.coords.speed ? (position.coords.speed * 1.94384).toFixed(1) : "0.0";
+    const heading = position.coords.heading ? Math.round(position.coords.heading) : null;
+
+    // 1. UI එකට දත්ත යාවත්කාලීන කිරීම (Decimal -> DMS පරිවර්තනය කර පෙන්වීම)
+    document.getElementById("lat-display").innerText = convertToDMS(lat);
+    document.getElementById("lon-display").innerText = convertToDMS(lon);
+    document.getElementById("speed-display").innerText = speedKnots;
+    
+    if (heading !== null) {
+        document.getElementById("course-display").innerText = `${heading}°`;
+    } else {
+        document.getElementById("course-display").innerText = "---";
+    }
+
+    // 2. ළඟම තියෙන ගල් (Hazards) පරික්ෂා කර ඇලර්ට් දීම
+    checkProximityAlerts(lat, lon);
 }
 
-function checkHazards(lat, lon) {
-    const alertBox = document.getElementById('hazard-alert');
-    let found = false;
-    globalHazards.forEach(h => {
-        const d = Math.sqrt(Math.pow(lat - h.lat, 2) + Math.pow(lon - h.lon, 2)) * 111;
-        if (d < 0.8) { 
-            alertBox.innerHTML = `⚠️ අනතුරක් ලඟයි: "${h.name}" ගල අසල ඇත! <br> දුර: ${d.toFixed(3)} KM`;
-            alertBox.style.display = "block";
-            found = true;
-        }
-    });
-    if (!found) alertBox.style.display = "none";
+function handleGPSError(error) {
+    console.error("GPS Error: ", error.message);
+    // වැරැද්දක් ආවත් ඇප් එක ක්‍රෑෂ් නොවී පරණ දත්ත හෝ මැසේජ් එකක් පෙන්වයි
 }
 
-// 5. Data Management
-window.adminSaveHazard = async () => {
-    if(!db) return alert("ඉන්ටර්නෙට් නොමැතිව අප්ලෝඩ් කල නොහැක!");
-    const name = document.getElementById('admin-name').value;
-    const lat = parseFloat(document.getElementById('admin-lat').value);
-    const lon = parseFloat(document.getElementById('admin-lon').value);
-    if (name && !isNaN(lat) && !isNaN(lon)) {
-        await addDoc(collection(db, "hazards"), { name, lat, lon });
-        alert("සාර්ථකයි!");
-        document.getElementById('admin-modal').style.display = "none";
+// --- 🔄 COORDINATES CONVERTER & DMS MATH ---
+// Decimal Degrees (7.12345) -> Degrees Minutes (7°7.407') වලට හරවන ෆන්ක්ෂන් එක
+function convertToDMS(decimal) {
+    const absVal = Math.abs(decimal);
+    const degrees = Math.floor(absVal);
+    const minutes = ((absVal - degrees) * 60).toFixed(3);
+    return `${degrees}°${minutes}'`;
+}
+
+// Settings පිටුවේ තියෙන බටන් එකෙන් ක්‍රියාත්මක වන Converter එක
+window.convertGPS = () => {
+    const inputValue = parseFloat(document.getElementById('convert-input').value);
+    
+    if (isNaN(inputValue)) {
+        alert("කරුණාකර නිවැරදි අංකයක් (Decimal Number) ඇතුළත් කරන්න!");
+        return;
+    }
+    
+    const resultText = convertToDMS(inputValue);
+    document.getElementById('convert-result').innerText = resultText;
+};
+
+// --- 🌙 NIGHT VISION & THEME MANAGEMENT ---
+window.toggleTheme = () => {
+    // සාමාන්‍ย Light / Dark මාරු කිරීම
+    document.body.classList.toggle('light-mode');
+    if(document.body.classList.contains('light-mode')) {
+        document.body.classList.remove('night-vision-mode');
     }
 };
 
-window.saveHazard = async () => {
-    if(!db) return alert("Offline අවස්ථාවලදී සේව් කල නොහැක!");
-    const name = document.getElementById('h-name').value;
-    if(!name) return alert("නමක් ඇතුළත් කරන්න!");
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-        await addDoc(collection(db, "hazards"), { name, lat: pos.coords.latitude, lon: pos.coords.longitude });
-        alert("සාර්ථකයි!");
+window.toggleNightVision = () => {
+    // මුළු ඇප් එකම තද රතු සහ කළු කරන Night Vision එක On/Off කිරීම
+    document.body.classList.toggle('night-vision-mode');
+    
+    // Night vision ඔන් නම් Light mode එක අයින් කරනවා කෝඩ් පැටලෙන්නේ නැති වෙන්න
+    if(document.body.classList.contains('night-vision-mode')) {
+        document.body.classList.remove('light-mode');
+    }
+};
+
+// --- 🚨 HAZARDS & PROXIMITY ALERTS (LOCAL / ADMIN) ---
+function loadSavedHazards() {
+    // LocalStorage එකෙන් කලින් සේව් කරපු ගල් ටික ගන්නවා
+    const localData = localStorage.getItem("marine_hazards");
+    if (localData) {
+        savedHazards = JSON.parse(localData);
+    } else {
+        // කිසිවක් නැත්නම් මූලික ඩෙමෝ ගලක් ඇතුලත් කිරීම
+        savedHazards = [
+            { name: "Demo Rock 1", lat: 7.1200, lon: 79.8000 }
+        ];
+        localStorage.setItem("marine_hazards", JSON.stringify(savedHazards));
+    }
+}
+
+function checkProximityAlerts(currentLat, currentLon) {
+    const alertDistanceKm = 0.5; // මීටර් 500ක් ඇතුලත ආවොත් ඇලර්ට් වෙනවා
+    let dangerFound = false;
+    let closestRockName = "";
+
+    savedHazards.forEach(hazard => {
+        const dist = calculateDistance(currentLat, currentLon, hazard.lat, hazard.lon);
+        if (dist <= alertDistanceKm) {
+            dangerFound = true;
+            closestRockName = hazard.name;
+        }
     });
+
+    const alertBox = document.getElementById("danger-alert");
+    if (alertBox) {
+        if (dangerFound) {
+            alertBox.innerText = `🚨 අවධානයයි: ${closestRockName} ගල ආසන්නයේ ඇත!`;
+            alertBox.style.display = "block";
+            // ෆෝන් එක වයිබ්‍රේට් කිරීම (සපෝට් කරන බ්‍රවුසර්ස් වල)
+            if (navigator.vibrate) navigator.vibrate([500, 300, 500]);
+        } else {
+            alertBox.style.display = "none";
+        }
+    }
+}
+
+// Haversine Formula (GPS ලක්ෂ්‍ය දෙකක් අතර දුර කිලෝමීටර් වලින් සෙවීම)
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // පෘථිවියේ අරය (Km)
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
+// --- 🛠️ ADMIN PANEL FUNCTIONS ---
+window.openAdmin = () => {
+    const password = prompt("ADMIN PASSWORD එක ඇතුළත් කරන්න:");
+    if (password === "dilshangps123") { // ඔයාට කැමති පාස්වර්ඩ් එකක් දාන්න මල්ලි
+        document.getElementById("admin-modal").style.display = "block";
+    } else {
+        alert("වැරදි මුරපදයක්!");
+    }
+};
+
+window.adminSaveHazard = () => {
+    const name = document.getElementById("admin-name").value;
+    const lat = parseFloat(document.getElementById("admin-lat").value);
+    const lon = parseFloat(document.getElementById("admin-lon").value);
+
+    if (!name || isNaN(lat) || isNaN(lon)) {
+        alert("කරුණාකර සියලු විස්තර නිවැරදිව ඇතුළත් කරන්න!");
+        return;
+    }
+
+    const newHazard = { name, lat, lon };
+    savedHazards.push(newHazard);
+    localStorage.setItem("marine_hazards", JSON.stringify(savedHazards));
+
+    alert(`${name} ගල සාර්ථකව මැප් එකට ඇතුළත් කළා!`);
+    
+    // Fields හිස් කිරීම
+    document.getElementById("admin-name").value = "";
+    document.getElementById("admin-lat").value = "";
+    document.getElementById("admin-lon").value = "";
+    document.getElementById("admin-modal").style.display = "none";
+};
+
+// --- 🔋 ADDITIONAL UTILITIES ---
+window.showBatteryInfo = () => {
+    if (navigator.getBattery) {
+        navigator.getBattery().then(battery => {
+            const level = Math.round(battery.level * 100);
+            alert(`🔋 බැටරි මට්ටම: ${level}%\n\nමුහුද මැදදී බැටරිය ඉතිරි කර ගැනීමට ෆෝන් එකේ Brightness අඩු කර 'Screen Timeout' කාලය වැඩි කරන්න.`);
+        });
+    } else {
+        alert("බැටරි විස්තර ලබාගත නොහැක. කරුණාකර ෆෝන් එකේ සෙටින්ග්ස් පරීක්ෂා කරන්න.");
+    }
 };
