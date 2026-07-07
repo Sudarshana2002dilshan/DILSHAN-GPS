@@ -92,22 +92,9 @@
 
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then((reg) => {
-                console.log("Service Worker Registered Successfully!");
-                
-                // අලුත් අප්ඩේට් එකක් ආවොත් බ්‍රවුසර් එකට දැනුම් දීම
-                reg.onupdatefound = () => {
-                    const installingWorker = reg.installing;
-                    installingWorker.onstatechange = () => {
-                        if (installingWorker.state === 'installed') {
-                            if (navigator.serviceWorker.controller) {
-                                // පාවිච්චි කරන කෙනාට නොදැනීම ඇප් එක පසුබිමෙන් අප්ඩේට් කරගැනීමට Refresh කරයි
-                                window.location.reload();
-                            }
-                        }
-                    };
-                };
-            }).catch(err => console.log("Service Worker Failed: ", err));
+            navigator.serviceWorker.register('./sw.js')
+            .then(() => console.log("Service Worker Registered Successfully!"))
+            .catch(err => console.log("Service Worker Registration Failed: ", err));
         }
     </script>
     <script type="module" src="script.js"></script>
