@@ -1,4 +1,4 @@
-// Offline Safety සඳහා Firebase ෆයිල් Local කර ඇත (පහල උපදෙස් බලන්න)
+// Offline Safety සඳහා Firebase ෆයිල් Local කර ඇත
 import { initializeApp } from "./firebase-app.js";
 import { getFirestore, collection, addDoc, onSnapshot } from "./firebase-firestore.js";
 
@@ -16,13 +16,39 @@ const firebaseConfig = {
 let db = null;
 let globalHazards = [];
 
+// 🌐 Global UI Functions (HTML එකෙන් කෙලින්ම කෝල් කරන නිසා මේවා සෙට් කර ඇත)
+window.showTab = (id) => {
+    document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
+    const targetTab = document.getElementById(id);
+    if (targetTab) {
+        targetTab.classList.add('active');
+    }
+};
+
+window.toggleTheme = () => {
+    document.body.classList.toggle('light-mode');
+};
+
+window.showBatteryInfo = () => {
+    alert("💡 මුහුදේදී GPS ඩේටා කැපී යාම වැලැක්වීමට:\n\n1. ෆෝන් එකේ Settings -> Apps වෙත යන්න.\n2. මෙම ඇප් එක (DILSHAN MARINE GPS) තෝරන්න.\n3. Battery / Battery Saver එක 'No Restrictions' (සීමා රහිත) කරන්න.");
+};
+
+window.openAdmin = () => {
+    const pass = prompt("Enter Admin Password:");
+    if (pass === "dilshan123") {
+        document.getElementById('admin-modal').style.display = "block";
+    } else {
+        alert("වැරදි මුරපදයකි!");
+    }
+};
+
+// Firebase Initialization with Offline Handling
 try {
     const app = initializeApp(firebaseConfig);
     db = getFirestore(app);
     
     onSnapshot(collection(db, "hazards"), (snapshot) => {
         globalHazards = snapshot.docs.map(doc => doc.data());
-        // ඔෆ්ලයින් භාවිතය සඳහා LocalStorage එකට සේව් කිරීම
         localStorage.setItem('local_hazards', JSON.stringify(globalHazards));
     });
 } catch (e) {
@@ -66,13 +92,25 @@ navigator.geolocation.watchPosition((pos) => {
 
     document.getElementById('speed').innerText = ((speed || 0) * 3.6).toFixed(1) + " km/h";
 
-    // Weather API (ඉන්ටර්නෙට් ඇති විට පමණි)
+    // Weather & Ocean Currents API (ඉන්ටර්නෙට් ඇති විට පමණි)
     if(navigator.onLine) {
+        // 🌊 Marine API එකෙන් දියකඩ දත්ත ලබා ගැනීම
+        fetch(`https://api.open-meteo.com/v1/marine?latitude=${latitude}&longitude=${longitude}&current_variable=ocean_current_velocity,ocean_current_direction`)
+        .then(r => r.json())
+        .then(data => {
+            const currentSpeed = data.current?.ocean_current_velocity || 0;
+            const currentDeg = data.current?.ocean_current_direction || 0;
+
+            document.getElementById('current-speed').innerText = currentSpeed.toFixed(2) + " m/s";
+            document.getElementById('current-dir').innerText = "දියකඩ දිශාව: " + getDirection(currentDeg);
+        }).catch((err) => console.log("Marine API Error: ", err));
+
+        // 🌬️ හුළඟේ දත්ත ලබා ගැනීම
         fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
         .then(r => r.json())
         .then(data => {
             document.getElementById('wind-speed').innerText = (data.wind.speed * 3.6).toFixed(1) + " km/h";
-            document.getElementById('wind-dir').innerText = getDirection(data.wind.deg);
+            document.getElementById('wind-dir').innerText = "හුළං දිශාව: " + getDirection(data.wind.deg);
         }).catch(() => {});
     }
 
@@ -107,27 +145,7 @@ function checkHazards(lat, lon) {
     if (!found) alertBox.style.display = "none";
 }
 
-// 5. UI Controls
-window.showTab = (id) => {
-    document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-};
-
-window.toggleTheme = () => document.body.classList.toggle('light-mode');
-
-window.showBatteryInfo = () => {
-    alert("💡 මුහුදේදී GPS ඩේටා කැපී යාම වැලැක්වීමට:\n\n1. ෆෝන් එකේ Settings -> Apps වෙත යන්න.\n2. මෙම ඇප් එක (DILSHAN MARINE GPS) තෝරන්න.\n3. Battery / Battery Saver එක 'No Restrictions' (සීමා රහිත) කරන්න.");
-};
-
-window.openAdmin = () => {
-    const pass = prompt("Enter Admin Password:");
-    if (pass === "dilshan123") {
-        document.getElementById('admin-modal').style.display = "block";
-    } else {
-        alert("වැරදි මුරපදයකි!");
-    }
-};
-
+// 5. Data Management
 window.adminSaveHazard = async () => {
     if(!db) return alert("ඉන්ටර්නෙට් නොමැතිව අප්ලෝඩ් කල නොහැක!");
     const name = document.getElementById('admin-name').value;
@@ -138,3 +156,14 @@ window.adminSaveHazard = async () => {
         alert("සාර්ථකයි!");
         document.getElementById('admin-modal').style.display = "none";
     }
+};
+
+window.saveHazard = async () => {
+    if(!db) return alert("Offline අවස්ථාවලදී සේව් කල නොහැක!");
+    const name = document.getElementById('h-name').value;
+    if(!name) return alert("නමක් ඇතුළත් කරන්න!");
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+        await addDoc(collection(db, "hazards"), { name, lat: pos.coords.latitude, lon: pos.coords.longitude });
+        alert("සාර්ථකයි!");
+    });
+};

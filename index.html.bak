@@ -30,19 +30,14 @@
         </div>
 
         <div class="card animate-card">
-            <div class="label">🌬️ WIND INFO & 🌊 CURRENT</div>
+            <div class="label">🌬️ WIND INFO</div>
             <div class="wind-text" id="wind-speed">--</div>
             <div class="wind-dir" id="wind-dir">--</div>
-            
-            <hr style="border: 0; border-top: 1px solid rgba(100, 255, 218, 0.3); margin: 15px 0;">
-            <div class="label" style="color: #00e676;">🌊 OCEAN CURRENT (දියකඩ)</div>
-            <div class="current-text" id="current-speed">-- m/s</div>
-            <div class="current-dir" id="current-dir">--</div>
         </div>
     </div>
 
     <div id="windy" class="tab-pane">
-        <iframe src="https://embed.windy.com/embed2.html?lat=7.0&lon=80.0&zoom=7&level=surface&overlay=currents&menu=&message=&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1" width="100%" height="100%" frameborder="0"></iframe>
+        <iframe src="https://embed.windy.com/embed2.html?lat=7.0&lon=80.0&zoom=7" width="100%" height="100%" frameborder="0"></iframe>
     </div>
     
     <div id="mark" class="tab-pane">
@@ -93,8 +88,8 @@
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js')
-            .then(() => console.log("Service Worker Registered Successfully!"))
-            .catch(err => console.log("Service Worker Registration Failed: ", err));
+            .then(() => console.log("Offline Service Worker Registered!"))
+            .catch(err => console.log("Service Worker Failed: ", err));
         }
     </script>
     <script type="module" src="script.js"></script>

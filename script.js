@@ -1,6 +1,7 @@
-// Offline Safety සඳහා Firebase ෆයිල් Local කර ඇත
-import { initializeApp } from "./firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot } from "./firebase-firestore.js";
+// Local ෆයිල් වෙනුවට කෙලින්ම Google CDN ලින්ක් එක පාවිච්චි කිරීම
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
 
 // 1. Firebase Configuration
 const firebaseConfig = {
@@ -16,7 +17,7 @@ const firebaseConfig = {
 let db = null;
 let globalHazards = [];
 
-// 🌐 Global UI Functions (HTML එකෙන් කෙලින්ම කෝල් කරන නිසා මේවා ස්ක්‍රිප්ට් එකේ උඩින්ම සෙට් කර ඇත)
+// 🌐 Global UI Functions (HTML එකෙන් කෙලින්ම කෝල් කරන නිසා මේවා සෙට් කර ඇත)
 window.showTab = (id) => {
     document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
     const targetTab = document.getElementById(id);
@@ -92,13 +93,25 @@ navigator.geolocation.watchPosition((pos) => {
 
     document.getElementById('speed').innerText = ((speed || 0) * 3.6).toFixed(1) + " km/h";
 
-    // Weather API (ඉන්ටර්නෙට් ඇති විට පමණි)
+    // Weather & Ocean Currents API (ඉන්ටර්නෙට් ඇති විට පමණි)
     if(navigator.onLine) {
+        // 🌊 Marine API එකෙන් දියකඩ දත්ත ලබා ගැනීම
+        fetch(`https://api.open-meteo.com/v1/marine?latitude=${latitude}&longitude=${longitude}&current_variable=ocean_current_velocity,ocean_current_direction`)
+        .then(r => r.json())
+        .then(data => {
+            const currentSpeed = data.current?.ocean_current_velocity || 0;
+            const currentDeg = data.current?.ocean_current_direction || 0;
+
+            document.getElementById('current-speed').innerText = currentSpeed.toFixed(2) + " m/s";
+            document.getElementById('current-dir').innerText = "දියකඩ දිශාව: " + getDirection(currentDeg);
+        }).catch((err) => console.log("Marine API Error: ", err));
+
+        // 🌬️ හුළඟේ දත්ත ලබා ගැනීම
         fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=b55f6eb21b285249ea39c2d19af58d88&units=metric`)
         .then(r => r.json())
         .then(data => {
             document.getElementById('wind-speed').innerText = (data.wind.speed * 3.6).toFixed(1) + " km/h";
-            document.getElementById('wind-dir').innerText = getDirection(data.wind.deg);
+            document.getElementById('wind-dir').innerText = "හුළං දිශාව: " + getDirection(data.wind.deg);
         }).catch(() => {});
     }
 
@@ -133,7 +146,7 @@ function checkHazards(lat, lon) {
     if (!found) alertBox.style.display = "none";
 }
 
-// 5. Admin Data Management
+// 5. Data Management
 window.adminSaveHazard = async () => {
     if(!db) return alert("ඉන්ටර්නෙට් නොමැතිව අප්ලෝඩ් කල නොහැක!");
     const name = document.getElementById('admin-name').value;
