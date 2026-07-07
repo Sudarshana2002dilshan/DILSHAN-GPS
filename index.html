@@ -41,6 +41,17 @@
             <h2>SETTINGS</h2>
             <button class="btn" onclick="toggleTheme()">🌓 DARK / LIGHT MODE</button>
             <a href="https://wa.me/94765529447" class="btn-wa">💬 CONTACT WHATSAPP</a>
+<button class="btn" onclick="openAdmin()">⚙️ ADMIN ACCESS</button>
+    </div>
+</div>
+
+<div id="admin-modal" class="card" style="display:none; border-color: red;">
+    <h3>🛠️ ADMIN CONTROL</h3>
+    <input type="text" id="h-name" placeholder="ගලේ නම" class="input-field"><br>
+    <input type="number" id="h-lat" placeholder="Latitude" class="input-field" step="any"><br>
+    <input type="number" id="h-lon" placeholder="Longitude" class="input-field" step="any"><br>
+    <button class="btn" onclick="adminSaveHazard()">SAVE TO MAP</button>
+</div>
         </div>
     </div>
 

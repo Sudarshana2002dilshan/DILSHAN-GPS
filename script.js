@@ -75,6 +75,34 @@ navigator.geolocation.watchPosition((pos) => {
         const dirs = ["උතුරු", "ඊසාන", "නැගෙනහිර", "අග්නිදිග", "දකුණ", "නිරිත", "බටහිර", "වයඹ"];
         document.getElementById('wind-info').innerText = `${(d.wind.speed * 3.6).toFixed(1)} km/h - ${dirs[Math.round(d.wind.deg / 45) % 8]}`;
     });
+// ඇඩ්මින් පැනල් එක විවෘත කිරීම
+window.openAdmin = () => {
+    const password = prompt("Enter Admin Password:");
+    if (password === "dilshan2002") { // මෙතනට ඔබේ රහස් මුරපදය දාන්න
+        document.getElementById('admin-modal').style.display = "block";
+    } else {
+        alert("වැරදි මුරපදයකි!");
+    }
+};
+
+// ඇඩ්මින් හරහා සේව් කිරීම
+window.adminSaveHazard = async () => {
+    const name = document.getElementById('h-name').value;
+    const lat = parseFloat(document.getElementById('h-lat').value);
+    const lon = parseFloat(document.getElementById('h-lon').value);
+
+    if (name && !isNaN(lat) && !isNaN(lon)) {
+        await addDoc(collection(db, "hazards"), {
+            name: name,
+            lat: lat,
+            lon: lon
+        });
+        alert("ගල සිතියමට එකතු විය!");
+        document.getElementById('admin-modal').style.display = "none";
+    } else {
+        alert("සියලුම විස්තර නිවැරදිව පුරවන්න.");
+    }
+};
 
     // Hazard Alert පරීක්ෂාව
     let alertBox = document.getElementById('hazard-alert');
