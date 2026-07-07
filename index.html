@@ -11,36 +11,36 @@
 
     <div id="home" class="tab-pane active">
         <div class="logo-container"><img src="DILGPS.png" class="main-logo"></div>
-        <div class="card">
+        <div class="card animate-card">
             <div class="label">LOCATION (DMS)</div>
             <div class="huge-text" id="lat">--</div>
             <div class="huge-text" id="lon">--</div>
-        </div>
-        <div class="card">
-            <div class="label">SPEED (SOG)</div>
-            <div class="speed-text" id="speed">0.0 knots</div>
-        </div>
-        <div class="card">
             <div class="time-text" id="time">--:--:--</div>
+        </div>
+        <div class="card animate-card">
+            <div class="label">SPEED (SOG)</div>
+            <div class="speed-text" id="speed">0.0 km/h</div>
+        </div>
+        <div class="card animate-card">
+            <div class="label">WIND INFO</div>
+            <div class="wind-text" id="wind-info">--</div>
         </div>
     </div>
 
     <div id="windy" class="tab-pane"><iframe src="https://embed.windy.com/embed2.html?lat=7.0&lon=80.0&zoom=7"></iframe></div>
-
     <div id="mark" class="tab-pane">
         <div class="card">
-            <h3>📍 ගලක් මාක් කරන්න</h3>
-            <input type="text" id="h-name" placeholder="ගලේ නම" class="input-field">
+            <h3>📍 මාක් කරන්න</h3>
+            <input type="text" id="h-name" placeholder="ගලේ නම..." class="input-field">
             <button class="btn" onclick="saveHazard()">💾 සේව් කරන්න</button>
         </div>
     </div>
-
     <div id="settings" class="tab-pane">
         <div class="card">
             <img src="DILGPS.png" class="about-logo">
-            <h2>DILSHAN MARINE GPS</h2>
+            <h2>SETTINGS</h2>
+            <button class="btn" onclick="toggleTheme()">🌓 DARK / LIGHT MODE</button>
             <a href="https://wa.me/94765529447" class="btn-wa">💬 CONTACT WHATSAPP</a>
-            <a href="#" class="btn-dl">⬇️ DOWNLOAD APP</a>
         </div>
     </div>
 
