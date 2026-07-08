@@ -68,7 +68,6 @@
             <div class="settings-actions">
                 <button class="btn" onclick="toggleTheme()">🌓 DARK / LIGHT MODE</button>
                 <button class="btn" onclick="toggleNightVision()" style="background:#ff1744; color:white;">🌙 NIGHT VISION MODE (🔴)</button>
-                
                 <button class="btn" onclick="showBatteryInfo()" style="background:#ff9800; color:black;">🔋 BATTERY OPTIMIZATION</button>
                 <button class="btn" onclick="openAdmin()" style="background:#d32f2f;">🛠️ ADMIN PANEL</button>
                 <a href="https://wa.me/94765529447" class="btn" style="background:#25D366; text-decoration:none; display:block;">💬 WHATSAPP SUPPORT</a>
@@ -111,15 +110,12 @@
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then((reg) => {
-                console.log("Service Worker Registered Successfully!");
-                
-                // අලුත් අප්ඩේට් එකක් ආවොත් බ්‍රවුසර් එකට දැනුම් දීම
+                console.log("Service Worker Registered!");
                 reg.onupdatefound = () => {
                     const installingWorker = reg.installing;
                     installingWorker.onstatechange = () => {
                         if (installingWorker.state === 'installed') {
                             if (navigator.serviceWorker.controller) {
-                                // පාවිච්චි කරන කෙනාට නොදැනීම ඇප් එක පසුබිමෙන් අප්ඩේට් කරගැනීමට Refresh කරයි
                                 window.location.reload();
                             }
                         }
