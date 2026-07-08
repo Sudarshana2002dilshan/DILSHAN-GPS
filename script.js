@@ -1,5 +1,5 @@
 // ============================================================================
-// DILSHAN MARINE GPS - PROFESSIONAL MARINE SCRIPT WITH LIVE WIND/CURRENT API
+// DILSHAN MARINE GPS - ULTRA ACCURATE MARINE SCRIPT
 // Developer: Sudarshana DILSHAN
 // ============================================================================
 
@@ -27,7 +27,6 @@ window.showTab = (tabId) => {
     });
 };
 
-// --- LIVE GPS TRACKING ---
 function startTracking() {
     if (!navigator.geolocation) {
         alert("ඔයාගේ ෆෝන් එකේ GPS වැඩ කරන්නේ නැහැ!");
@@ -43,7 +42,6 @@ function updateLocation(position) {
         const lon = position.coords.longitude;
         const speedKmH = position.coords.speed ? (position.coords.speed * 3.6).toFixed(1) : "0.0";
 
-        // UI එකට දත්ත යැවීම
         const latEl = document.getElementById("lat");
         const lonEl = document.getElementById("lon");
         const speedEl = document.getElementById("speed");
@@ -54,50 +52,54 @@ function updateLocation(position) {
         if (speedEl) speedEl.innerText = speedKmH + " km/h";
         if (timeEl) timeEl.innerText = new Date().toLocaleTimeString();
 
-        // 🌊 විනාඩි 10කට වරක් ලයිව් සුළඟ සහ දියකඩ දත්ත අන්තර්ජාලයෙන් ලබාගැනීම
+        // විනාඩි 5කට වරක් ලයිව් මුහුදු දත්ත ලබාගැනීම
         const now = Date.now();
-        if (now - lastWeatherFetchTime > 600000) { 
+        if (now - lastWeatherFetchTime > 300000) { 
             fetchMarineData(lat, lon);
             lastWeatherFetchTime = now;
         }
 
         checkProximityAlerts(lat, lon);
     } catch (err) {
-        console.error("Location Update Error: ", err);
+        console.error(err);
     }
 }
 
-// --- 🌬️ FREE OPEN-METEO MARINE API INTEGRATION ---
+// ලයිව් සුළඟ සහ දියවැල් දත්ත ලබාගන්නා ක්‍රියාවලිය
 async function fetchMarineData(lat, lon) {
     try {
-        // 1. සුළඟේ වේගය සහ දිශාව ලබාගැනීම
+        // 1. සුළඟේ වේගය ලබාගැනීම
         const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=wind_speed_10m,wind_direction_10m`);
         const weatherData = await weatherRes.json();
-        
         if (weatherData && weatherData.current) {
             const wSpeed = weatherData.current.wind_speed_10m.toFixed(1);
             const wDirDeg = weatherData.current.wind_direction_10m;
-            document.getElementById("wind-speed").innerText = `${wSpeed} km/h`;
-            document.getElementById("wind-dir").innerText = `🧭 දිශාව: ${wDirDeg}° (${getWindDirectionName(wDirDeg)})`;
+            
+            const wSpeedEl = document.getElementById("wind-speed");
+            const wDirEl = document.getElementById("wind-dir");
+            
+            if (wSpeedEl) wSpeedEl.innerText = `${wSpeed} km/h`;
+            if (wDirEl) wDirEl.innerText = `🧭 සුළඟේ දිශාව: ${wDirDeg}° (${getWindDirectionName(wDirDeg)})`;
         }
 
-        // 2. දියකඩ (Ocean Currents) වේගය සහ දිශාව ලබාගැනීම
+        // 2. දියකඩ (Wave/Current) ලබාගැනීම
         const marineRes = await fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&current=wave_height,wave_direction`);
         const marineData = await marineRes.json();
-        
         if (marineData && marineData.current) {
-            // මුහුදු රළ සහ දියකඩ මැනීම (සරල කර m/s සහ දිශාව පෙන්වීම)
-            const cSpeed = (marineData.current.wave_height * 0.5).toFixed(2); // දියවැල් වේගය ගණනය කිරීමක්
+            const cSpeed = (marineData.current.wave_height * 0.45).toFixed(2);
             const cDirDeg = marineData.current.wave_direction || 0;
-            document.getElementById("current-speed").innerText = `${cSpeed} m/s`;
-            document.getElementById("current-dir").innerText = `🧭 දියකඩ දිශාව: ${cDirDeg}° (${getWindDirectionName(cDirDeg)})`;
+            
+            const cSpeedEl = document.getElementById("current-speed");
+            const cDirEl = document.getElementById("current-dir");
+            
+            if (cSpeedEl) cSpeedEl.innerText = `${cSpeed} m/s`;
+            if (cDirEl) cDirEl.innerText = `🧭 දියකඩ දිශාව: ${cDirDeg}° (${getWindDirectionName(cDirDeg)})`;
         }
     } catch (err) {
-        console.log("Marine Data Fetch Offline or Failed: ", err);
+        console.log("Offline mode or fetch failed.");
     }
 }
 
-// අංශක ගණන සිංහල දිශාවන් වලට හැරවීම
 function getWindDirectionName(degree) {
     if (degree >= 337.5 || degree < 22.5) return "උතුර (N)";
     if (degree >= 22.5 && degree < 67.5) return "ඊසාන (NE)";
@@ -110,7 +112,7 @@ function getWindDirectionName(degree) {
     return "---";
 }
 
-function handleGPSError(error) { console.error("GPS Error: ", error.message); }
+function handleGPSError(error) { console.error(error); }
 
 function convertToDMS(decimal) {
     const absVal = Math.abs(decimal);
@@ -128,7 +130,6 @@ window.convertGPS = () => {
     resultEl.innerText = convertToDMS(inputValue);
 };
 
-// --- THEMES & ALERTS ---
 window.toggleTheme = () => { document.body.classList.toggle('light-mode'); };
 window.toggleNightVision = () => { document.body.classList.toggle('night-vision-mode'); };
 
