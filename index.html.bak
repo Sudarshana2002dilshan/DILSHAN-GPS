@@ -52,7 +52,7 @@
     <div id="mark" class="tab-pane">
         <div class="card form-card fade-in">
             <h3 class="section-title">📍 ගල මාක් කරන්න.</h3>
-            <p style="text-align: center; font-size: 14px; opacity: 0.8; margin-bottom: 15px; color: #64ffda;">ඔයා ඉන්න තැන තියෙන ගලේ  නම දමා Submit කරන්න.</p>
+            <p style="text-align: center; font-size: 14px; opacity: 0.8; margin-bottom: 15px; color: #64ffda;">ඔයා ඉන්න තැන තියෙන ගල සේව් කිරීමට නම දමා Submit කරන්න.</p>
             <input type="text" id="h-name" placeholder="ගලේ නම ඇතුළත් කරන්න (උදා: මුදු ගල)" class="input-field">
             <button class="btn btn-submit glow-button" id="btn-save-hazard">Submit</button>
         </div>
