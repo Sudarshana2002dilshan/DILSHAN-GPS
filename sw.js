@@ -1,5 +1,5 @@
 // සෑම අප්ඩේට් එකකදීම මේ කැෂේ නම (v4, v5 ලෙස) මාරු කරන්න
-const CACHE_NAME = 'dilshan-gps-v4'; 
+const CACHE_NAME = 'dilshan-gps-v6'; 
 const ASSETS = [
   './',
   './index.html',
