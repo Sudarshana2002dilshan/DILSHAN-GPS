@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dilshan-gps-v40'; // Cloud Sync Version v40
+const CACHE_NAME = 'dilshan-gps-v1'; // Cloud Sync Version v40
 const ASSETS = [
   './',
   './index.html',
