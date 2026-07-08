@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DILSHAN MARINE GPS</title>
     <link rel="stylesheet" href="style.css">
-    
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
     <div id="hazard-alert" class="alert-bar"></div>
@@ -22,71 +21,54 @@
         
         <div class="card location-card fade-in">
             <div class="label">📍 LIVE GPS LOCATION & TIME</div>
-            <div class="huge-text bold-text tight-text" id="lat">--</div>
-            <div class="huge-text bold-text tight-text" id="lon">--</div>
-            <div class="time-text bold-text" id="time">--:--:--</div>
+            <div class="huge-text" id="lat">--</div>
+            <div class="huge-text" id="lon">--</div>
+            <div class="time-text" id="time">--:--:--</div>
         </div>
 
         <div class="card speed-card fade-in">
             <div class="label">🚀 SPEED (SOG)</div>
-            <div class="speed-text bold-text" id="speed">0.0 km/h</div>
+            <div class="speed-text" id="speed">0.0 km/h</div>
         </div>
 
         <div class="card marine-card fade-in">
             <div class="label">🌬️ WIND INFO (ලයිව් සුළඟ)</div>
-            <div class="marine-text bold-text" id="wind-speed">-- km/h</div>
-            <div class="marine-sub bold-text" id="wind-dir">--</div>
+            <div class="marine-text" id="wind-speed">-- km/h</div>
+            <div class="marine-sub" id="wind-dir">--</div>
             
             <hr class="card-hr">
             
             <div class="label" style="color: #00b0ff;">🌊 OCEAN CURRENT (දියකඩ)</div>
-            <div class="marine-text bold-text" id="current-speed" style="color: #00b0ff;">-- m/s</div>
-            <div class="marine-sub bold-text" id="current-dir">--</div>
+            <div class="marine-text" id="current-speed" style="color: #00b0ff;">-- m/s</div>
+            <div class="marine-sub" id="current-dir">--</div>
         </div>
     </div>
 
-    <div id="windy" class="tab-pane full-screen-tab">
+    <div id="windy" class="tab-pane">
         <iframe src="https://embed.windy.com/embed2.html?lat=7.0&lon=80.0&zoom=7&level=surface&overlay=currents&menu=&message=&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1" width="100%" height="100%" frameborder="0"></iframe>
     </div>
     
     <div id="mark" class="tab-pane">
         <div class="card form-card fade-in">
             <h3 class="section-title">📍 පොදුවේ ගලක් මාක් කරන්න</h3>
-            <p style="text-align: center; font-size: 14px; opacity: 0.8; margin-bottom: 15px; color: #64ffda;">ඔයා ඉන්න තැන තියෙන ගල පොදු පද්ධතියට සේව් කිරීමට නම දමා Submit කරන්න.</p>
+            <p style="text-align: center; font-size: 14px; opacity: 0.8; margin-bottom: 15px; color: #64ffda;">ඔයා මෙතනින් සේව් කරන ගල Firebase හරහා ඇප් එක පාවිච්චි කරන හැමෝටම පෙනේවි.</p>
             <input type="text" id="h-name" placeholder="ගලේ නම ඇතුළත් කරන්න (උදා: මුදු ගල)" class="input-field">
             <button class="btn btn-submit glow-button" id="btn-save-hazard">💾 Firebase එකට සේව් කරන්න</button>
         </div>
     </div>
 
     <div id="admin" class="tab-pane">
-        <div id="admin-auth-box" class="card auth-card fade-in">
-            <h3 class="section-title" style="color: #ff1744;">🔒 ADMIN AUTHENTICATION</h3>
-            <p style="text-align: center; font-size: 14px; opacity: 0.8;">මෙම පැනලය ඇතුළු වීමට ඇඩ්මින් මුද්‍රාපද්‍ය (Password) ඇතුළත් කරන්න.</p>
-            <input type="password" id="admin-password" placeholder="Enter Admin Password" class="input-field" style="text-align: center; letter-spacing: 5px;">
-            <button class="btn btn-danger" id="btn-login-admin">🔓 LOGIN TO PANEL</button>
-        </div>
-
-        <div id="admin-content-box" class="card admin-card fade-in" style="display: none;">
-            <h3 class="section-title" style="color: #ff1744;">🛠️ CONTROL PANEL</h3>
-            <p style="text-align: center; opacity: 0.8; font-size: 14px;">පද්ධතියේ ඇති සියලුම ගල් කළමනාකරණය සහ ගෙදර ඉඳන් අප්ලෝඩ් කිරීම.</p>
+        <div class="card admin-card fade-in">
+            <h3 class="section-title" style="color: #ff1744;">🛠️ FIREBASE ADMIN PANEL</h3>
+            <p style="text-align: center; opacity: 0.8; font-size: 14px;">සමස්ත ලංකා මුහුදේ මාක් කර ඇති සියලුම ගල් මෙතනින් පාලනය කරන්න.</p>
             
-            <div class="remote-upload-box" style="margin-bottom: 20px; padding: 15px; border: 1px dashed #ff1744; border-radius: 12px; background: rgba(255,23,68,0.05);">
-                <h4 style="margin: 0 0 10px 0; color: #ff1744; text-align: center;">🏠 REMOTE HAZARD UPLOAD</h4>
-                <input type="text" id="remote-name" placeholder="ගලේ නම" class="input-field">
-                <input type="number" step="any" id="remote-lat" placeholder="Latitude (ඛණ්ඩාංකය - උදා: 7.3214)" class="input-field">
-                <input type="number" step="any" id="remote-lon" placeholder="Longitude (ඛණ්ඩාංකය - උදා: 79.8451)" class="input-field">
-                <button class="btn btn-submit" id="btn-remote-upload" style="background: #ff1744; color: white;">🚀 ගෙදර ඉඳන් අප්ලෝඩ් කරන්න</button>
-            </div>
-
             <div class="admin-stats">
                 📊 මුළු පොදු ගල් ගණන: <span id="hazard-count" style="color: #64ffda; font-weight: bold;">0</span>
             </div>
 
             <div id="hazard-list" class="hazard-list-container">
-                <p style="text-align: center; opacity: 0.5; padding: 20px;">දත්ත ලෝඩ් වෙමින් පවතී...</p>
+                <p style="text-align: center; opacity: 0.5; padding: 20px;">Firebase දත්ත ලෝඩ් වෙමින් පවතී...</p>
             </div>
-            
-            <button class="btn btn-action" id="btn-logout-admin" style="margin-top: 15px; border-color: #ff1744; color: #ff1744;">🔒 LOGOUT ADMIN</button>
         </div>
     </div>
 
@@ -96,7 +78,7 @@
                 <img src="DILGPS.png" class="settings-logo glow-blue">
                 <h3>DILSHAN MARINE GPS</h3>
                 <p class="dev-text">Developer: Sudarshana DILSHAN</p>
-                <a href="https://wa.me/94765529447" target="_blank" class="whatsapp-link">💬 WhatsApp: 0765529447</a>
+                <p class="phone-text">📞 0765529447</p>
             </div>
 
             <hr class="card-hr">
@@ -105,7 +87,7 @@
                 <button class="btn btn-action" id="btn-theme">🌓 DARK / LIGHT MODE</button>
                 <button class="btn btn-action btn-danger" id="btn-night">🌙 NIGHT VISION MODE (🔴)</button>
                 <button class="btn btn-action btn-warning" id="btn-battery">🔋 BATTERY INFO</button>
-                <button class="btn btn-action" id="btn-go-admin" style="background: rgba(255,23,68,0.1); border-color: #ff1744; color: #ff1744;">🛠️ OPEN CONTROL PANEL</button>
+                <button class="btn btn-action" id="btn-go-admin" style="background: rgba(255,23,68,0.1); border-color: #ff1744; color: #ff1744;">🛠️ OPEN FIREBASE ADMIN</button>
             </div>
 
             <hr class="card-hr">
@@ -114,7 +96,7 @@
                 <h4>🔄 GPS COORDINATES CONVERTER</h4>
                 <input type="number" id="convert-input" placeholder="7.12345" class="input-field">
                 <button class="btn btn-submit" id="btn-convert">🔄 CONVERT</button>
-                <div class="result-box bold-text">
+                <div class="result-box">
                     ප්‍රතිඵලය: <span id="convert-result">--</span>
                 </div>
             </div>

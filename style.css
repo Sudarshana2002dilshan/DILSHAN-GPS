@@ -8,11 +8,11 @@ body {
 }
 
 .fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
+    animation: fadeIn 0.4s ease-out forwards;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
@@ -21,37 +21,46 @@ body {
     background: linear-gradient(90deg, #ff1744, #b71c1c);
     color: white;
     text-align: center;
-    padding: 14px;
-    font-weight: bold;
-    font-size: 22px;
+    padding: 16px;
+    font-weight: 900;
+    font-size: 20px;
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 9999;
-    box-shadow: 0 4px 15px rgba(255,23,68,0.4);
+    z-index: 99999;
+    box-shadow: 0 4px 20px rgba(255,23,68,0.5);
+    box-sizing: border-box;
 }
 
 .tab-pane {
     display: none;
-    margin-top: 15px;
-    padding: 0 10px 110px 10px;
+    padding: 10px 12px 110px 12px;
     box-sizing: border-box;
+    min-height: calc(100vh - 80px);
 }
 
 .tab-pane.active {
     display: block;
 }
 
+/* Windy Full Screen Configuration */
+.full-screen-tab {
+    padding: 0 !important;
+    margin: 0 !important;
+    height: calc(100vh - 75px) !important;
+    width: 100vw !important;
+}
+
 .logo-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
 }
 
 .logo-circle {
-    width: 110px;
-    height: 110px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     overflow: hidden;
 }
@@ -62,72 +71,84 @@ body {
 .app-title {
     text-align: center;
     color: #64ffda;
-    font-size: 28px;
-    font-weight: 800;
-    margin: 0 0 20px 0;
+    font-size: 26px;
+    font-weight: 900;
+    margin: 0 0 15px 0;
+    letter-spacing: 0.5px;
 }
 
-/* --- CARDS DESIGN --- */
+/* --- TEXT BOLD & TIGHT STYLES --- */
+.bold-text {
+    font-weight: 900 !important;
+}
+
+.tight-text {
+    letter-spacing: -1.5px !important;
+}
+
+/* --- CARDS DESIGN FULL WIDTH --- */
 .card {
-    background: rgba(23, 42, 69, 0.7);
+    background: rgba(23, 42, 69, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-radius: 20px;
-    padding: 24px;
-    margin: 15px 5px;
+    border-radius: 18px;
+    padding: 20px;
+    margin: 12px 0;
     border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+    width: 100%; /* කාඩ් මුළු ස්ක්‍රීන් එකේම ලස්සනට පෙන්වීමට */
 }
 
 .location-card { border: 2px solid #64ffda; }
 .speed-card { border: 2px solid #ff5722; }
 .marine-card { border: 2px solid #00e676; }
-.admin-card { border: 2px solid #ff1744; }
+.admin-card, .auth-card { border: 2px solid #ff1744; }
 
 .label {
     text-align: center;
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 900;
     color: #64ffda;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
 }
 
 .huge-text {
-    font-size: 3.8rem;
-    font-weight: 900;
+    font-size: 3.6rem;
     text-align: center;
     color: #ffffff;
-    margin: 10px 0;
+    margin: 4px 0;
     font-family: 'Courier New', Courier, monospace;
+    line-height: 1.1;
 }
 
 .speed-text {
-    font-size: 5.2rem;
-    font-weight: 900;
+    font-size: 4.8rem;
     text-align: center;
     color: #ff5722;
-    margin: 5px 0;
+    margin: 0;
 }
 
 .marine-text {
     text-align: center;
-    font-size: 3.8rem;
-    font-weight: 900;
+    font-size: 3.6rem;
     color: #00e676;
-    margin: 5px 0;
+    margin: 0;
 }
 
-.marine-sub { text-align: center; font-size: 22px; font-weight: bold; color: #edf2f7; }
-.time-text { text-align: center; font-size: 26px; font-weight: bold; color: #ff9800; margin-top: 10px; }
-.card-hr { border: 0; border-top: 2px solid rgba(100, 255, 218, 0.15); margin: 22px 0; }
+.marine-sub { text-align: center; font-size: 20px; color: #edf2f7; margin-top: 2px; }
+.time-text { text-align: center; font-size: 26px; color: #ff9800; margin-top: 8px; }
+.card-hr { border: 0; border-top: 2px solid rgba(100, 255, 218, 0.15); margin: 15px 0; }
 
 /* --- INPUTS & BUTTONS --- */
 .input-field {
     width: 100%;
-    padding: 16px;
-    font-size: 18px;
-    margin: 15px 0;
-    border-radius: 12px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0;
+    border-radius: 10px;
     box-sizing: border-box;
     background: #0a192f;
     border: 1px solid rgba(100,255,218,0.3);
@@ -136,57 +157,69 @@ body {
 
 .btn {
     width: 100%;
-    padding: 16px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 12px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 900;
+    border-radius: 10px;
     border: none;
     cursor: pointer;
     box-sizing: border-box;
 }
 
 .btn-submit { background: linear-gradient(135deg, #64ffda, #00b0ff); color: #060d1a; }
-.btn-action { background: rgba(100, 255, 218, 0.05); border: 1px solid rgba(100, 255, 218, 0.4); color: #64ffda; margin: 8px 0; }
+.btn-action { background: rgba(100, 255, 218, 0.05); border: 1px solid rgba(100, 255, 218, 0.4); color: #64ffda; margin: 6px 0; }
 .btn-danger { background: linear-gradient(135deg, #ff1744, #d50000); color: white; }
 .btn-warning { background: linear-gradient(135deg, #ff9800, #f57c00); color: black; }
 
-/* --- ADMIN PANEL LIST --- */
+.whatsapp-link {
+    display: inline-block;
+    background-color: #25D366;
+    color: white;
+    text-decoration: none;
+    font-weight: 900;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin-top: 10px;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+}
+
+/* --- ADMIN CONTROL PANEL LIST --- */
 .admin-stats {
     background: rgba(100,255,218,0.06);
     padding: 12px;
     border-radius: 8px;
     text-align: center;
     font-size: 16px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     border: 1px solid rgba(100,255,218,0.2);
 }
 .hazard-list-container {
     max-height: 250px;
     overflow-y: auto;
     background: rgba(0,0,0,0.2);
-    border-radius: 12px;
-    padding: 10px;
+    border-radius: 10px;
+    padding: 8px;
 }
 .hazard-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: rgba(23,42,69,0.9);
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 10px;
+    padding: 10px;
+    margin: 6px 0;
+    border-radius: 8px;
     border-left: 4px solid #ff1744;
 }
-.hazard-info h5 { margin: 0; font-size: 16px; color: white; }
-.hazard-info p { margin: 2px 0 0 0; font-size: 12px; opacity: 0.7; font-family: monospace; }
-.btn-delete-item { background: #ff1744; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+.hazard-info h5 { margin: 0; font-size: 15px; color: white; font-weight: 900; }
+.hazard-info p { margin: 2px 0 0 0; font-size: 11px; opacity: 0.8; font-family: monospace; font-weight: bold; }
+.btn-delete-item { background: #ff1744; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; }
 
-.converter-box { background: rgba(100, 255, 218, 0.02); padding: 15px; border-radius: 15px; border: 1px solid rgba(100, 255, 218, 0.15); }
-.result-box { font-weight: bold; font-size: 22px; background: rgba(0,0,0,0.4); padding: 14px; border-radius: 10px; text-align: center; border: 1px solid rgba(255,87,34,0.3); }
+.converter-box { background: rgba(100, 255, 218, 0.02); padding: 12px; border-radius: 12px; border: 1px solid rgba(100, 255, 218, 0.15); }
+.result-box { font-size: 20px; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,87,34,0.3); }
 .settings-header { text-align: center; }
-.settings-logo { width: 95px; height: 95px; border-radius: 50%; }
-.dev-text { font-size: 18px; font-weight: bold; color: #64ffda; margin: 5px 0; }
-.phone-text { font-size: 18px; font-weight: bold; margin: 5px 0; }
+.settings-logo { width: 90px; height: 90px; border-radius: 50%; }
+.dev-text { font-size: 18px; font-weight: 900; color: #64ffda; margin: 5px 0; }
 
 /* --- BOTTOM NAVIGATION --- */
 .bottom-nav {
@@ -195,13 +228,13 @@ body {
     width: 100%;
     display: flex;
     justify-content: space-around;
-    background: rgba(10, 25, 47, 0.9);
+    background: rgba(10, 25, 47, 0.95);
     backdrop-filter: blur(15px);
-    padding: 15px 0;
+    padding: 12px 0;
     border-top: 1px solid rgba(100, 255, 218, 0.3);
-    z-index: 9999;
+    z-index: 99999;
 }
-.nav-btn { background: none; border: none; font-size: 28px; cursor: pointer; opacity: 0.5; transition: all 0.3s ease; padding: 5px 10px; border-radius: 10px; }
+.nav-btn { background: none; border: none; font-size: 26px; cursor: pointer; opacity: 0.4; transition: all 0.2s ease; padding: 4px 8px; border-radius: 8px; }
 .active-nav { opacity: 1 !important; background: rgba(100, 255, 218, 0.15); color: #64ffda; }
 
 /* 🌓 Light & Night Modes */
@@ -209,12 +242,12 @@ body {
 .light-mode .card { background: #ffffff !important; color: #1a202c !important; border: 1px solid #e2e8f0 !important; }
 .light-mode .huge-text, .light-mode .marine-sub { color: #2d3748 !important; }
 .light-mode .input-field { background: #edf2f7 !important; color: black !important; }
-.light-mode .bottom-nav { background: rgba(255,255,255,0.9) !important; border-top: 1px solid #cbd5e0 !important; }
+.light-mode .bottom-nav { background: rgba(255,255,255,0.95) !important; border-top: 1px solid #cbd5e0 !important; }
 .light-mode .hazard-item { background: #edf2f7 !important; }
 .light-mode .hazard-info h5 { color: black; }
 
 .night-vision-mode { background-color: #000000 !important; }
-.night-vision-mode body, .night-vision-mode .card, .night-vision-mode h2, .night-vision-mode h3, .night-vision-mode .label, .night-vision-mode .huge-text, .night-vision-mode .speed-text, .night-vision-mode .marine-text, .night-vision-mode .marine-sub, .night-vision-mode .time-text, .night-vision-mode .hazard-info h5, .night-vision-mode .admin-stats { background-color: #000000 !important; color: #ff1744 !important; border-color: #ff1744 !important; }
+.night-vision-mode body, .night-vision-mode .card, .night-vision-mode h2, .night-vision-mode h3, .night-vision-mode .label, .night-vision-mode .huge-text, .night-vision-mode .speed-text, .night-vision-mode .marine-text, .night-vision-mode .marine-sub, .night-vision-mode .time-text, .night-vision-mode .hazard-info h5, .night-vision-mode .admin-stats, .night-vision-mode .remote-upload-box { background-color: #000000 !important; color: #ff1744 !important; border-color: #ff1744 !important; }
 .night-vision-mode .bottom-nav { background: #000000 !important; border-top: 1px solid #ff1744 !important; }
 .night-vision-mode .active-nav { background: rgba(255,23,68,0.2) !important; }
 .night-vision-mode .hazard-item { background: #000000 !important; border: 1px solid #ff1744 !important; }
