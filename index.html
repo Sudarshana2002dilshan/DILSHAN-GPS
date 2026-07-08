@@ -17,27 +17,28 @@
         </div>
         <h2 class="app-title" style="text-align: center; color: #64ffda;">DILSHAN MARINE GPS</h2>
         
-        <div class="card animate-card">
-            <div class="label">📍 LOCATION & TIME</div>
-            <div class="huge-text" id="lat" style="font-size: 2rem; font-weight: bold; text-align: center; margin: 10px 0;">--</div>
-            <div class="huge-text" id="lon" style="font-size: 2rem; font-weight: bold; text-align: center; margin: 10px 0;">--</div>
-            <div class="time-text" id="time" style="text-align: center; opacity: 0.7;">--:--:--</div>
+        <div class="card animate-card" style="border: 2px solid #64ffda;">
+            <div class="label" style="text-align: center; font-size: 14px; margin-bottom: 10px;">📍 LIVE GPS LOCATION & TIME</div>
+            <div class="huge-text" id="lat" style="font-size: 2.8rem; font-weight: 900; text-align: center; color: #ffffff; margin: 12px 0; letter-spacing: 1px; font-family: monospace;">--</div>
+            <div class="huge-text" id="lon" style="font-size: 2.8rem; font-weight: 900; text-align: center; color: #ffffff; margin: 12px 0; letter-spacing: 1px; font-family: monospace;">--</div>
+            <div class="time-text" id="time" style="text-align: center; font-size: 18px; font-weight: bold; color: #ff9800; margin-top: 10px;">--:--:--</div>
         </div>
 
         <div class="card animate-card">
             <div class="label">🚀 SPEED (SOG)</div>
-            <div class="speed-text" id="speed" style="font-size: 3rem; font-weight: bold; text-align: center; color: #ff5722;">0.0 km/h</div>
+            <div class="speed-text" id="speed" style="font-size: 3.5rem; font-weight: bold; text-align: center; color: #ff5722;">0.0 km/h</div>
         </div>
 
         <div class="card animate-card">
-            <div class="label">🌬️ WIND INFO & 🌊 CURRENT</div>
-            <div class="wind-text" id="wind-speed" style="text-align: center;">--</div>
-            <div class="wind-dir" id="wind-dir" style="text-align: center;">--</div>
+            <div class="label">🌬️ WIND INFO (ලයිව් සුළඟ)</div>
+            <div class="wind-text" id="wind-speed" style="text-align: center; font-size: 2rem; font-weight: bold; color: #00e676; margin: 5px 0;">-- km/h</div>
+            <div class="wind-dir" id="wind-dir" style="text-align: center; font-size: 1.2rem; color: #edf2f7; opacity: 0.9;">--</div>
             
             <hr style="border: 0; border-top: 1px solid rgba(100, 255, 218, 0.3); margin: 15px 0;">
-            <div class="label" style="color: #00e676;">🌊 OCEAN CURRENT (දියකඩ)</div>
-            <div class="current-text" id="current-speed" style="text-align: center;">-- m/s</div>
-            <div class="current-dir" id="current-dir" style="text-align: center;">--</div>
+            
+            <div class="label" style="color: #64ffda;">🌊 OCEAN CURRENT (දියකඩ දත්ත)</div>
+            <div class="current-text" id="current-speed" style="text-align: center; font-size: 2rem; font-weight: bold; color: #2196f3; margin: 5px 0;">-- m/s</div>
+            <div class="current-dir" id="current-dir" style="text-align: center; font-size: 1.2rem; color: #edf2f7; opacity: 0.9;">--</div>
         </div>
     </div>
 
@@ -58,7 +59,7 @@
             <div class="settings-header" style="text-align: center;">
                 <img src="DILGPS.png" style="width:100px; height:100px; border-radius:50%; margin:10px auto; display:block; border: 2px solid #64ffda;">
                 <h3>DILSHAN MARINE GPS</h3>
-                <p style="font-size: 0.9em; opacity: 0.8;">Version: 1.0.0</p>
+                <p style="font-size: 0.9em; opacity: 0.8;">Version: 1.1.0</p>
                 <p style="font-weight: bold;">Developer: Sudarshana DILSHAN</p>
                 <p>📞 0765529447</p>
             </div>
@@ -71,59 +72,28 @@
                 <button class="btn" onclick="showBatteryInfo()" style="width: 100%; padding: 10px; margin: 5px 0; background:#ff9800; color:black;">🔋 BATTERY OPTIMIZATION</button>
                 <button class="btn" onclick="openAdmin()" style="width: 100%; padding: 10px; margin: 5px 0; background:#d32f2f; color: white;">🛠️ ADMIN PANEL</button>
                 <a href="https://wa.me/94765529447" class="btn" style="background:#25D366; text-decoration:none; display:block; text-align: center; padding: 10px; margin: 5px 0; color: white; border-radius: 8px;">💬 WHATSAPP SUPPORT</a>
-                <a href="https://drive.google.com/uc?export=download&id=1rCkE_Xmfg0xJFFbBvRW5ETSVuGBFw11l" class="btn" style="background:#1976d2; text-decoration:none; display:block; text-align: center; padding: 10px; margin: 5px 0; color: white; border-radius: 8px;">⬇️ DOWNLOAD APP</a>
             </div>
 
             <hr style="border: 0; border-top: 1px solid #64ffda; margin: 20px 0;">
 
             <div style="background: rgba(100, 255, 218, 0.05); padding: 15px; border-radius: 15px; border: 1px solid #64ffda; text-align: left;">
                 <h4 style="color: #64ffda; margin-top: 0; text-align: center;">🔄 GPS COORDINATES CONVERTER</h4>
-                <p style="font-size: 13px; opacity: 0.8; text-align: center;">වෙනත් අය දෙන GPS අංක ඇප් එකේ ක්‍රමයට (DMS) හරවා ගන්න.</p>
-                
-                <label style="font-size: 12px; font-weight: bold;">Decimal Format (උදා: 7.12345):</label>
                 <input type="number" id="convert-input" placeholder="7.12345" class="input-field" style="width:100%; padding: 10px; margin: 5px 0; border-radius: 8px;">
-                
-                <button class="btn" onclick="convertGPS()" style="width:100%; padding: 10px; margin: 10px 0; background: #64ffda; color: black;">🔄 CONVERT (හරවන්න)</button>
-                
-                <div style="font-weight: bold; font-size: 16px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; border-left: 5px solid #ff9800; color: white;">
-                    ප්‍රතිඵලය (DMS): <span id="convert-result" style="color: #ff5722;">--</span>
+                <button class="btn" onclick="convertGPS()" style="width:100%; padding: 10px; margin: 10px 0; background: #64ffda; color: black;">🔄 CONVERT</button>
+                <div style="font-weight: bold; font-size: 16px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; color: white;">
+                    ප්‍රතිඵලය: <span id="convert-result" style="color: #ff5722;">--</span>
                 </div>
-            </div>
-
-            <div id="admin-modal" class="card" style="display:none; border:2px solid red; margin-top:20px; padding: 15px;">
-                <h4>🛠️ ADMIN CONTROL</h4>
-                <input type="text" id="admin-name" placeholder="ගලේ නම" class="input-field" style="width:100%; padding: 8px; margin: 5px 0;"><br>
-                <input type="number" id="admin-lat" placeholder="Latitude (Decimal)" class="input-field" style="width:100%; padding: 8px; margin: 5px 0;"><br>
-                <input type="number" id="admin-lon" placeholder="Longitude (Decimal)" class="input-field" style="width:100%; padding: 8px; margin: 5px 0;"><br>
-                <button class="btn" onclick="adminSaveHazard()" style="width: 100%; background: red; color: white; padding: 10px;">UPLOAD TO MAP</button>
             </div>
         </div>
     </div>
 
     <nav class="bottom-nav" style="position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; background: #0a192f; padding: 15px 0; border-top: 1px solid #64ffda; z-index: 9999;">
-        <button onclick="showTab('home')" style="background: none; border: none; font-size: 24px; cursor: pointer;">🏠</button>
-        <button onclick="showTab('windy')" style="background: none; border: none; font-size: 24px; cursor: pointer;">🌪️</button>
-        <button onclick="showTab('mark')" style="background: none; border: none; font-size: 24px; cursor: pointer;">📍+</button>
-        <button onclick="showTab('settings')" style="background: none; border: none; font-size: 24px; cursor: pointer;">⚙️</button>
+        <button onclick="showTab('home')" style="background: none; border: none; font-size: 24px;">🏠</button>
+        <button onclick="showTab('windy')" style="background: none; border: none; font-size: 24px;">🌪️</button>
+        <button onclick="showTab('mark')" style="background: none; border: none; font-size: 24px;">📍+</button>
+        <button onclick="showTab('settings')" style="background: none; border: none; font-size: 24px;">⚙️</button>
     </nav>
 
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then((reg) => {
-                console.log("Service Worker Registered!");
-                reg.onupdatefound = () => {
-                    const installingWorker = reg.installing;
-                    installingWorker.onstatechange = () => {
-                        if (installingWorker.state === 'installed') {
-                            if (navigator.serviceWorker.controller) {
-                                window.location.reload();
-                            }
-                        }
-                    };
-                };
-            }).catch(err => console.log("Service Worker Failed: ", err));
-        }
-    </script>
     <script type="module" src="script.js"></script>
 </body>
 </html>

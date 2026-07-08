@@ -1,5 +1,5 @@
 // ============================================================================
-// DILSHAN MARINE GPS - MASTER SCRIPT (FIXED IDs)
+// DILSHAN MARINE GPS - ULTRA SAFE CRASH-FREE SCRIPT
 // Developer: Sudarshana DILSHAN
 // ============================================================================
 
@@ -8,8 +8,8 @@ let savedHazards = [];
 
 // --- INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. මුලින්ම පෙන්වන්නේ Home (Dashboard) ටැබ් එකයි
-    showTab('home');
+    // 1. ටැබ් ආරම්භ කිරීම
+    initTabs();
     
     // 2. Local Storage එකෙන් සේව් කරපු ගල් ලෝඩ් කිරීම
     loadSavedHazards();
@@ -18,53 +18,64 @@ document.addEventListener("DOMContentLoaded", () => {
     startTracking();
 });
 
-// --- 📱 TAB NAVIGATION SYSTEM ---
+// --- SAFE NAVIGATION ---
+function initTabs() {
+    const panels = document.querySelectorAll('.tab-pane');
+    panels.forEach(p => p.style.display = 'none');
+    
+    const homePanel = document.getElementById('home');
+    if (homePanel) homePanel.style.display = 'block';
+}
+
 window.showTab = (tabId) => {
-    document.querySelectorAll('.tab-pane').forEach(panel => {
-        panel.classList.remove('active');
+    const panels = document.querySelectorAll('.tab-pane');
+    panels.forEach(panel => {
+        if (panel.id === tabId) {
+            panel.style.display = 'block';
+        } else {
+            panel.style.display = 'none';
+        }
     });
-    const activePanel = document.getElementById(tabId);
-    if (activePanel) activePanel.classList.add('active');
 };
 
-// --- 🧭 LIVE GPS TRACKING & CALCULATIONS ---
+// --- GPS TRACKING ---
 function startTracking() {
     if (!navigator.geolocation) {
         alert("ඔයාගේ ෆෝන් එකේ GPS වැඩ කරන්නේ නැහැ!");
         return;
     }
-
-    const options = {
-        enableHighAccuracy: true,
-        maximumAge: 0,
-        timeout: 10000
-    };
-
+    const options = { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 };
     watchId = navigator.geolocation.watchPosition(updateLocation, handleGPSError, options);
 }
 
 function updateLocation(position) {
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
-    
-    // ධීවරයන්ට පහසු වීමට වේගය km/h වලින් (SOG)
-    const speedKmH = position.coords.speed ? (position.coords.speed * 3.6).toFixed(1) : "0.0";
+    try {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const speedKmH = position.coords.speed ? (position.coords.speed * 3.6).toFixed(1) : "0.0";
 
-    // 🎯 ඔයාගේ index.html එකේ තියෙන නිවැරදි ID වලටම ලයිව් දත්ත ඇතුළත් කිරීම
-    document.getElementById("lat").innerText = convertToDMS(lat);
-    document.getElementById("lon").innerText = convertToDMS(lon);
-    document.getElementById("speed").innerText = speedKmH + " km/h";
-    document.getElementById("time").innerText = new Date().toLocaleTimeString();
+        // Safe ID Mapping - HTML එකේ ID තිබුණොත් විතරක් වැටේ, ක්‍රෑෂ් නොවේ
+        const latEl = document.getElementById("lat");
+        const lonEl = document.getElementById("lon");
+        const speedEl = document.getElementById("speed");
+        const timeEl = document.getElementById("time");
 
-    // ළඟම තියෙන ගල් පරික්ෂා කර ඇලර්ට් දීම
-    checkProximityAlerts(lat, lon);
+        if (latEl) latEl.innerText = convertToDMS(lat);
+        if (lonEl) lonEl.innerText = convertToDMS(lon);
+        if (speedEl) speedEl.innerText = speedKmH + " km/h";
+        if (timeEl) timeEl.innerText = new Date().toLocaleTimeString();
+
+        checkProximityAlerts(lat, lon);
+    } catch (err) {
+        console.error("Update Location Error: ", err);
+    }
 }
 
 function handleGPSError(error) {
     console.error("GPS Error: ", error.message);
 }
 
-// --- 🔄 COORDINATES CONVERTER & DMS MATH ---
+// --- CONVERTER MATH ---
 function convertToDMS(decimal) {
     const absVal = Math.abs(decimal);
     const degrees = Math.floor(absVal);
@@ -72,20 +83,20 @@ function convertToDMS(decimal) {
     return `${degrees}°${minutes}'`;
 }
 
-// Settings පිටුවේ තියෙන බටන් එකෙන් ක්‍රියාත්මක වන Converter එක
 window.convertGPS = () => {
-    const inputValue = parseFloat(document.getElementById('convert-input').value);
+    const inputEl = document.getElementById('convert-input');
+    const resultEl = document.getElementById('convert-result');
+    if (!inputEl || !resultEl) return;
     
+    const inputValue = parseFloat(inputEl.value);
     if (isNaN(inputValue)) {
         alert("කරුණාකර නිවැරදි අංකයක් ඇතුළත් කරන්න!");
         return;
     }
-    
-    const resultText = convertToDMS(inputValue);
-    document.getElementById('convert-result').innerText = resultText;
+    resultEl.innerText = convertToDMS(inputValue);
 };
 
-// --- 🌙 NIGHT VISION & THEME MANAGEMENT ---
+// --- THEMES ---
 window.toggleTheme = () => {
     document.body.classList.toggle('light-mode');
     if(document.body.classList.contains('light-mode')) {
@@ -100,21 +111,19 @@ window.toggleNightVision = () => {
     }
 };
 
-// --- 🚨 HAZARDS & PROXIMITY ALERTS ---
+// --- PROXIMITY SYSTEM ---
 function loadSavedHazards() {
     const localData = localStorage.getItem("marine_hazards");
     if (localData) {
         savedHazards = JSON.parse(localData);
     } else {
-        savedHazards = [
-            { name: "Demo Rock 1", lat: 7.1200, lon: 79.8000 }
-        ];
+        savedHazards = [{ name: "Demo Rock 1", lat: 7.1200, lon: 79.8000 }];
         localStorage.setItem("marine_hazards", JSON.stringify(savedHazards));
     }
 }
 
 function checkProximityAlerts(currentLat, currentLon) {
-    const alertDistanceKm = 0.5; // මීටර් 500ක් ඇතුලත ආවොත්
+    const alertDistanceKm = 0.5;
     let dangerFound = false;
     let closestRockName = "";
 
@@ -142,60 +151,50 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; 
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = 
-        Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+    return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
 }
 
-// --- 🛠️ ADMIN PANEL & ADD HAZARDS ---
+// --- ADD HAZARDS ---
+window.saveHazard = () => {
+    const nameEl = document.getElementById("h-name");
+    if (!nameEl || !nameEl.value) { alert("කරුණාකර ගලේ නම ඇතුළත් කරන්න!"); return; }
+    
+    navigator.geolocation.getCurrentPosition((position) => {
+        savedHazards.push({ name: nameEl.value, lat: position.coords.latitude, lon: position.coords.longitude });
+        localStorage.setItem("marine_hazards", JSON.stringify(savedHazards));
+        alert(`${nameEl.value} ගල සාර්ථකව සේව් වුණා!`);
+        nameEl.value = "";
+    });
+};
+
 window.openAdmin = () => {
     const password = prompt("ADMIN PASSWORD එක ඇතුළත් කරන්න:");
     if (password === "dilshangps123") {
-        document.getElementById("admin-modal").style.display = "block";
+        const modal = document.getElementById("admin-modal");
+        if (modal) modal.style.display = "block";
     } else {
         alert("වැරදි මුරපදයක්!");
     }
 };
 
-window.saveHazard = () => {
-    const name = document.getElementById("h-name").value;
-    if (!name) { alert("කරුණාකර ගලේ නම ඇතුළත් කරන්න!"); return; }
-    
-    navigator.geolocation.getCurrentPosition((position) => {
-        const newHazard = { name, lat: position.coords.latitude, lon: position.coords.longitude };
-        savedHazards.push(newHazard);
-        localStorage.setItem("marine_hazards", JSON.stringify(savedHazards));
-        alert(`${name} ගල දැනට ඔයා ඉන්න ස්ථානයට සාර්ථකව සේව් වුණා!`);
-        document.getElementById("h-name").value = "";
-    });
-};
-
 window.adminSaveHazard = () => {
-    const name = document.getElementById("admin-name").value;
-    const lat = parseFloat(document.getElementById("admin-lat").value);
-    const lon = parseFloat(document.getElementById("admin-lon").value);
+    const name = document.getElementById("admin-name")?.value;
+    const lat = parseFloat(document.getElementById("admin-lat")?.value);
+    const lon = parseFloat(document.getElementById("admin-lon")?.value);
 
-    if (!name || isNaN(lat) || isNaN(lon)) {
-        alert("සියලු විස්තර නිවැරදිව ඇතුළත් කරන්න!");
-        return;
-    }
+    if (!name || isNaN(lat) || isNaN(lon)) { alert("සියලු විස්තර නිවැරදිව ඇතුළත් කරන්න!"); return; }
 
-    const newHazard = { name, lat, lon };
-    savedHazards.push(newHazard);
+    savedHazards.push({ name, lat, lon });
     localStorage.setItem("marine_hazards", JSON.stringify(savedHazards));
-
     alert(`${name} ගල සිතියමට ඇතුළත් කළා!`);
-    document.getElementById("admin-modal").style.display = "none";
+    const modal = document.getElementById("admin-modal");
+    if (modal) modal.style.display = "none";
 };
 
-// --- 🔋 BATTERY INFO ---
 window.showBatteryInfo = () => {
     if (navigator.getBattery) {
-        navigator.getBattery().then(battery => {
-            alert(`🔋 බැටරි මට්ටම: ${Math.round(battery.level * 100)}%\n\nමුහුද මැදදී බැටරිය ඉතිරි කර ගැනීමට Brightness අඩු කරන්න.`);
-        });
+        navigator.getBattery().then(b => alert(`🔋 බැටරි මට්ටම: ${Math.round(b.level * 100)}%`));
     } else {
         alert("බැටරි විස්තර ලබාගත නොහැක.");
     }

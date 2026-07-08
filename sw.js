@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dilshan-gps-v10'; // අලුත්ම කැෂේ අංකය
+const CACHE_NAME = 'dilshan-gps-v12'; // අලුත්ම කැෂේ අංකය
 const ASSETS = [
   './',
   './index.html',
