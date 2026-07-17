@@ -1,9 +1,8 @@
 // ============================================================================
-// DILSHAN MARINE GPS - PROFESSIONAL CLOUD SYSTEM Grade 2026
-// Developer: Sudarshana DILSHAN
+// DILSHAN MARINE GPS - PRO STABLE PROXIMITY GRADE 2026
+// Developer: Sudarshana DILSHAN | WhatsApp: 0765529447
 // ============================================================================
 
-// 🔐 ඔයාගේ Firebase Config එක මෙතනට ඇතුළත් කළා මල්ලි
 const firebaseConfig = {
   apiKey: "AIzaSyAbCfnQtNWbSznv3OU0THPZSB9VWPv-hOs",
   authDomain: "dilshan-gps.firebaseapp.com",
@@ -14,23 +13,32 @@ const firebaseConfig = {
   measurementId: "G-SZ44FM7Z42"
 };
 
-// 🔑 Admin Panel එක ආරක්ෂා කරන්න පාස්වර්ඩ් එකක් (ඕන නම් වෙනස් කරන්න මල්ලි)
 const ADMIN_SECRET_PASSWORD = "DILSHANGPSADMIN"; 
 
 let database = null;
+let deferredPrompt = null; // PWA බටන් එක සඳහා
+
 try {
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
     database = firebase.database();
 } catch (e) {
-    console.error("Firebase Initialization failed: ", e);
+    console.error("Firebase Init Error: ", e);
 }
 
 let watchId = null;
 let savedHazards = {}; 
 let lastWeatherFetchTime = 0;
 let isAdminAuthenticated = false;
+
+// 📥 App Download Trigger Listener (ෆෝන් එකට ඉන්ස්ටෝල් කරගන්නා බටන් එක සක්‍රීය කිරීම)
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const downloadBtn = document.getElementById('btn-download-app');
+    if (downloadBtn) downloadBtn.style.display = 'block';
+});
 
 document.addEventListener("DOMContentLoaded", () => {
     // Tab Navigation
@@ -43,14 +51,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Action Event Listeners
+    // Action Buttons
     document.getElementById('btn-save-hazard')?.addEventListener('click', saveHazardToFirebase);
     document.getElementById('btn-theme')?.addEventListener('click', toggleTheme);
     document.getElementById('btn-night')?.addEventListener('click', toggleNightVision);
     document.getElementById('btn-battery')?.addEventListener('click', showBatteryInfo);
     document.getElementById('btn-convert')?.addEventListener('click', convertGPS);
     
-    // Admin Auth Buttons
+    // Download Button Trigger
+    document.getElementById('btn-download-app')?.addEventListener('click', triggerAppDownload);
+    
+    // Admin Buttons
     document.getElementById('btn-login-admin')?.addEventListener('click', handleAdminLogin);
     document.getElementById('btn-logout-admin')?.addEventListener('click', handleAdminLogout);
     document.getElementById('btn-remote-upload')?.addEventListener('click', saveRemoteHazardToFirebase);
@@ -77,23 +88,36 @@ function showTab(tabId) {
     });
 }
 
-// 🔒 Admin Login පරීක්ෂාව
+// 📥 ඩවුන්ලෝඩ් බටන් ක්‍රියාවලිය
+function triggerAppDownload() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+        });
+    } else {
+        // PWA නොවන බ්‍රවුසර් එකකදී හෝ Shortcut එකක් ලෙස Add කරගැනීමට උපදෙස් දීම
+        alert("මෙම ඇප් එක ෆෝන් එකේ Home Screen එකට දමා සෘජුවම ඇප් එකක් ලෙස පාවිච්චි කිරීමට, බ්‍රවුසර් එකේ ඉහල ඇති තිත් 3 ක්ලික් කර 'Add to Home Screen' හෝ 'Install App' යන්න තෝරන්න!");
+    }
+}
+
 function handleAdminLogin() {
     const passInput = document.getElementById("admin-password");
     if (!passInput) return;
-    
     if (passInput.value === ADMIN_SECRET_PASSWORD) {
         isAdminAuthenticated = true;
         document.getElementById("admin-auth-box").style.display = "none";
         document.getElementById("admin-content-box").style.display = "block";
         passInput.value = "";
     } else {
-        alert("වැරදි මුද්‍රාපදයක් (Incorrect Password)! නැවත උත්සාහ කරන්න.");
+        alert("වැරදි මුද්‍රාපදයක්! නැවත උත්සාහ කරන්න.");
         passInput.value = "";
     }
 }
 
-// 🔒 Admin Logout කිරීම
 function handleAdminLogout() {
     isAdminAuthenticated = false;
     document.getElementById("admin-auth-box").style.display = "block";
@@ -109,18 +133,23 @@ function listenToFirebaseHazards() {
 
 function startTracking() {
     if (!navigator.geolocation) {
-        alert("GPS නොමැත!");
+        alert("GPS Hardware නොමැත!");
         return;
     }
-    const options = { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 };
-    watchId = navigator.geolocation.watchPosition(updateLocation, handleGPSError, options);
+    const geoOptions = {
+        enableHighAccuracy: true,
+        timeout: 6000,
+        maximumAge: 0
+    };
+    if (watchId) navigator.geolocation.clearWatch(watchId);
+    watchId = navigator.geolocation.watchPosition(updateLocation, handleGPSError, geoOptions);
 }
 
 function updateLocation(position) {
     try {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
-        const speedKmH = position.coords.speed ? (position.coords.speed * 3.6).toFixed(1) : "0.0";
+        const speedKmH = position.coords.speed && position.coords.speed > 0.4 ? (position.coords.speed * 3.6).toFixed(1) : "0.0";
 
         document.getElementById("lat").innerText = convertToDMS(lat);
         document.getElementById("lon").innerText = convertToDMS(lon);
@@ -128,177 +157,118 @@ function updateLocation(position) {
         document.getElementById("time").innerText = new Date().toLocaleTimeString();
 
         const now = Date.now();
-        if (now - lastWeatherFetchTime > 300000) { 
+        if (now - lastWeatherFetchTime > 180000) { 
             fetchMarineData(lat, lon);
             lastWeatherFetchTime = now;
         }
-
         checkProximityAlerts(lat, lon);
     } catch (err) {
         console.error(err);
     }
 }
 
-// 📍 1. ඕනෑම කෙනෙක්ට තමන් ඉන්න තැනින් ගල් සේව් කරන ක්‍රමය
+async function fetchMarineData(lat, lon) {
+    try {
+        const fixedLat = lat.toFixed(2);
+        const fixedLon = lon.toFixed(2);
+        const response = await fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${fixedLat}&longitude=${fixedLon}&current=ocean_current_velocity,ocean_current_direction`);
+        const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${fixedLat}&longitude=${fixedLon}&current=wind_speed_10m,wind_direction_10m`);
+        
+        if (response.ok) {
+            const marineData = await response.json();
+            if (marineData && marineData.current && marineData.current.ocean_current_velocity !== undefined) {
+                const cSpeed = marineData.current.ocean_current_velocity.toFixed(2);
+                const cDir = marineData.current.ocean_current_direction;
+                document.getElementById("current-speed").innerText = `${cSpeed} m/s`;
+                document.getElementById("current-dir").innerText = cDir ? `🧭 දිශාව: ${cDir}° (${getWindDirectionName(cDir)})` : "🧭 දිශාව: --";
+            }
+        }
+        if (weatherResponse.ok) {
+            const windData = await weatherResponse.json();
+            if (windData && windData.current) {
+                const wSpeed = windData.current.wind_speed_10m ? windData.current.wind_speed_10m.toFixed(1) : "0.0";
+                const wDirDeg = windData.current.wind_direction_10m;
+                document.getElementById("wind-speed").innerText = `${wSpeed} km/h`;
+                document.getElementById("wind-dir").innerText = wDirDeg ? `🧭 දිශාව: ${wDirDeg}° (${getWindDirectionName(wDirDeg)})` : "--";
+            }
+        }
+    } catch (err) { console.log("Marine server dynamic skip."); }
+}
+
 function saveHazardToFirebase() {
     const nameEl = document.getElementById("h-name");
     if (!nameEl || !nameEl.value) { alert("කරුණාකර ගලේ නම ඇතුළත් කරන්න!"); return; }
-    if (!database) { alert("Firebase දෝෂයකි!"); return; }
-
     navigator.geolocation.getCurrentPosition((position) => {
-        const newHazardRef = database.ref('hazards').push();
-        newHazardRef.set({
+        database.ref('hazards').push().set({
             name: nameEl.value,
             lat: position.coords.latitude,
             lon: position.coords.longitude,
             timestamp: Date.now()
-        }).then(() => {
-            alert(`${nameEl.value} ගල සාර්ථකව පොදු පද්ධතියට එක් වුණා!`);
-            nameEl.value = "";
-        }).catch(() => {
-            alert("Firebase සේව් කිරීම අසාර්ථකයි.");
-        });
-    }, () => {
-        alert("ඔයාගේ ලයිව් ලොකේෂන් එක ලබාගන්න බැරි වුණා!");
-    });
+        }).then(() => { alert(`${nameEl.value} සේව් වුණා!`); nameEl.value = ""; });
+    }, () => { alert("GPS ලබාගත නොහැක."); }, { enableHighAccuracy: true });
 }
 
-// 🏠 2. ඩිවලොපර්ට ගෙදර ඉඳන් ඕනෑම ඛණ්ඩාංකයක් දාලා ගල් අප්ලෝඩ් කරන ක්‍රමය
 function saveRemoteHazardToFirebase() {
     const nameEl = document.getElementById("remote-name");
     const latEl = document.getElementById("remote-lat");
     const lonEl = document.getElementById("remote-lon");
-
-    if (!nameEl.value || !latEl.value || !lonEl.value) {
-        alert("කරුණාකර නම, Latitude සහ Longitude යන සියල්ලම නිවැරදිව පුරවන්න!");
-        return;
-    }
-
-    const rLat = parseFloat(latEl.value);
-    const rLon = parseFloat(lonEl.value);
-
-    if (isNaN(rLat) || isNaN(rLon)) {
-        alert("ඛණ්ඩාංක සඳහා නිවැරදි දශම සංඛ්‍යා ඇතුළත් කරන්න!");
-        return;
-    }
-
-    const newHazardRef = database.ref('hazards').push();
-    newHazardRef.set({
+    if (!nameEl.value || !latEl.value || !lonEl.value) { alert("සියල්ල පුරවන්න!"); return; }
+    database.ref('hazards').push().set({
         name: nameEl.value,
-        lat: rLat,
-        lon: rLon,
+        lat: parseFloat(latEl.value),
+        lon: parseFloat(lonEl.value),
         timestamp: Date.now()
-    }).then(() => {
-        alert(`🏠 [Remote] ${nameEl.value} ගල සාර්ථකව අප්ලෝඩ් වුණා!`);
-        nameEl.value = "";
-        latEl.value = "";
-        lonEl.value = "";
-    }).catch((e) => {
-        alert("Firebase අප්ලෝඩ් දෝෂයකි!");
-        console.error(e);
-    });
+    }).then(() => { alert("🏠 Remote අප්ලෝඩ් සාර්ථකයි!"); nameEl.value=""; latEl.value=""; lonEl.value=""; });
 }
 
 function updateAdminPanel() {
     const countEl = document.getElementById("hazard-count");
     const container = document.getElementById("hazard-list");
     if (!container) return;
-
     const keys = Object.keys(savedHazards);
     if (countEl) countEl.innerText = keys.length;
-
-    if (keys.length === 0) {
-        container.innerHTML = `<p style="text-align: center; opacity: 0.5; padding: 20px;">තවමත් කිසිදු ගලක් මාක් කර නැත.</p>`;
-        return;
-    }
-
     container.innerHTML = "";
     keys.forEach((key, index) => {
         const hazard = savedHazards[key];
         const item = document.createElement("div");
         item.className = "hazard-item";
         item.innerHTML = `
-            <div class="hazard-info">
-                <h5>${index + 1}. ${hazard.name}</h5>
-                <p>Lat: ${convertToDMS(hazard.lat)} | Lon: ${convertToDMS(hazard.lon)}</p>
-            </div>
+            <div class="hazard-info"><h5>${index + 1}. ${hazard.name}</h5><p>Lat: ${convertToDMS(hazard.lat)} | Lon: ${convertToDMS(hazard.lon)}</p></div>
             <button class="btn-delete-item" data-id="${key}">🗑️</button>
         `;
         container.appendChild(item);
     });
-
     document.querySelectorAll('.btn-delete-item').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const id = e.target.getAttribute('data-id');
-            if (confirm("මෙම ගල සදහටම පද්ධතියෙන් මකා දැමීමට අවශ්‍යද?")) {
-                database.ref(`hazards/${id}`).remove();
-            }
+            if (confirm("මකා දැමීමට අවශ්‍යද?")) database.ref(`hazards/${id}`).remove();
         });
     });
 }
 
-// 🚨 ගල් වලට ලං වෙද්දී ගලේ ඛණ්ඩාංක දෙකත් එක්කම එලාම් එක වැදීම
 function checkProximityAlerts(currentLat, currentLon) {
     const alertDistanceKm = 0.5; 
-    let dangerFound = false;
-    let closestRockName = "";
-    let closestRockLat = "";
-    let closestRockLon = "";
-
+    let dangerFound = false; let closestRockName = ""; let closestRockLat = ""; let closestRockLon = "";
     Object.keys(savedHazards).forEach(key => {
         const hazard = savedHazards[key];
-        const dist = calculateDistance(currentLat, currentLon, hazard.lat, hazard.lon);
-        if (dist <= alertDistanceKm) { 
-            dangerFound = true; 
-            closestRockName = hazard.name;
-            closestRockLat = convertToDMS(hazard.lat);
-            closestRockLon = convertToDMS(hazard.lon);
+        if (calculateDistance(currentLat, currentLon, hazard.lat, hazard.lon) <= alertDistanceKm) { 
+            dangerFound = true; closestRockName = hazard.name; closestRockLat = convertToDMS(hazard.lat); closestRockLon = convertToDMS(hazard.lon);
         }
     });
-
     const alertBox = document.getElementById("hazard-alert");
     if (alertBox) {
         if (dangerFound) {
-            // 📍 මෙතනදී ගලේ නම සහ පිහිටීමේ ඛණ්ඩාංක දෙකම පෙන්වයි
-            alertBox.innerHTML = `🚨 අවධානයයි: ${closestRockName} ලඟ ඇත!<br><span style="font-size:15px; font-family:monospace;">(ගලේ පිහිටීම: ${closestRockLat} | ${closestRockLon})</span>`;
+            alertBox.innerHTML = `🚨 අවධානයයි: ${closestRockName} ලඟ ඇත!<br><span style="font-size:14px; font-family:monospace;">(${closestRockLat} | ${closestRockLon})</span>`;
             alertBox.style.display = "block";
             if (navigator.vibrate) navigator.vibrate([500, 300, 500]);
-        } else {
-            alertBox.style.display = "none";
-        }
+        } else { alertBox.style.display = "none"; }
     }
 }
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; 
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const R = 6371; const dLat = (lat2 - lat1) * Math.PI / 180; const dLon = (lon2 - lon1) * Math.PI / 180;
     const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
     return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
-}
-
-async function fetchMarineData(lat, lon) {
-    try {
-        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=wind_speed_10m,wind_direction_10m&marine=currents_speed,currents_direction`).catch(() => null);
-        if (res) {
-            const data = await res.json();
-            if (data.current) {
-                const wSpeed = data.current.wind_speed_10m ? data.current.wind_speed_10m.toFixed(1) : "--";
-                const wDirDeg = data.current.wind_direction_10m;
-                document.getElementById("wind-speed").innerText = `${wSpeed} km/h`;
-                document.getElementById("wind-dir").innerText = wDirDeg ? `🧭 දිශාව: ${wDirDeg}° (${getWindDirectionName(wDirDeg)})` : "--";
-            }
-            if (data.marine && data.marine.currents_speed) {
-                const cSpeed = data.marine.currents_speed.toFixed(2);
-                const cDirDeg = data.marine.currents_direction;
-                document.getElementById("current-speed").innerText = `${cSpeed} m/s`;
-                document.getElementById("current-dir").innerText = `🧭 දිශාව: ${cDirDeg}°`;
-            } else {
-                document.getElementById("current-speed").innerText = "ගොඩබිමට නැත";
-                document.getElementById("current-dir").innerText = "🌊 මුහුදේදී පමණක් පෙන්වයි";
-            }
-        }
-    } catch (err) { console.log("Marine fetch issue skipped."); }
 }
 
 function getWindDirectionName(degree) {
@@ -312,8 +282,7 @@ function getWindDirectionName(degree) {
     if (degree >= 292.5 && degree < 337.5) return "වයඹ (NW)";
     return "---";
 }
-
-function handleGPSError(error) { console.error(error); }
+function handleGPSError(error) { console.warn(error.message); }
 function convertToDMS(decimal) {
     const absVal = Math.abs(decimal);
     const degrees = Math.floor(absVal);
@@ -324,12 +293,8 @@ function convertGPS() {
     const inputEl = document.getElementById('convert-input');
     const resultEl = document.getElementById('convert-result');
     if (!inputEl || !resultEl) return;
-    const inputValue = parseFloat(inputEl.value);
-    if (isNaN(inputValue)) return;
-    resultEl.innerText = convertToDMS(inputValue);
+    resultEl.innerText = convertToDMS(parseFloat(inputEl.value));
 }
 function toggleTheme() { document.body.classList.toggle('light-mode'); }
 function toggleNightVision() { document.body.classList.toggle('night-vision-mode'); }
-function showBatteryInfo() {
-    if (navigator.getBattery) { navigator.getBattery().then(b => alert(`🔋 බැටරිය: ${Math.round(b.level * 100)}%`)); }
-}
+function showBatteryInfo() { if (navigator.getBattery) { navigator.getBattery().then(b => alert(`🔋 බැටරිය: ${Math.round(b.level * 100)}%`)); } }

@@ -6,12 +6,16 @@
     <title>DILSHAN MARINE GPS</title>
     <link rel="stylesheet" href="style.css">
     
+    <!-- 🌐 Google Fonts & Firebase Core -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 </head>
 <body>
+    <!-- ⚠️ අනතුරු ඇඟවීමේ බාර් එක (Hazard Alert) -->
     <div id="hazard-alert" class="alert-bar"></div>
 
+    <!-- 🏠 HOME TAB -->
     <div id="home" class="tab-pane active">
         <div class="logo-container">
             <div class="logo-circle glow-blue">
@@ -20,6 +24,7 @@
         </div>
         <h2 class="app-title">DILSHAN MARINE GPS</h2>
         
+        <!-- 📍 LOCATION CARD -->
         <div class="card location-card fade-in">
             <div class="label">📍 LIVE GPS LOCATION & TIME</div>
             <div class="huge-text bold-text tight-text" id="lat">--</div>
@@ -27,11 +32,13 @@
             <div class="time-text bold-text" id="time">--:--:--</div>
         </div>
 
+        <!-- 🚀 SPEED CARD -->
         <div class="card speed-card fade-in">
             <div class="label">🚀 SPEED (SOG)</div>
             <div class="speed-text bold-text" id="speed">0.0 km/h</div>
         </div>
 
+        <!-- 🌬️ WIND & OCEAN CURRENT CARD -->
         <div class="card marine-card fade-in">
             <div class="label">🌬️ WIND INFO (ලයිව් සුළඟ)</div>
             <div class="marine-text bold-text" id="wind-speed">-- km/h</div>
@@ -45,19 +52,22 @@
         </div>
     </div>
 
+    <!-- 🌪️ WINDY TAB (Full Screen) -->
     <div id="windy" class="tab-pane full-screen-tab">
         <iframe src="https://embed.windy.com/embed2.html?lat=7.0&lon=80.0&zoom=7&level=surface&overlay=currents&menu=&message=&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1" width="100%" height="100%" frameborder="0"></iframe>
     </div>
     
+    <!-- 📍 MARK TAB -->
     <div id="mark" class="tab-pane">
         <div class="card form-card fade-in">
-            <h3 class="section-title">📍 ගල මාක් කරන්න.</h3>
-            <p style="text-align: center; font-size: 14px; opacity: 0.8; margin-bottom: 15px; color: #64ffda;">ඔයා ඉන්න තැන තියෙන ගලේ  නම දමා Submit කරන්න.</p>
+            <h3 class="section-title">📍 පොදුවේ ගලක් මාක් කරන්න</h3>
+            <p style="text-align: center; font-size: 14px; opacity: 0.8; margin-bottom: 15px; color: #64ffda;">ඔයා ඉන්න තැන තියෙන ගල පොදු පද්ධතියට සේව් කිරීමට නම දමා Submit කරන්න.</p>
             <input type="text" id="h-name" placeholder="ගලේ නම ඇතුළත් කරන්න (උදා: මුදු ගල)" class="input-field">
-            <button class="btn btn-submit glow-button" id="btn-save-hazard">Submit</button>
+            <button class="btn btn-submit glow-button" id="btn-save-hazard">💾 Firebase එකට සේව් කරන්න</button>
         </div>
     </div>
 
+    <!-- 🛠️ ADMIN PANEL TAB (🔐 Password Protected) -->
     <div id="admin" class="tab-pane">
         <div id="admin-auth-box" class="card auth-card fade-in">
             <h3 class="section-title" style="color: #ff1744;">🔒 ADMIN AUTHENTICATION</h3>
@@ -68,8 +78,8 @@
 
         <div id="admin-content-box" class="card admin-card fade-in" style="display: none;">
             <h3 class="section-title" style="color: #ff1744;">🛠️ CONTROL PANEL</h3>
-            <p style="text-align: center; opacity: 0.8; font-size: 14px;">පද්ධතියේ ඇති සියලුම ගල් කළමනාකරණය සහ ගෙදර ඉඳන් අප්ලෝඩ් කිරීම.</p>
             
+            <!-- 🏠 Developer Remote Upload Form -->
             <div class="remote-upload-box" style="margin-bottom: 20px; padding: 15px; border: 1px dashed #ff1744; border-radius: 12px; background: rgba(255,23,68,0.05);">
                 <h4 style="margin: 0 0 10px 0; color: #ff1744; text-align: center;">🏠 REMOTE HAZARD UPLOAD</h4>
                 <input type="text" id="remote-name" placeholder="ගලේ නම" class="input-field">
@@ -90,6 +100,7 @@
         </div>
     </div>
 
+    <!-- ⚙️ SETTINGS TAB -->
     <div id="settings" class="tab-pane">
         <div class="card settings-card fade-in">
             <div class="settings-header">
@@ -102,6 +113,9 @@
             <hr class="card-hr">
 
             <div class="settings-actions">
+                <!-- 📥 DOWNLOAD APP BUTTON -->
+                <button class="btn btn-submit glow-button" id="btn-download-app" style="margin-bottom: 12px; font-size: 18px;">📥 DOWNLOAD APP (ෆෝන් එකට ගන්න)</button>
+                
                 <button class="btn btn-action" id="btn-theme">🌓 DARK / LIGHT MODE</button>
                 <button class="btn btn-action btn-danger" id="btn-night">🌙 NIGHT VISION MODE (🔴)</button>
                 <button class="btn btn-action btn-warning" id="btn-battery">🔋 BATTERY INFO</button>
@@ -110,6 +124,7 @@
 
             <hr class="card-hr">
 
+            <!-- 🔄 CONVERTER -->
             <div class="converter-box">
                 <h4>🔄 GPS COORDINATES CONVERTER</h4>
                 <input type="number" id="convert-input" placeholder="7.12345" class="input-field">
@@ -121,6 +136,7 @@
         </div>
     </div>
 
+    <!-- BOTTOM NAVIGATION BAR -->
     <nav class="bottom-nav">
         <button class="nav-btn active-nav" data-tab="home">🏠</button>
         <button class="nav-btn" data-tab="windy">🌪️</button>
