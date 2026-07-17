@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dilshan-gps-v2';
+const CACHE_NAME = 'dilshan-gps-v3';
 const ASSETS = [
   'index.html',
   'style.css',
