@@ -77,7 +77,7 @@ body {
     width: 96%;
     box-sizing: border-box;
 }
-.location-card { border-left: 5px solid #64ffda; }
+.location-card { border-left: 6px solid #64ffda; }
 .speed-card { border-left: 5px solid #ff5722; }
 .marine-card { border-left: 5px solid #00e676; }
 .admin-card, .auth-card { border: 2px solid #ff1744; }
@@ -86,9 +86,9 @@ body {
 
 /* MONOSPACE ACCURATE TEXT FOR GPS */
 .huge-text {
-    font-size: var(--text-huge);
+    font-size: var(--text-speed);
     text-align: center;
-    color: #ffffff;
+    color: #FFFFFF;
     margin: 4px 0;
     font-family: 'Courier New', Courier, monospace; 
     line-height: 1.1;
@@ -96,7 +96,7 @@ body {
 }
 .speed-text { font-size: var(--text-speed); text-align: center; color: #ff5722; margin: 0; }
 .marine-text { text-align: center; font-size: var(--text-marine); color: #00e676; margin: 0; }
-.marine-sub { text-align: center; font-size: 15px; color: #edf2f7; }
+.marine-sub { text-align: center; font-size: 15px; color: #FFFFFF; }
 .time-text { text-align: center; font-size: 20px; color: #ff9800; margin-top: 4px; }
 .card-hr { border: 0; border-top: 1px solid rgba(100, 255, 218, 0.15); margin: 10px 0; }
 
@@ -126,10 +126,10 @@ body {
 
 /* THEMES */
 .light-mode { background-color: #f4f7f6 !important; color: #1a202c !important; }
-.light-mode .card { background: #ffffff !important; color: #1a202c !important; border: 1px solid #e2e8f0 !important; }
+.light-mode .card { background: #ffffff !important; color: #1a202c !important; border: 5px solid #e2e8f0 !important; }
 .light-mode .huge-text, .light-mode .marine-sub { color: #2d3748 !important; }
-.light-mode .input-field { background: #edf2f7 !important; color: black !important; }
-.light-mode .bottom-nav { background: rgba(255,255,255,0.95) !important; border-top: 1px solid #cbd5e0 !important; }
+.light-mode .input-field { background: #9EA7B0 !important; color: black !important; }
+.light-mode .bottom-nav { background: rgba(255,255,255,0.95) !important; border-top: 5px solid #cbd5e0 !important; }
 .light-mode .hazard-item { background: #edf2f7 !important; }
 .light-mode .hazard-info h5 { color: black; }
 
