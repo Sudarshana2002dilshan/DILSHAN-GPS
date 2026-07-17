@@ -174,7 +174,7 @@ function checkProximityAlerts(cLat, cLon) {
         if (alertActive) {
             box.innerHTML = `🚨 අවධානයයි: ${rockName} ඉතා ආසන්නයේ ඇත!`;
             box.style.display = "block";
-            document.body.classList.add("danger-blink"); // Advanced UI blinking warning
+            document.body.classList.add("danger-blink");
             if (navigator.vibrate) navigator.vibrate([400, 200, 400]);
         } else {
             box.style.display = "none";
@@ -193,7 +193,7 @@ function convertToDMS(decimal) {
     const abs = Math.abs(decimal);
     const d = Math.floor(abs);
     const m = ((abs - d) * 60).toFixed(3);
-    return `${d}°${m}'`;
+    return `${d}° ${m}'`; // ධීවරයින්ට කියවීමට පහසු වන ලෙස space එකක් එක් කර ඇත
 }
 
 function convertGPS() {
