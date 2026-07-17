@@ -8,8 +8,7 @@ body {
 }
 
 :root {
-    /* 📍 MAXIMUM ULTRA BIG LOCATION FONT SIZE */
-    --text-huge-gps: clamp(2.2rem, 10vw, 4.2rem);
+    --text-huge-gps: clamp(2.3rem, 10.5vw, 4.4rem);
     --text-speed: clamp(2.2rem, 10.5vw, 4.4rem);
     --text-marine: clamp(1.6rem, 7.8vw, 3.0rem);
 }
@@ -58,7 +57,6 @@ body {
 
 .bold-text { font-weight: 900 !important; }
 
-/* CARD ARCHITECTURE */
 .card {
     background: rgba(23, 42, 69, 0.85);
     backdrop-filter: blur(10px);
@@ -77,7 +75,6 @@ body {
 
 .label { text-align: center; font-size: 12px; font-weight: 900; color: #64ffda; margin-bottom: 6px; }
 
-/* 📍 ULTRA BIG & EXTRA BLUR-GLOW FOR LAT/LON */
 .huge-gps-container {
     display: flex;
     flex-direction: column;
@@ -96,7 +93,6 @@ body {
     letter-spacing: -0.5px;
     width: 100%;
     word-wrap: break-word;
-    /* දුරට බ්ලර් වෙලා කැපිලා පේන්න Glow එක වැඩි කලා */
     text-shadow: 0 0 12px rgba(255, 255, 255, 0.6), 0 0 25px rgba(100, 255, 218, 0.4);
 }
 
@@ -106,7 +102,6 @@ body {
 .time-text { text-align: center; font-size: 20px; color: #ff9800; margin-top: 8px; }
 .card-hr { border: 0; border-top: 1px solid rgba(100, 255, 218, 0.15); margin: 10px 0; }
 
-/* 🛠️ FIXED SETTINGS LOGO OVERLAY SCREEN BUG */
 .settings-header {
     display: flex;
     flex-direction: column;
@@ -117,18 +112,12 @@ body {
 .settings-logo-wrapper {
     width: 100px;
     height: 100px;
-    max-width: 100px;
-    max-height: 100px;
     margin-bottom: 10px;
     border-radius: 50%;
     overflow: hidden;
     border: 3px solid #64ffda;
 }
-.settings-logo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+.settings-logo { width: 100%; height: 100%; object-fit: cover; }
 
 .input-field {
     width: 100%; padding: 12px; font-size: 15px; font-weight: bold; margin: 6px 0;
@@ -159,6 +148,6 @@ body {
 .light-mode .bottom-nav { background: rgba(255,255,255,0.95) !important; border-top: 1px solid #cbd5e0 !important; }
 
 .night-vision-mode { background-color: #000000 !important; }
-.night-vision-mode body, .night-vision-mode .card, .night-vision-mode h2, .night-vision-mode h3, .night-vision-mode .label, .night-vision-mode .huge-gps-text, .night-vision-mode .speed-text, .night-vision-mode .marine-text, .night-vision-mode .marine-sub, .night-vision-mode .time-text, .night-vision-mode .admin-stats, .night-vision-mode .remote-upload-box { background-color: #000000 !important; color: #ff1744 !important; border-color: #ff1744 !important; text-shadow: 0 0 12px rgba(255, 23, 68, 0.8) !important; }
+.night-vision-mode body, .night-vision-mode .card, .night-vision-mode h2, .night-vision-mode h3, .night-vision-mode .label, .night-vision-mode .huge-gps-text, .night-vision-mode .speed-text, .night-vision-mode .marine-text, .night-vision-mode .marine-sub, .night-vision-mode .time-text, .night-vision-mode .admin-stats, .night-vision-mode .remote-upload-box, .night-vision-mode .about-details { background-color: #000000 !important; color: #ff1744 !important; border-color: #ff1744 !important; text-shadow: 0 0 12px rgba(255, 23, 68, 0.8) !important; }
 .night-vision-mode .bottom-nav { background: #000000 !important; border-top: 1px solid #ff1744 !important; }
 .night-vision-mode .active-nav { background: rgba(255,23,68,0.2) !important; }

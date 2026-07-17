@@ -51,7 +51,7 @@
             <hr class="card-hr">
             
             <div class="label" style="color: #00b0ff;">🌊 OCEAN CURRENT (දියකඩ ලයිව්)</div>
-            <div class="marine-text bold-text" id="current-speed" style="color: #00b0ff;">0.0 m/s</div>
+            <div class="marine-text bold-text" id="current-speed" style="color: #00b0ff;">-- m/s</div>
             <div class="marine-sub bold-text" id="current-dir">🧭 දිශාව: --</div>
         </div>
     </div>
@@ -98,23 +98,40 @@
     <div id="settings" class="tab-pane">
         <div class="card settings-card fade-in">
             <div class="settings-header">
-                <!-- 🛠️ FIXED: Image එක කැඩෙන්නේ නැති වෙන්න wrapper එකක් දැම්මා -->
                 <div class="settings-logo-wrapper">
                     <img src="DILGPS.png" class="settings-logo" alt="Logo">
                 </div>
                 <h3>DILSHAN MARINE GPS</h3>
-                <p class="dev-text">Developer: Sudarshana DILSHAN</p>
-                <a href="https://wa.me/94765529447" target="_blank" class="whatsapp-link">💬 WhatsApp: 0765529447</a>
+                <p class="dev-text" style="color:#64ffda; font-weight:900;">PRO NAVIGATION SYSTEM</p>
             </div>
 
             <hr class="card-hr">
 
             <div class="settings-actions">
-                <button class="btn btn-submit glow-button" id="btn-download-app" style="margin-bottom: 12px; font-size: 16px;">📥 DOWNLOAD APP</button>
+                <!-- 📥 GOOGLE DRIVE DIRECT DOWNLOAD BUTTON -->
+                <a href="https://drive.google.com/file/d/1rCkE_Xmfg0xJFFbBvRW5ETSVuGBFw11l/view?usp=drivesdk" target="_blank" style="text-decoration: none;">
+                    <button class="btn glow-button" style="background: linear-gradient(135deg, #2db742, #1aa032); color: white; margin-bottom: 12px; font-size: 16px;">📥 DIRECT DOWNLOAD LINK (Drive)</button>
+                </a>
+                
+                <button class="btn btn-submit glow-button" id="btn-download-app" style="margin-bottom: 12px; font-size: 16px;">📲 INSTALL PWA APP</button>
                 <button class="btn btn-action" id="btn-theme">🌓 DARK / LIGHT MODE</button>
                 <button class="btn btn-action btn-danger" id="btn-night">🌙 NIGHT VISION MODE (🔴)</button>
                 <button class="btn btn-action btn-warning" id="btn-battery">🔋 BATTERY INFO</button>
                 <button class="btn btn-action" id="btn-go-admin" style="background: rgba(255,23,68,0.1); border-color: #ff1744; color: #ff1744;">🛠️ OPEN CONTROL PANEL</button>
+            </div>
+
+            <hr class="card-hr">
+
+            <!-- ℹ️ ABOUT DEVELOPER SECTION -->
+            <div class="about-card-box">
+                <h4 style="color:#64ffda; margin: 5px 0 8px 0; text-align:center;">ℹ️ ABOUT DEVELOPER (පද්ධති විස්තර)</h4>
+                <div class="about-details" style="font-size: 13px; line-height: 1.6; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
+                    <p style="margin:4px 0;"><strong>👨‍💻 Developer:</strong> Sudarshana DILSHAN</p>
+                    <p style="margin:4px 0;"><strong>🚀 Version:</strong> 3.5.0 (Pro Hybrid)</p>
+                    <p style="margin:4px 0;"><strong>🛡️ Security:</strong> Encrypted Firebase Realtime Database</p>
+                    <p style="margin:4px 0;"><strong>🌊 Scope:</strong> Marine Navigation & Deep Sea Fishing Support</p>
+                    <center><a href="https://wa.me/94765529447" target="_blank" class="whatsapp-link">💬 Contact Developer (0765529447)</a></center>
+                </div>
             </div>
 
             <hr class="card-hr">

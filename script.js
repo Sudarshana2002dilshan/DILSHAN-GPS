@@ -24,8 +24,8 @@ let lastWeatherFetchTime = 0;
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('Service Worker Active'))
-            .catch(err => console.warn('SW register failed', err));
+            .then(reg => console.log('Service Worker Registered'))
+            .catch(err => console.warn('SW failed', err));
     });
 }
 
@@ -83,16 +83,16 @@ function triggerAppDownload() {
             if (choice.outcome === 'accepted') deferredPrompt = null;
         });
     } else {
-        alert("බ්‍රවුසර් එකේ ඉහල තිත් 3 ඔබලා 'Install App' හෝ 'Add to Home Screen' ක්ලික් කරන්න.");
+        alert("බ්‍රවුසර් එකේ Options (තිත් 3) ක්ලික් කර 'Install' හෝ 'Add to Home Screen' තෝරන්න.");
     }
 }
 
 function startTracking() {
     if (!navigator.geolocation) {
-        alert("GPS Hardware ක්‍රියා විරහිතයි!");
+        alert("GPS Hardware නොමැත හෝ ක්‍රියා විරහිතයි!");
         return;
     }
-    const options = { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 };
+    const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
     if (watchId) navigator.geolocation.clearWatch(watchId);
     watchId = navigator.geolocation.watchPosition(updateLocation, handleGPSError, options);
 }
@@ -115,11 +115,10 @@ function updateLocation(position) {
     const lon = position.coords.longitude;
     const speed = position.coords.speed && position.coords.speed > 0.3 ? (position.coords.speed * 3.6).toFixed(1) : "0.0";
     
-    // 🌊 STABLE OCEAN CURRENT & DIRECTION VIA SATELLITE HEADING
-    // මුහුද මැදදී API Fail වුනත් Geolocation Heading එකෙන් 100% දියකඩ සහ දිශාව ගණනය කරයි.
+    // 🛠️ FIXED BUG: Safe Heading Check
     const heading = position.coords.heading;
-    if (heading !== null && !isNaN(heading)) {
-        const currentKnots = (position.coords.speed ? (position.coords.speed * 0.514) : 0).toFixed(2);
+    if (heading !== null && heading !== undefined && !isNaN(heading)) {
+        const currentKnots = position.coords.speed ? (position.coords.speed * 0.514).toFixed(2) : "0.00";
         document.getElementById("current-speed").innerText = `${currentKnots} m/s`;
         document.getElementById("current-dir").innerText = `🧭 දිශාව: ${heading.toFixed(0)}° (${getWindDirectionName(heading)})`;
     }
@@ -130,7 +129,7 @@ function updateLocation(position) {
     document.getElementById("time").innerText = new Date().toLocaleTimeString();
 
     const now = Date.now();
-    if (now - lastWeatherFetchTime > 180000) {
+    if (now - lastWeatherFetchTime > 300000) { // 5 mins cache
         fetchMarineData(lat, lon);
         lastWeatherFetchTime = now;
     }
@@ -140,15 +139,22 @@ function updateLocation(position) {
 async function fetchMarineData(lat, lon) {
     try {
         const l1 = lat.toFixed(2); const l2 = lon.toFixed(2);
-        const res2 = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${l1}&longitude=${l2}&current=wind_speed_10m,wind_direction_10m`);
-        if (res2.ok) {
-            const data = await res2.json();
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${l1}&longitude=${l2}&current=wind_speed_10m,wind_direction_10m,ocean_current_velocity,ocean_current_direction`);
+        if (res.ok) {
+            const data = await res.json();
             if(data.current) {
-                document.getElementById("wind-speed").innerText = `${data.current.wind_speed_10m.toFixed(1)} km/h`;
-                document.getElementById("wind-dir").innerText = `🧭 දිශාව: ${data.current.wind_direction_10m}° (${getWindDirectionName(data.current.wind_direction_10m)})`;
+                if(data.current.wind_speed_10m !== undefined) {
+                    document.getElementById("wind-speed").innerText = `${data.current.wind_speed_10m.toFixed(1)} km/h`;
+                    document.getElementById("wind-dir").innerText = `🧭 දිශාව: ${data.current.wind_direction_10m}° (${getWindDirectionName(data.current.wind_direction_10m)})`;
+                }
+                // Backup Ocean Current API integration if heading fails
+                if(data.current.ocean_current_velocity !== undefined && document.getElementById("current-speed").innerText === "-- m/s") {
+                    document.getElementById("current-speed").innerText = `${data.current.ocean_current_velocity.toFixed(2)} m/s`;
+                    document.getElementById("current-dir").innerText = `🧭 දිශාව: ${data.current.ocean_current_direction}° (${getWindDirectionName(data.current.ocean_current_direction)})`;
+                }
             }
         }
-    } catch (e) { console.log("Skipped remote fetch."); }
+    } catch (e) { console.log("Network skip."); }
 }
 
 function checkProximityAlerts(cLat, cLon) {
@@ -199,17 +205,17 @@ function saveHazardToFirebase() {
     if (!name) { alert("නම ඇතුළත් කරන්න!"); return; }
     navigator.geolocation.getCurrentPosition(p => {
         database.ref('hazards').push().set({ name, lat: p.coords.latitude, lon: p.coords.longitude, timestamp: Date.now() });
-        alert("ගල සේව් වුණා!"); document.getElementById("h-name").value = "";
-    }, () => alert("GPS ERROR"), { enableHighAccuracy: true });
+        alert("ගල සාර්ථකව සේව් වුණා!"); document.getElementById("h-name").value = "";
+    }, () => alert("GPS දත්ත ලබාගත නොහැක!"), { enableHighAccuracy: true });
 }
 
 function saveRemoteHazardToFirebase() {
     const name = document.getElementById("remote-name").value;
     const lat = parseFloat(document.getElementById("remote-lat").value);
     const lon = parseFloat(document.getElementById("remote-lon").value);
-    if (!name || isNaN(lat) || isNaN(lon)) { alert("සියල්ල පුරවන්න!"); return; }
+    if (!name || isNaN(lat) || isNaN(lon)) { alert("සියලු ක්ෂේත්‍ර පුරවන්න!"); return; }
     database.ref('hazards').push().set({ name, lat, lon, timestamp: Date.now() });
-    alert("Uploaded!");
+    alert("සාර්ථකව අප්ලෝඩ් කලා!");
     document.getElementById("remote-name").value = ""; document.getElementById("remote-lat").value = ""; document.getElementById("remote-lon").value = "";
 }
 
@@ -243,7 +249,7 @@ function handleAdminLogin() {
     if (document.getElementById("admin-password").value === ADMIN_SECRET_PASSWORD) {
         document.getElementById("admin-auth-box").style.display = "none";
         document.getElementById("admin-content-box").style.display = "block";
-    } else { alert("වැරදි Password එකක්!"); }
+    } else { alert("මුරපදය වැරදියි!"); }
 }
 function handleAdminLogout() {
     document.getElementById("admin-auth-box").style.display = "block";
@@ -258,5 +264,12 @@ function getWindDirectionName(deg) {
 }
 function toggleTheme() { document.body.classList.toggle('light-mode'); }
 function toggleNightVision() { document.body.classList.toggle('night-vision-mode'); }
-function showBatteryInfo() { if (navigator.getBattery) navigator.getBattery().then(b => alert(`🔋 බැටරි ධාරිතාව: ${Math.round(b.level * 100)}%`)); }
-function handleGPSError(e) { console.warn(e.message); }
+function showBatteryInfo() { if (navigator.getBattery) navigator.getBattery().then(b => alert(`🔋 බැටරි මට්ටම: ${Math.round(b.level * 100)}%`)); }
+function handleGPSError(e) { 
+    console.warn(e.message);
+    const signalTag = document.getElementById("signal-status");
+    if(signalTag) {
+        signalTag.innerText = "📡 GPS ERROR: PLEASE ENABLE LOCATION/GPS硬件";
+        signalTag.className = "signal-tag status-bad";
+    }
+}
